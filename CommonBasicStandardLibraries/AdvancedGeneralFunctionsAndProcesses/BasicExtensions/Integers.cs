@@ -1,0 +1,67 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using CommonBasicStandardLibraries.CollectionClasses;
+using CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Misc;
+using System.Linq;
+using CommonBasicStandardLibraries.Exceptions;
+namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.BasicExtensions
+{
+    public static class Integers
+    {
+        public static string Join(this CustomBasicList<int> ThisList, string Delimiter)
+        {
+            StrCat cats = new StrCat();
+            ThisList.ForEach(x => cats.AddToString(x.ToString(), Delimiter));
+            return cats.GetInfo();
+        }
+
+        public static (int Batches, int LeftOver) GetRemainderInfo(this int ThisInt, int BatchSize) //if i need the class, can do later.  don't remember if i needed the real class or not.
+        {
+            int x = 0;
+            int b = 0;
+            for (int i = 1; i < ThisInt; i++)
+            {
+                x += 1;
+                if (x == BatchSize)
+                {
+                    x = 0;
+                    b++;
+                }
+            }
+            return (b, x);
+        }
+
+        public static string ConvertToSpecificStrings(this int ThisInt, int DesiredDigits)
+        {
+            string Temps = ThisInt.ToString();
+            if (Temps.Count() > DesiredDigits)
+                throw new BasicBlankException($"The Integer Of {ThisInt} has more digits than the desired digits of {DesiredDigits}");
+
+            if (Temps.Count() == DesiredDigits)
+                return Temps;
+            int Padding = DesiredDigits - Temps.Count();
+            StrCat cats = new StrCat();
+            for (int i = 0; i < Padding; i++)
+            {
+                cats.AddToString("0");
+            }
+            cats.AddToString(Temps);
+            return cats.GetInfo();
+        }
+
+        public static string MusicProgressStringFromMillis(this int MilliSecondsUpTo, int DurationMilliseconds)
+        {
+            TimeSpan ProgressSpan = TimeSpan.FromMilliseconds(MilliSecondsUpTo);
+            TimeSpan DurationSpan = TimeSpan.FromMilliseconds(DurationMilliseconds);
+            return ProgressSpan.SongProgress(DurationSpan);
+        }
+
+        public static string MusicProgressStringFromSeconds(this int SecondsUpTo, int DurationSeconds)
+        {
+            TimeSpan ProgressSpan = TimeSpan.FromMilliseconds(SecondsUpTo);
+            TimeSpan DurationSpan = TimeSpan.FromMilliseconds(DurationSeconds);
+            return ProgressSpan.SongProgress(DurationSpan);
+        }
+    }
+}
