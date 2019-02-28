@@ -116,6 +116,7 @@ namespace CommonBasicStandardLibraries.MVVMHelpers
 				await ThisError.HandleErrorAsync(ex);
 				return;
 			}
+            await CustomErrorHandler(ex);
 		}
 
 		protected virtual Task CustomErrorHandler(Exception ex) //default implementation is to just throw it.  you can do other things if needed.
