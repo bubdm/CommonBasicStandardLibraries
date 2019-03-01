@@ -26,7 +26,7 @@ namespace CommonBasicStandardLibraries.MVVMHelpers
 			}
 		}
 
-		private static void ReportAll() //when changing, will report to all no matter what.
+		internal static void ReportAll() //when changing, will report to all no matter what.  decided it can be good to notify all that something has changed.
 		{
 			//CanExecuteChanged?.Invoke(this, new EventArgs()); 
 			CommandList.ForEach(Items =>

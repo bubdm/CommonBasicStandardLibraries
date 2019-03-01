@@ -202,6 +202,11 @@ namespace CommonBasicStandardLibraries.MVVMHelpers
             return IsExecuting;
         }
 
+        public static void NotifyAllCommands()
+        {
+            ReportAll();
+        }
+
         //we managed without the weakreferences.   we should be able to manage again.
 
         public Command(Func<object, Task> action, Func<object, bool> _Cans, IErrorHandler errors)
