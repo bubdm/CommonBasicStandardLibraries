@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>7.3</LangVersion>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Company>None</Company>
     <Authors>musictopia</Authors>
     <Description>This has lots of common standard libraries like MVVM Helpers, New Collection Classes, Extensions, Exceptions,
@@ -11,13 +11,11 @@ and cross platform converters.</Description>
     <RepositoryUrl>https://github.com/musictopia2/CommonBasicStandardLibraries</RepositoryUrl>
     <PackageProjectUrl>https://github.com/musictopia2/CommonBasicStandardLibraries</PackageProjectUrl>
     <PackageTags>MVVM Helpers Collections Converters Extensions Messenging Json Serializing Exception Handling Dependency Injection Interfaces File Helpers</PackageTags>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="System.ComponentModel.Annotations">
-      <HintPath>..\..\..\Nuget\System.ComponentModel.Annotations.dll</HintPath>
-    </Reference>
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
   </ItemGroup>
 
 </Project>
