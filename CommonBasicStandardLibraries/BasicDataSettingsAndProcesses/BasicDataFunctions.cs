@@ -56,7 +56,7 @@ namespace CommonBasicStandardLibraries.BasicDataSettingsAndProcesses
 
         //public delegate Object ConvertData(object Results);
 
-        public delegate object ConvertTranslation(object EndResults);
+        public delegate object VisibleTranslation(bool EndResults); 
 
 
         public delegate void TextEventData(string ThisStr); //in this case the argument being received is text.  this can be used anywhere the argument being passed back is a string

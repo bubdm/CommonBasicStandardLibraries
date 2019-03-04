@@ -40,6 +40,19 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
             return System.IO.File.Exists(FilePath);
         }
 
+        public static async  Task<bool> NewFileCreated(string DirectoryPath, string ExpectedExtension)
+        {
+            var FirstList = await FileListAsync(DirectoryPath);
+            string Results = FirstList.Find(Items =>
+            {
+                return Items.ToLower().EndsWith(ExpectedExtension.ToLower());
+            }
+            );
+            if (string.IsNullOrWhiteSpace(Results) == true)
+                return false;
+            return true;
+        }
+
         public static bool DirectoryExists(string DirectoryPath)
         {
             return System.IO.Directory.Exists(DirectoryPath);
@@ -214,6 +227,32 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
 			return NewList;
 		}
 
+        public static async Task<string> GetSpecificFile(string DirectoryPath, string ExtensionEndsAt)
+        {
+            var TempList = await FileListAsync(DirectoryPath);
+            return TempList.FindOnlyOne(Items => Items.ToLower().EndsWith(ExtensionEndsAt.ToLower()));
+        }
+        /// <summary>
+        /// This searches for files in not only top directory but sub directories as well
+        /// </summary>
+        /// <param name="DirectoryPath">Directory Where To Look</param>
+        /// <param name="FileName">File Name Including Extension Needed</param>
+        /// <returns></returns>
+        public static async Task<string> SearchForFileName(string DirectoryPath, string FileName)
+        {
+            //this time i need first a list of all but even sub folders for it.
+            CustomBasicList<string> tFileList = new CustomBasicList<string>();
+            await Task.Run(() =>
+            {
+                tFileList = Directory.EnumerateFiles(DirectoryPath, FileName, SearchOption.AllDirectories).ToCustomBasicList();
+            });
+            if (tFileList.Count == 0)
+                throw new BasicBlankException($"The File Name {FileName} Was Not Found At {DirectoryPath} Or Even Sub Directories");
+            return tFileList.Single(); //if nothing is found, then will get runtime error
+        }
+
+        
+
         private static async  Task<string> PrivateAllTextAsync(string FilePath, Encoding encodes)
         {
             string ThisText;
@@ -252,7 +291,18 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
 
         public static async Task  WriteAllTextAsync(string FilePath, string WhatText)
         {
-            await PrivateWriteAllTextAsync(FilePath, WhatText, false, Encoding.UTF8);
+            await PrivateWriteAllTextAsync(FilePath, WhatText, false, Encoding.Default);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="FilePath"></param>
+        /// <param name="WhatText"></param>
+        /// <param name="encoding">Hint  Use UTF-8 in some cases.</param>
+        /// <returns></returns>
+        public static async Task WriteAllTextAsync(string FilePath, string WhatText, Encoding encoding)
+        {
+            await PrivateWriteAllTextAsync(FilePath, WhatText, false, encoding);
         }
 
         public static async Task WriteTextAsync(string FilePath, string WhatText, bool Append)
@@ -273,6 +323,14 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
         public static async Task CreateFolderAsync(string Path)
         {
             await Task.Run(() => Directory.CreateDirectory(Path));
+        }
+
+        public static async Task DeleteSeveralFiles(string DirectoryPath, string StringEnd)
+        {
+            CustomBasicList<string> ThisList = await FileListAsync(DirectoryPath);
+            ThisList.KeepConditionalItems(Items =>
+            Items.ToLower().EndsWith(StringEnd.ToLower()));
+            await ThisList.ForEachAsync(async Items => await DeleteFileAsync(Items));
         }
 
         public static async Task DeleteFileAsync(string Path)

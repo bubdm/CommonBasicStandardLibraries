@@ -14,7 +14,7 @@ namespace CommonBasicStandardLibraries.CommonConverters
 /// <typeparam name="E"></typeparam>
     public abstract class EnumVisibleConverter<E> : IConverterCP where E : Enum
     {
-        public ConvertTranslation VisibleDelegate;
+        public VisibleTranslation VisibleDelegate;
 
         public object Convert(object value, Type TargetType, object Parameter, CultureInfo culture)
         {

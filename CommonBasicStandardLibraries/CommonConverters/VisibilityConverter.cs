@@ -8,7 +8,7 @@ namespace CommonBasicStandardLibraries.CommonConverters
 {
     public abstract class VisibilityConverter : IConverterCP
     {
-        public ConvertTranslation VisibleDelegate;
+        public VisibleTranslation VisibleDelegate;
 
         public object Convert(object value, Type TargetType, object Parameter, CultureInfo culture)
         {

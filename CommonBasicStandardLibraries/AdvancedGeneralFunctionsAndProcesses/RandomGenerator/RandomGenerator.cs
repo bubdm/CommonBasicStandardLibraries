@@ -99,7 +99,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
             TempResults.ShuffleList(); //i now have this new list.  i might as well use this especially if i need random functions.
             string ResultString = "";
             foreach (var ThisItem in TempResults)
-                ResultString = ResultString + VBCompat.ChrW(ThisItem);
+                ResultString += VBCompat.ChrW(ThisItem);
             return ResultString;
         }       
         

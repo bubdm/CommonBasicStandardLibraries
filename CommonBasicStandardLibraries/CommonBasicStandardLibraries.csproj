@@ -10,8 +10,9 @@
 and cross platform converters.</Description>
     <RepositoryUrl>https://github.com/musictopia2/CommonBasicStandardLibraries</RepositoryUrl>
     <PackageProjectUrl>https://github.com/musictopia2/CommonBasicStandardLibraries</PackageProjectUrl>
-    <PackageTags>MVVM Helpers Collections Converters Extensions Messenging Json Serializing Exception Handling Dependency Injection Interfaces File Helpers</PackageTags>
-    <Version>1.0.3</Version>
+    <PackageTags>MVVM Helpers mvvmhelper Collections Converters Extensions Messenging Json Serializing Exception Handling Dependency Injection Interfaces File Helpers</PackageTags>
+    <Version>1.0.4</Version>
+	<AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
   </PropertyGroup>
 
   <ItemGroup>

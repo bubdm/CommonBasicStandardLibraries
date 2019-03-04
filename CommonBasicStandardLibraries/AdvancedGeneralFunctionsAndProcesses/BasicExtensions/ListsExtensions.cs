@@ -5,6 +5,8 @@ using CommonBasicStandardLibraries.CollectionClasses;
 using CommonBasicStandardLibraries.Exceptions;
 using CommonBasicStandardLibraries.BasicDataSettingsAndProcesses;
 using static CommonBasicStandardLibraries.BasicDataSettingsAndProcesses.BasicDataFunctions;
+using System.Threading.Tasks;
+
 namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.BasicExtensions
 {
     public static class ListsExtensions
@@ -68,42 +70,28 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
 			);
 		}
 
-		private static void  OldIncrementIntegers<T> (this ICustomBasicList<T> ThisList, Func<T, int> Selector, int StartAt = 1)
-		{
+        public static async Task ReconcileStrings<T>(this ICustomBasicList<string> SentList, ICustomBasicList<T> SavedList, Func<T, string> match, Func<string, Task<T>> result)
+        {
+            CustomBasicList<string> TempList = new CustomBasicList<string>();
+            SavedList.ForEach(Items => TempList.Add(match(Items)));
+            CustomBasicList<T> RemoveList = new CustomBasicList<T>();
+            CustomBasicList<T> AddList = new CustomBasicList<T>();
+            TempList.ForEach(Items =>
+            {
+                if (SentList.Contains(Items) == false)
+                    RemoveList.Add(SavedList[TempList.IndexOf(Items)]);
+            });
 
-			//int q = 1;
-			//ref int x = ref q;
-			int xx = StartAt;
-
-
-			
-			
-
-			//Action NewAction(out int ThisInt)
-			//{
-			//	xx += 1;
-			//	ThisInt = xx;
-			//	return;
-			//}
-
-			ThisList.ForEach(ThisItem =>
-			{
-				//Selector.Invoke()
-				//Console.WriteLine(Selector.Invoke(ThisItem)); //start here.
-				//the good news is i can get a specific item to do an action on.
-				//however would like to be able to change it.
-				int q = Selector.Invoke(ThisItem);
-				//this means if you need to retrieve a specific value, i can easily do that now.
-
-				xx++;
-				//ref int zz = yy;
-
-
-			}
-			);
-		}
-
-        //for now, done.  but could add others.
+            await SentList.ForEachAsync(async Items =>
+            {
+                if (TempList.Contains(Items) == false)
+                    AddList.Add(await result(Items));
+            });
+            SavedList.RemoveGivenList(RemoveList, System.Collections.Specialized.NotifyCollectionChangedAction.Remove);
+            SavedList.AddRange(AddList);
+            //you have to do both.  there is no other way around this
+            //i think its best this time to have as an extension.
+        }
 
 
 

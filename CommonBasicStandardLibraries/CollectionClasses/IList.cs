@@ -90,6 +90,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
 		ICustomBasicList<T> GetConditionalItems(Predicate<T> match); //if you wanted to remove, there is another method that gives you the items and removes.
 
 
+
         void Sort(); //i do want all to have the ability to sort.
         //that way i can decide whether a behavior does it or if the list does it.
         //if there is something in common but not completely, then the isort.
