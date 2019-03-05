@@ -125,7 +125,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         bool ForSpecificItem(Predicate<T> match, Action<T> action, int HowManyToCheck = 0); //if 0, then it means that it won't check any
 
         void ForConditionalItems(Predicate<T> match, Action<T> action);
-
+        Task ForConditionalItemsAsync(Predicate<T> match, ActionAsync<T> action);
 
         //i don't think we need to skip any
 

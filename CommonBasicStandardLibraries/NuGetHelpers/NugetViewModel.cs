@@ -28,6 +28,12 @@ namespace CommonBasicStandardLibraries.NuGetHelpers
             }
         }
 
+        public async Task RunTestTraditional()
+        {
+            //no need for dependency injection while i am running tests
+            await ThisBus.TestTraditionalNet();
+        }
+
         /// <summary>
         /// You can do either from ui or from console.  Since you can invoke commands from view models.
         /// If doing from console. you can directly use the executeasync though.

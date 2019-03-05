@@ -289,6 +289,15 @@ namespace CommonBasicStandardLibraries.CollectionClasses
 			}
 		}
 
+        public async Task ForConditionalItemsAsync(Predicate<T> match, BasicDataFunctions.ActionAsync<T> action)
+        {
+            foreach (T ThisItem in PrivateList)
+            {
+                if (match.Invoke(ThisItem) == true)
+                    await action.Invoke(ThisItem);
+            }
+        }
+
         public async Task ForEachAsync(BasicDataFunctions.ActionAsync<T> action) //i think done.
         {
             foreach (T ThisItem in PrivateList)
@@ -774,6 +783,6 @@ namespace CommonBasicStandardLibraries.CollectionClasses
 			OnCollectionChanged(NotifyCollectionChangedAction.Reset);
 		}
 
-		
-	}
+        
+    }
 }

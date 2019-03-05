@@ -23,10 +23,67 @@ namespace CommonBasicStandardLibraries.NuGetHelpers
         private string BatPath;
         private string DefaultPath;
         private CustomBasicList<VSProject> SavedList;
+        private bool CheckedForNuget;
+        private bool PrivateHas;
+        private const string NugetExt = ".nupkg";
 
         private async Task<string> GetCSProj(string DirectoryPath)
         {
             return await GetSpecificFile(DirectoryPath, ".csproj");
+        }
+
+        public async Task TestTraditionalNet()
+        {
+            //this is only used temporarily.
+            //just until i can get it working for the sample.
+            //has to hard code what i am using.   will use console only for showing messages
+            Console.WriteLine("Trying To Create Nuget Packages For Traditional .Net Class Libraries");
+            //step 1 is generating the nuget xml format
+            BatPath = @"C:\TempFiles\E.bat"; //this will be the bat path.
+            await WriteAllTextAsync(BatPath, "nuget spec ClassLibrary1.csproj");
+            
+            ProcessStartInfo psi = new ProcessStartInfo(BatPath);
+            psi.WorkingDirectory = @"C:\VS\DesktopDlls4.7.1\Tests\ClassLibrary1";
+            await DeleteSeveralFiles(psi.WorkingDirectory, ".nuspec");
+            psi.CreateNoWindow = true;
+            psi.WindowStyle = ProcessWindowStyle.Hidden;
+            psi.UseShellExecute = true;
+            Process process = Process.Start(psi);
+            bool rets = process.WaitForExit(5000);
+            if (rets == true)
+            {
+                if (await NewFileCreated(psi.WorkingDirectory, ".nuspec") == false)
+                    throw new Exception("No File Created");
+                string NuPath = await GetSpecificFile(psi.WorkingDirectory, ".nuspec");
+                XElement ThisElement = XElement.Load(NuPath);
+                XElement TempElement = ThisElement.Elements("metadata").Single();
+                TempElement.Elements("licenseUrl").Remove();
+                TempElement.Elements("projectUrl").Remove();
+                TempElement.Elements("iconUrl").Remove();
+                TempElement.Elements("releaseNotes").Remove();
+                TempElement.Elements("copyright").Remove();
+                TempElement.Elements("tags").Remove();
+                ThisElement.Save(NuPath);
+                //so far so good.
+
+                //for testing, use shortcut
+                await WriteAllTextAsync(BatPath, @"nuget pack -Properties Configuration=Release -OutputDirectory bin\Release -Version 2.0.0");
+                string NewPath = $@"{psi.WorkingDirectory}\bin\Release";
+                await DeleteSeveralFiles(NewPath, ".nupkg");
+                process = Process.Start(psi);
+                rets = process.WaitForExit(5000);
+                if (rets == true)
+                {
+                    if (await NewFileCreated(NewPath, ".nupkg") == false)
+                        throw new Exception("Rethink");
+                    await DeleteSeveralFiles(psi.WorkingDirectory, ".nuspec");
+                    Console.WriteLine("I think nuget package was created successfully.  Please Check");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Rethink");
+            }
         }
 
         private void IncrementVersion(ref string StrVersion) //was going to do as extension but did not work out.  so was forced to just send in for this case.
@@ -110,7 +167,7 @@ namespace CommonBasicStandardLibraries.NuGetHelpers
         {
             UpdateProgress("Starting The Processes For Creation Of Nuget Packages");
             await LoadSettings();
-            
+            CheckedForNuget = false;
             //first check to see if there is anything to add to the saved list.
             UpdateProgress("Start Reconciling To Make Sure The Saved Lists Shows Current Items Needed");
             await ProjectList.ReconcileStrings<VSProject>(SavedList, Items => Items.ProjectDirectory, async Items =>
@@ -121,6 +178,10 @@ namespace CommonBasicStandardLibraries.NuGetHelpers
                 string TempName = $"{FileName(CSProj)}.dll";
                 string DllPath = await SearchForFileName($@"{Items}\bin\Release", TempName);
                 var ThisFile = await GetFileAsync(DllPath);
+                //Microsoft.NET.Sdk
+                //bool IsTrad;
+                string TempText = await AllTextAsync(CSProj);
+                
                 VSProject ThisProj = new VSProject()
                 {
                     ProjectDirectory = Items,
@@ -131,9 +192,28 @@ namespace CommonBasicStandardLibraries.NuGetHelpers
                     DLLPath = DllPath,
                     NugetPath = $@"{Items}\bin\Release"
                 };
+                if (TempText.Contains("Microsoft.NET.Sdk") == true)
+                {
+                    ThisProj.LastVersion = await GetVersionNumber(CSProj);
+                    ThisProj.NetVersion = EnumNet.CoreStandard;
+                }
+                else
+                {
+                    ThisProj.LastVersion = "1.0.0";
+                    ThisProj.NetVersion = EnumNet.Traditional;
+                }
                 UpdateProgress($"Version Found Is {ThisProj.LastVersion}");
                 return ThisProj;
             });
+
+            var TempList = SavedList.GetConditionalItems(Items => Items.NetVersion == EnumNet.None);
+            TempList.ForEach(Items =>
+            {
+                Items.NetVersion = EnumNet.CoreStandard;
+            });
+
+            //if we have lots of need for it, then will rethink
+
             await SaveData();
             await SavedList.ForEachAsync(async ThisItem =>
             {
@@ -142,9 +222,56 @@ namespace CommonBasicStandardLibraries.NuGetHelpers
 
         }
 
+        private async Task PrepNugetTraditional(VSProject ThisProj)
+        {
+            if (CheckedForNuget == true &&  PrivateHas == false)
+            {
+                UpdateProgress("Previously checked for nuget but don't have it");
+                return;
+            }
+            await DeleteSeveralFiles(ThisProj.ProjectDirectory, NugetExt);
+            await WriteAllTextAsync(BatPath, $@"nuget spec {FullFile(ThisProj.CSPath)}");
+            ProcessStartInfo psi = new ProcessStartInfo(BatPath);
+            psi.WorkingDirectory = ThisProj.ProjectDirectory;
+            psi.CreateNoWindow = true;
+            psi.WindowStyle = ProcessWindowStyle.Hidden;
+            psi.UseShellExecute = true;
+            Process process = Process.Start(psi);
+            string XMLExt = "nuspec";
+            process.WaitForExit(5000);
+            CheckedForNuget = true;
+            //i think it can ignore this
+            if (await NewFileCreated(ThisProj.ProjectDirectory, XMLExt) == false)
+            {
+                UpdateProgress("Did not detect nuget was running");
+                return;
+            }
+            string NuPath = await GetSpecificFile(psi.WorkingDirectory, XMLExt);
+            XElement ThisElement = XElement.Load(NuPath);
+            XElement TempElement = ThisElement.Elements("metadata").Single();
+            TempElement.Elements("licenseUrl").Remove();
+            TempElement.Elements("projectUrl").Remove();
+            TempElement.Elements("iconUrl").Remove();
+            TempElement.Elements("releaseNotes").Remove();
+            TempElement.Elements("copyright").Remove();
+            TempElement.Elements("tags").Remove();
+            ThisElement.Save(NuPath);
+            //await DeleteSeveralFiles(psi.WorkingDirectory, XMLExt);
+            PrivateHas = true;
+        }
+
         private async Task ProcessProject(VSProject ThisProj)
         {
             //at first, will only create package but not upload it.
+            if (ThisProj.NetVersion == EnumNet.Traditional)
+            {
+                await PrepNugetTraditional(ThisProj);
+                if (PrivateHas == false)
+                {
+                    UpdateProgress("Since you don't have nuget running, can't resume to create the traditional .net class library to nuget");
+                    return;
+                }
+            }
             UpdateProgress($"Processing {ThisProj.ProjectDirectory}");
             var ThisFile = await GetFileAsync(ThisProj.DLLPath);
             switch (ThisProj.Status)
@@ -152,8 +279,11 @@ namespace CommonBasicStandardLibraries.NuGetHelpers
                 case EnumStatus.None:
                     //has to figure out whether it needs to create package or not.
                     DateTime LastSavedDate = ThisProj.LastModified;
-                   
-                    string VSVersion = await GetVersionNumber(ThisProj.CSPath);
+                    string VSVersion;
+                    if (ThisProj.NetVersion == EnumNet.CoreStandard)
+                        VSVersion = await GetVersionNumber(ThisProj.CSPath);
+                    else
+                        VSVersion = ""; //we will not have the ability to change it if the traditional .net framework
                     if (VSVersion != ThisProj.LastVersion)
                     {
                         UpdateProgress($"Updating Version To Match Visual Studios Of {VSVersion}");
@@ -195,7 +325,8 @@ namespace CommonBasicStandardLibraries.NuGetHelpers
                 string LastVersion = ThisProj.LastVersion;
                 IncrementVersion(ref LastVersion);
                 ThisProj.LastVersion = LastVersion;
-                await SaveUpdatedVersion(ThisProj.CSPath, ThisProj.LastVersion);
+                if (ThisProj.NetVersion == EnumNet.CoreStandard)
+                    await SaveUpdatedVersion(ThisProj.CSPath, ThisProj.LastVersion);
                 UpdateProgress($"New Version Of Product Is {ThisProj.LastVersion}");
                 await SaveData();
             }
@@ -208,7 +339,10 @@ namespace CommonBasicStandardLibraries.NuGetHelpers
             }
             UpdateProgress($"Creating Package For {ThisProj.ProjectDirectory}");
             await DeleteSeveralFiles(ThisProj.NugetPath, ".nupkg");
-            await WriteAllTextAsync(BatPath, "dotnet pack -c release --no-build");
+            if (ThisProj.NetVersion == EnumNet.CoreStandard)
+                await WriteAllTextAsync(BatPath, "dotnet pack -c release --no-build");
+            else
+                await WriteAllTextAsync(BatPath, $@"nuget pack -Properties Configuration=Release -OutputDirectory bin\Release -Version {ThisProj.LastVersion}");
             ProcessStartInfo psi = new ProcessStartInfo(BatPath);
             psi.WorkingDirectory = ThisProj.ProjectDirectory;
             psi.CreateNoWindow = true;
@@ -221,6 +355,8 @@ namespace CommonBasicStandardLibraries.NuGetHelpers
             rets = await NewFileCreated(ThisProj.NugetPath, ".nupkg");
             if (rets == true)
             {
+                if (ThisProj.NetVersion == EnumNet.Traditional)
+                    await DeleteSeveralFiles(ThisProj.ProjectDirectory, ".nupkg");
                 ThisProj.Status = EnumStatus.NeedsToUpload;
                 await SaveData();
                 UpdateProgress("Successfully Created Nuget Package");
@@ -229,15 +365,18 @@ namespace CommonBasicStandardLibraries.NuGetHelpers
                 throw new BasicBlankException($"Failed To Create Nuget Package Because No File At {ThisProj.NugetPath}.nupkg Exist");
             await UploadPackageAsync(ThisProj, false);
         }
+
         private async Task UploadPackageAsync(VSProject ThisProj, bool ShowHints)
         {
             UpdateProgress($"Uploading Package {ThisProj.NugetPath}");
             string Key = await ThisSetting.GetKey();
             string FilePath = await GetSpecificFile(ThisProj.NugetPath, ".nupkg");
             string TempName = FullFile(FilePath);
-
             string TextForBat;
-            TextForBat = $"dotnet nuget push {TempName} -k {Key} -s https://api.nuget.org/v3/index.json";
+            if (ThisProj.NetVersion == EnumNet.CoreStandard)
+                TextForBat = $"dotnet nuget push {TempName} -k {Key} -s https://api.nuget.org/v3/index.json";
+            else
+                TextForBat = $"nuget push {TempName} {Key} -source https://api.nuget.org/v3/index.json";
             if (ShowHints == true)
                 TextForBat = TextForBat + Constants.vbLf + "pause";
             //if uploading alone, putting pause so a person can double check.

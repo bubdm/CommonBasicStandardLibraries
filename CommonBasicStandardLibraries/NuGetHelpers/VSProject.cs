@@ -15,6 +15,10 @@ namespace CommonBasicStandardLibraries.NuGetHelpers
         None,New,NeedCreate,NeedsToUpload
     }
 
+    public enum EnumNet
+    {
+        None, CoreStandard, Traditional
+    }
     public class VSProject
     {
         public EnumStatus Status { get; set; }
@@ -24,5 +28,7 @@ namespace CommonBasicStandardLibraries.NuGetHelpers
         public string CSPath { get; set; }
         public string DLLPath { get; set; }
         public string NugetPath { get; set; }
+        public EnumNet NetVersion { get; set; }
+        
     }
 }

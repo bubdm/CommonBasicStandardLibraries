@@ -1,5 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>7.3</LangVersion>
@@ -11,13 +11,11 @@ and cross platform converters.</Description>
     <RepositoryUrl>https://github.com/musictopia2/CommonBasicStandardLibraries</RepositoryUrl>
     <PackageProjectUrl>https://github.com/musictopia2/CommonBasicStandardLibraries</PackageProjectUrl>
     <PackageTags>MVVM Helpers mvvmhelper Collections Converters Extensions Messenging nugethelpers ExceptionHandling DependencyInjection Interfaces FileHelpers</PackageTags>
-    <Version>1.0.5</Version>
-	<AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <Version>1.0.6</Version>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
   </ItemGroup>
-
 </Project>
