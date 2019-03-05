@@ -11,7 +11,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Json
         public static async Task SaveObjectAsync(string Path, object ThisObject)
         {
             string ThisText=default;
-            await Task.Run(() => ThisText = js.SerializeObject(ThisObject));
+            await Task.Run(() => ThisText = js.SerializeObject(ThisObject, Newtonsoft.Json.Formatting.Indented));
             await WriteTextAsync(Path, ThisText, false);
         }
 

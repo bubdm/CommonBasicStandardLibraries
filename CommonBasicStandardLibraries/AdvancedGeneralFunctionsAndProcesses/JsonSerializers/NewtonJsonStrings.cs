@@ -11,7 +11,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Json
         public static async Task<string> SerializeObjectAsync(object ThisObj) //decided to do async versions now. hopefully i don't regret this.
         {
             string ThisStr = default;
-            await Task.Run(() => ThisStr = JsonConvert.SerializeObject(ThisObj));
+            await Task.Run(() => ThisStr = JsonConvert.SerializeObject(ThisObj, Formatting.Indented));
             return ThisStr;
         }
 

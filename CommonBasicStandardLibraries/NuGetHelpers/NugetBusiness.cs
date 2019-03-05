@@ -206,14 +206,11 @@ namespace CommonBasicStandardLibraries.NuGetHelpers
                 return ThisProj;
             });
 
-            var TempList = SavedList.GetConditionalItems(Items => Items.NetVersion == EnumNet.None);
-            TempList.ForEach(Items =>
-            {
-                Items.NetVersion = EnumNet.CoreStandard;
-            });
-
-            //if we have lots of need for it, then will rethink
-
+            SavedList.ForConditionalItems(Items => Items.NetVersion == EnumNet.None,
+                Items =>
+                {
+                    Items.NetVersion = EnumNet.CoreStandard;
+                }); //tried an experiment where it updated it and it still worked.
             await SaveData();
             await SavedList.ForEachAsync(async ThisItem =>
             {
@@ -229,6 +226,7 @@ namespace CommonBasicStandardLibraries.NuGetHelpers
                 UpdateProgress("Previously checked for nuget but don't have it");
                 return;
             }
+            UpdateProgress("Starting To Prep Traditional .net Framework");
             await DeleteSeveralFiles(ThisProj.ProjectDirectory, NugetExt);
             await WriteAllTextAsync(BatPath, $@"nuget spec {FullFile(ThisProj.CSPath)}");
             ProcessStartInfo psi = new ProcessStartInfo(BatPath);
@@ -237,7 +235,7 @@ namespace CommonBasicStandardLibraries.NuGetHelpers
             psi.WindowStyle = ProcessWindowStyle.Hidden;
             psi.UseShellExecute = true;
             Process process = Process.Start(psi);
-            string XMLExt = "nuspec";
+            string XMLExt = ".nuspec";
             process.WaitForExit(5000);
             CheckedForNuget = true;
             //i think it can ignore this
@@ -246,6 +244,7 @@ namespace CommonBasicStandardLibraries.NuGetHelpers
                 UpdateProgress("Did not detect nuget was running");
                 return;
             }
+            UpdateProgress($"Checking Working Folder {psi.WorkingDirectory} for extension of {XMLExt}");
             string NuPath = await GetSpecificFile(psi.WorkingDirectory, XMLExt);
             XElement ThisElement = XElement.Load(NuPath);
             XElement TempElement = ThisElement.Elements("metadata").Single();
@@ -258,6 +257,7 @@ namespace CommonBasicStandardLibraries.NuGetHelpers
             ThisElement.Save(NuPath);
             //await DeleteSeveralFiles(psi.WorkingDirectory, XMLExt);
             PrivateHas = true;
+            UpdateProgress("Finished Prepping .net framework");
         }
 
         private async Task ProcessProject(VSProject ThisProj)
@@ -284,7 +284,7 @@ namespace CommonBasicStandardLibraries.NuGetHelpers
                         VSVersion = await GetVersionNumber(ThisProj.CSPath);
                     else
                         VSVersion = ""; //we will not have the ability to change it if the traditional .net framework
-                    if (VSVersion != ThisProj.LastVersion)
+                    if (VSVersion != ThisProj.LastVersion && ThisProj.NetVersion == EnumNet.CoreStandard)
                     {
                         UpdateProgress($"Updating Version To Match Visual Studios Of {VSVersion}");
                         ThisProj.LastVersion = VSVersion; //needs to make sure you match it again since somebody decided to manually change it.
@@ -324,6 +324,8 @@ namespace CommonBasicStandardLibraries.NuGetHelpers
                     throw new BasicBlankException("You cannot increment if you needed to create the nuget package");
                 string LastVersion = ThisProj.LastVersion;
                 IncrementVersion(ref LastVersion);
+                if (LastVersion == "")
+                    throw new BasicBlankException("Last Version Can't Be Blank Before Saving");
                 ThisProj.LastVersion = LastVersion;
                 if (ThisProj.NetVersion == EnumNet.CoreStandard)
                     await SaveUpdatedVersion(ThisProj.CSPath, ThisProj.LastVersion);
@@ -339,10 +341,20 @@ namespace CommonBasicStandardLibraries.NuGetHelpers
             }
             UpdateProgress($"Creating Package For {ThisProj.ProjectDirectory}");
             await DeleteSeveralFiles(ThisProj.NugetPath, ".nupkg");
+
+            
+
             if (ThisProj.NetVersion == EnumNet.CoreStandard)
                 await WriteAllTextAsync(BatPath, "dotnet pack -c release --no-build");
             else
+            {
+                if (ThisProj.LastVersion == "")
+                {
+                    throw new BasicBlankException("Last Version Can't Be Blank Before Creating Package");
+                }
                 await WriteAllTextAsync(BatPath, $@"nuget pack -Properties Configuration=Release -OutputDirectory bin\Release -Version {ThisProj.LastVersion}");
+            }
+               
             ProcessStartInfo psi = new ProcessStartInfo(BatPath);
             psi.WorkingDirectory = ThisProj.ProjectDirectory;
             psi.CreateNoWindow = true;
