@@ -7,7 +7,7 @@ namespace CommonBasicStandardLibraries.MVVMHelpers
 {
 	internal static class InternalCommandList
 	{
-		private static CustomBasicList<ICustomCommand> CommandList = new CustomBasicList<ICustomCommand>();
+		private static readonly CustomBasicList<ICustomCommand> CommandList = new CustomBasicList<ICustomCommand>();
 
 		private static bool _Executing;
 
@@ -28,11 +28,12 @@ namespace CommonBasicStandardLibraries.MVVMHelpers
 
 		internal static void ReportAll() //when changing, will report to all no matter what.  decided it can be good to notify all that something has changed.
 		{
-			//CanExecuteChanged?.Invoke(this, new EventArgs()); 
-			CommandList.ForEach(Items =>
-			{
-				Items.ReportCanExecuteChange();
-			});
+
+            CommandList.ForEach(Items =>
+            {
+                Items.ReportCanExecuteChange();
+            });
+            
 		}
 
 		public static void AddCommand(ICustomCommand ThisCommand)

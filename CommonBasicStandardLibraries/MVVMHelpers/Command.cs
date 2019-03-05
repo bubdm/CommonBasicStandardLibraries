@@ -148,12 +148,12 @@ namespace CommonBasicStandardLibraries.MVVMHelpers
             }
             if (oldcommand != null)
             {
-                OldExecute((T)parameter);
+                {
+                    OldExecute((T)parameter);
+                    return;
+                }
             }
-
             ExecuteAsync((T)parameter).FireAndForgetSafeAsync(_errorHandler);
-            //T NewObj = (T)parameter;
-            //ExecuteMethod(NewObj);
         }
 
 
@@ -295,6 +295,7 @@ namespace CommonBasicStandardLibraries.MVVMHelpers
             if (oldcommand != null)
             {
                 OldExecute(parameter);
+                return;
             }
 
             ExecuteAsync(parameter).FireAndForgetSafeAsync(_errorHandler);
