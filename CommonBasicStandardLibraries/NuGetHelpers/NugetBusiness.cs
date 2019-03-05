@@ -76,9 +76,22 @@ namespace CommonBasicStandardLibraries.NuGetHelpers
             ThisMod.Progress = Text;
             Console.WriteLine(Text);
         }
-        public async Task CreateNugetPackage()
+
+        public async Task UploadAlone()
         {
-            UpdateProgress("Starting The Processes For Creation Of Nuget Packages");
+            UpdateProgress("Uploading Packages Alone.  Will not even reconcile the list.");
+            //this assumes that its already ran once but somehow did not show up so you have to try again.
+            await LoadSettings();
+            if (SavedList.Count == 0)
+                throw new BasicBlankException("You never tried to upload to nuget before");
+            await SavedList.ForEachAsync(async ThisItem =>
+            {
+                await UploadPackageAsync(ThisItem, true);
+            });
+        }
+
+        private async Task LoadSettings()
+        {
             DefaultPath = await ThisSetting.GetDataPath(); //just in case the interface does something complex.
             ProjectList = await ThisSetting.GetProjectLists();
             //key will only be used at the end.
@@ -92,6 +105,12 @@ namespace CommonBasicStandardLibraries.NuGetHelpers
             {
                 SavedList = new CustomBasicList<VSProject>();
             }
+        }
+        public async Task CreateNugetPackage()
+        {
+            UpdateProgress("Starting The Processes For Creation Of Nuget Packages");
+            await LoadSettings();
+            
             //first check to see if there is anything to add to the saved list.
             UpdateProgress("Start Reconciling To Make Sure The Saved Lists Shows Current Items Needed");
             await ProjectList.ReconcileStrings<VSProject>(SavedList, Items => Items.ProjectDirectory, async Items =>
@@ -154,7 +173,7 @@ namespace CommonBasicStandardLibraries.NuGetHelpers
                     await CreatePackageAsync(ThisProj, false, ThisFile.DateModified);
                     break;
                 case EnumStatus.NeedsToUpload:
-                    await UploadPackageAsync(ThisProj);
+                    await UploadPackageAsync(ThisProj, false);
                     break;
                 default:
                     throw new BasicBlankException("Not Supported Currently");
@@ -208,28 +227,47 @@ namespace CommonBasicStandardLibraries.NuGetHelpers
             }
             else
                 throw new BasicBlankException($"Failed To Create Nuget Package Because No File At {ThisProj.NugetPath}.nupkg Exist");
-            await UploadPackageAsync(ThisProj);
+            await UploadPackageAsync(ThisProj, false);
         }
-        private async Task UploadPackageAsync(VSProject ThisProj)
+        private async Task UploadPackageAsync(VSProject ThisProj, bool ShowHints)
         {
             UpdateProgress($"Uploading Package {ThisProj.NugetPath}");
             string Key = await ThisSetting.GetKey();
             string FilePath = await GetSpecificFile(ThisProj.NugetPath, ".nupkg");
             string TempName = FullFile(FilePath);
-            await WriteAllTextAsync(BatPath, $"dotnet nuget push {TempName} -k {Key} -s https://api.nuget.org/v3/index.json");
+
+            string TextForBat;
+            TextForBat = $"dotnet nuget push {TempName} -k {Key} -s https://api.nuget.org/v3/index.json";
+            if (ShowHints == true)
+                TextForBat = TextForBat + Constants.vbLf + "pause";
+            //if uploading alone, putting pause so a person can double check.
+            await WriteAllTextAsync(BatPath, TextForBat);
             ProcessStartInfo psi = new ProcessStartInfo(BatPath);
-            psi.WorkingDirectory = ThisProj.ProjectDirectory;
-            psi.CreateNoWindow = true;
-            psi.WindowStyle = ProcessWindowStyle.Hidden;
-            psi.UseShellExecute = true;
+            psi.WorkingDirectory = ThisProj.NugetPath;
+            if (ShowHints == false)
+            {
+                psi.CreateNoWindow = true;
+                psi.WindowStyle = ProcessWindowStyle.Hidden;
+                psi.UseShellExecute = true;
+            }
+            else
+            {
+                psi.WindowStyle = ProcessWindowStyle.Normal;
+                psi.CreateNoWindow = false;
+                psi.UseShellExecute = true;
+            }
             Process process = Process.Start(psi);
             bool rets = process.WaitForExit(200000);
             if (rets == false)
                 throw new BasicBlankException("Failed To Upload Nuget Package");
             else
             {
-                ThisProj.Status = EnumStatus.None;
-                await SaveData();            
+                if (ShowHints == false)
+                {
+                    ThisProj.Status = EnumStatus.None;
+                    await SaveData();
+                }
+                            
                 UpdateProgress($"Successfully Uploaded Nuget Package For {ThisProj.ProjectDirectory}");
             }
         }

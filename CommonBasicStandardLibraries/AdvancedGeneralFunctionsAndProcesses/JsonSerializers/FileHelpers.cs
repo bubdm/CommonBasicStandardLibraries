@@ -3,30 +3,17 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using static CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.FileFunctions.FileFunctions;
-using js =  SimpleJson.JsonConvert;
+using js = Newtonsoft.Json.JsonConvert;
 namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.JsonSerializers
 {
     public static class FileHelpers
     {
-        //public static void SaveObject(string Path, object ThisObject)
-        //{
-        //    var ThisText = JsonConvert.SerializeObject(ThisObject);
-        //    WriteText(Path, ThisText, false);
-        //}
-
         public static async Task SaveObjectAsync(string Path, object ThisObject)
         {
             string ThisText=default;
             await Task.Run(() => ThisText = js.SerializeObject(ThisObject));
             await WriteTextAsync(Path, ThisText, false);
-            
         }
-
-        //public static T RetrieveSavedObject<T>(string Path)
-        //{
-        //    var ThisText = AllTextFromFile(Path);
-        //    return JsonConvert.DeserializeObject<T>(ThisText);
-        //}
 
         public static async Task<T> RetrieveSavedObjectAsync<T>(string Path)
         {
@@ -44,7 +31,8 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Json
         }
 
         //decided to make it all async.  hopefully its a good decision.  could end up being forced to have a non async version.  well see what happens.
-
+        //decided to go ahead and use the newton one.  since it will download it anyways.
+        //plus there are other packages that require it so i might as well use it.
 
     }
 }

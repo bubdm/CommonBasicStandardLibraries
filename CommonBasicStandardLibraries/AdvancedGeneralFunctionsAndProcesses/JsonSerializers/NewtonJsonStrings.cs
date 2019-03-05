@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using SimpleJson;
+using Newtonsoft.Json;
 namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.JsonSerializers
 {
     //looks like the spacing problem is still happening sometimes.

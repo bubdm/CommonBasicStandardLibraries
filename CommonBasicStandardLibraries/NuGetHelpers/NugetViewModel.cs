@@ -35,6 +35,10 @@ namespace CommonBasicStandardLibraries.NuGetHelpers
         /// After the first time, it will automatically increment the version as needed by nuget.
         /// </summary>
         public Command UpdateCommand { get; set; }
+        /// <summary>
+        /// could be a case where you need to reupload the packages.  in this case, it will just upload them alone.  however in this case, may need to show as its happening.
+        /// </summary>
+        public Command UploadOnlyCommand { get; set; }
 
         public NugetViewModel()
         {
@@ -61,6 +65,29 @@ namespace CommonBasicStandardLibraries.NuGetHelpers
             }, x =>
             {
                 return true; //just return true for now.
+            }, this);
+
+            UploadOnlyCommand = new Command(async x =>
+            {
+                if (ThisSetting == null)
+                    ThisSetting = Resolve<INugetSettings>();
+                if (ThisSetting == null)
+                {
+                    if (ThisMessage == null)
+                    {
+                        Console.WriteLine("You did not use dependency injection in order to get the setting in order to create and upload nuget packages");
+                        return;
+                    }
+                    else
+                    {
+                        ThisMessage.ShowError("You did not use dependency injection in order to be able to create and upload the nuget packages");
+                        return;
+                    }
+                }
+                await ThisBus.UploadAlone(); //this means it will not even version it.
+            }, x =>
+            {
+                return true;
             }, this);
         }
     }

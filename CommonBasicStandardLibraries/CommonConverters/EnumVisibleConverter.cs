@@ -18,7 +18,6 @@ namespace CommonBasicStandardLibraries.CommonConverters
 
         public object Convert(object value, Type TargetType, object Parameter, CultureInfo culture)
         {
-            //throw new NotImplementedException();
             bool rets;
             E ToSend;
             if (Parameter == null || Parameter is E == false)
@@ -37,8 +36,6 @@ namespace CommonBasicStandardLibraries.CommonConverters
         } 
 
         protected abstract bool Convert(E EnumSent, E Parameter); //the derived classes must implement this function which returns whether the ui will be visible or not.
-
-
         protected bool DefaultEnumVisible(E EnumSent, E Parameter)
         {
             if (EnumSent.Equals(Parameter))
