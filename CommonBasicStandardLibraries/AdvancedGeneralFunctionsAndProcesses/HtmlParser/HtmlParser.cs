@@ -1,15 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
+//using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using CommonBasicStandardLibraries.BasicDataSettingsAndProcesses;
-
+using CommonBasicStandardLibraries.CollectionClasses;
 namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.HtmlParser
 {
     public class HtmlParser
     {
-        private static string DEFAULT_WORD_SEPARATORS = " " + Constants.vbLf + Constants.vbCr + Constants.vbTab + "<>;,!";
+        private static readonly string DEFAULT_WORD_SEPARATORS = " " + Constants.vbLf + Constants.vbCr + Constants.vbTab + "<>;,!";
         private string m_strBody = "";
         private string m_error = "";
         public string ErrorPath = "";
@@ -20,13 +21,13 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Html
 
 
 
-        public List<string> GetList(string strFirst, bool ShowErrors = true)
+        public CustomBasicList<string> GetList(string strFirst, bool ShowErrors = true)
         {
             string TempStr;
             TempStr = m_strBody;
             if (TempStr == "")
                 throw new Exception("Blank list");
-            var tGetList = new List<string>();
+            var tGetList = new CustomBasicList<string>();
             // Dim x As Integer
             do
             {
@@ -49,13 +50,13 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Html
             while (true);// try this
         }
 
-        public List<string> GetList(string strFirst, string strSecond, bool ShowErrors = true)
+        public CustomBasicList<string> GetList(string strFirst, string strSecond, bool ShowErrors = true)
         {
             string TempStr;
             TempStr = m_strBody;
             if (TempStr == "")
                 throw new Exception("Blank list");
-            var tGetList = new List<string>();
+            var tGetList = new CustomBasicList<string>();
             string ThisItem;
 
             do
@@ -98,8 +99,6 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Html
 
         public bool DoesExist(string strFirst, string StrSecond = "")
         {
-            bool to_ret = false;
-
             if (m_strBody.Length == 0)
                 // m_error = "HtmlParser::DoesExist - nothing in body"
                 return false;
@@ -122,21 +121,27 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Html
                     return false;
             }
 
-            to_ret = true;
+            bool to_ret = true;
             // Catch ex As Exception
             // m_error = "HtmlParser::DoesExist - got exception (" & ex.Source & " - " & ex.Message & ")"
             // to_ret = False
             // End Try
             return to_ret;
         }
-        // Public Function DoesExist(ByVal strFirst As String, ByVal strSecond As String) As Boolean
 
-        // End Function
-        // Public Function GetTopInfo(ByVal strTagEnd As String) As String
-        // Dim bIncludeThis As Boolean = False
-
-        // Return Me.GetTopInfo(strTagEnd, bIncludeThis)
-        // End Function
+        public async Task EliminateSeveralTopItemsAsync(CustomBasicList<string> ThisList)
+        {
+            await Task.Run(() =>
+            {
+                ThisList.ForEach(Items =>
+                {
+                    if (DoesExist(Items) == true)
+                    {
+                        Body = GetTopInfo(Items);
+                    }
+                });
+            });
+        }
 
         public string GetTopInfo(bool bIncludeThis = false)
         {
@@ -148,8 +153,6 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Html
 
         public string GetTopInfo(string strTagEnd, bool bIncludeThis = false)
         {
-            string to_ret = "";
-
             if (m_strBody.Length == 0)
             {
                 // m_error = "HtmlParser::GetTopInfo - nothing in body"
@@ -171,6 +174,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Html
             }
 
             strTmpBody = m_strBody;
+            string to_ret;
             if (bIncludeThis)
                 to_ret = strTmpBody.Substring(0, n_find + strTagEnd.Length);
             else
@@ -249,8 +253,6 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Html
 
         public string GetSomeInfo(string bstrStartTag, string bstrEndTag, bool bTakeOutBody = false, bool bIncludeFirst = false, bool bIncludeLast = false)
         {
-            string to_ret = "";
-
             if (m_strBody.Length == 0)
             {
                 m_error = "HtmlParser::GetSomeInfo - nothing in body";
@@ -297,6 +299,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Html
                     m_strBody = strTempBody.Substring(n_find, strTempBody.Length - n_find);
             }
 
+            string to_ret;
             if (bIncludeLast)
                 to_ret = strTempBody.Substring(0, n_find + strEndTag.Length);
             else
@@ -425,7 +428,6 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Html
             }
             catch (Exception ex)
             {
-                to_ret = false;
                 throw ex;
             }
 
@@ -468,7 +470,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Html
                 if (!(fs == null))
                 {
                     fs.Close();
-                    fs = null;
+                    fs.Dispose();
                 }
             }
 
