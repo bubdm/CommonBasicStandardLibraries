@@ -18,7 +18,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
 
         public static bool IsNumeric(this string ThisStr)
         {
-            return int.TryParse(ThisStr, out int NewInt); //you are forced to assign variable no matter what now.
+            return int.TryParse(ThisStr, out _); //you are forced to assign variable no matter what now.
         } //sometimes it did without the 2 braces but not this time.
 
 
@@ -306,9 +306,9 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
                 if (x == 1)
                     Item1 = ThisItem.ToString();
                 else if (LastAlpha == true && IsAlpha == true)
-                    Item1 = Item1 + ThisItem;
+                    Item1 += ThisItem;
                 else if (LastAlpha == false && IsInt == true)
-                    Item2 = Item2 + ThisItem;
+                    Item2 += ThisItem;
                 else if (LastAlpha == true && IsInt == true)
                     Item2 = ThisItem.ToString(); // start of a number
                 else
@@ -447,9 +447,9 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             if (PostalCode.Length < 5)
                 return false;
             if (PostalCode.Length == 5)
-                return int.TryParse(PostalCode, out int t);
+                return int.TryParse(PostalCode, out _);
             if (PostalCode.Length == 9)
-                return int.TryParse(PostalCode, out int t);
+                return int.TryParse(PostalCode, out _);
             if (PostalCode.Length == 10)
             {
                 int Index;
@@ -457,7 +457,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
                 if (Index != 5)
                     return false;
                 PostalCode = PostalCode.Replace("-", "");
-                return int.TryParse(PostalCode, out int t);
+                return int.TryParse(PostalCode, out _);
             }
             return false;
         }
@@ -474,7 +474,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
                 if (char.IsUpper(ThisItem) == true && x > 0)
                     NewText = NewText + " " + ThisItem;
                 else
-                    NewText = NewText + ThisItem;
+                    NewText += ThisItem;
                 x += 1;
             });
             NewText = NewText.Replace("I P ", " IP ");

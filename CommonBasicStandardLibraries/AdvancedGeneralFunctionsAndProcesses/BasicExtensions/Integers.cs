@@ -59,8 +59,8 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
 
         public static string MusicProgressStringFromSeconds(this int SecondsUpTo, int DurationSeconds)
         {
-            TimeSpan ProgressSpan = TimeSpan.FromMilliseconds(SecondsUpTo);
-            TimeSpan DurationSpan = TimeSpan.FromMilliseconds(DurationSeconds);
+            TimeSpan ProgressSpan = TimeSpan.FromSeconds(SecondsUpTo);
+            TimeSpan DurationSpan = TimeSpan.FromSeconds(DurationSeconds); //meant to use from seconds.
             return ProgressSpan.SongProgress(DurationSpan);
         }
     }
