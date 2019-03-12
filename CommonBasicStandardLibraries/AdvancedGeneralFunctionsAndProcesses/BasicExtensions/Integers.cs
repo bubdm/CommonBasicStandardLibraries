@@ -63,5 +63,15 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             TimeSpan DurationSpan = TimeSpan.FromSeconds(DurationSeconds); //meant to use from seconds.
             return ProgressSpan.SongProgress(DurationSpan);
         }
+        public static int MultiplyPercentage(this int Amount, int Percentage) //decided this needs to be clear it multiplies
+        {
+            //var Pes = (Single)Percentage / 100;
+            //int Counts = Amount;
+            //Single Results = Pes * Counts;
+            //return (int)Results;
+            decimal Firsts = Percentage / 100;
+            return (int)Math.Ceiling(Firsts * Amount);
+        }
+
     }
 }
