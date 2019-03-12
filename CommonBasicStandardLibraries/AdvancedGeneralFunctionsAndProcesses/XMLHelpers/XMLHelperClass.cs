@@ -87,6 +87,23 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.XMLH
             CustomBasicList<XMLPair> ThisList = ElementPairs.ToCustomBasicList();
             await WriteElementsAsync(ThisList);
         }
+
+        public async Task WriteSeveralElementsAsync(string CommonAttribute, string CommonValue, params XMLPair[] ElementPairs)
+        {
+            Check();
+            CustomBasicList<XMLPair> ThisList = ElementPairs.ToCustomBasicList();
+            await ThisList.ForEachAsync(async Items =>
+            {
+                await Task.Run(() =>
+                {
+                    Writes.WriteStartElement(Items.AttributeOrTag);
+                    Writes.WriteAttributeString(CommonAttribute, CommonValue);
+                    Writes.WriteString(Items.Value);
+                    Writes.WriteEndElement();
+                });
+            });
+        }
+
         /// <summary>
         /// This writes when you have an existing tag
         /// </summary>
