@@ -15,6 +15,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.XMLH
         private bool Closed;
         public async Task<XElement> GetElementAsync()
         {
+            Check(); //i should check here too.
             Closed = true; //at this point, you should not add anything else to it.  the rest has to be done with the old fashioned xelement.
             await Writes.WriteEndDocumentAsync();
             await Writes.FlushAsync();
