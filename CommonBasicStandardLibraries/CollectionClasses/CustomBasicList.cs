@@ -839,11 +839,6 @@ namespace CommonBasicStandardLibraries.CollectionClasses
             });
             RemoveGivenList(RList, NotifyCollectionChangedAction.Remove);
         }
-        //if i want fluency, don't do through interface.
-        public CustomBasicList<T> Append(T ThisItem)
-        {
-            Add(ThisItem);
-            return this;
-        }
+        
     }
 }

@@ -14,6 +14,11 @@ namespace CommonBasicStandardLibraries.BasicDataSettingsAndProcesses
         public Action<T> Action { get; private set; }
         public Predicate<T> Predicate { get; private set; }
 
+        public static ConditionActionPair<T> GetPair(Predicate<T> predicate, Action<T> action) //i might as well keep it here so i have choices.
+        {
+            return new ConditionActionPair<T>(predicate, action);
+        }
+
         public ConditionActionPair(Predicate<T> predicate, Action<T> action) //i like predicate first.
         {
             Action = action;
