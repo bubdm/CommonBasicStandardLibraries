@@ -49,29 +49,18 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             cats.AddToString(Temps);
             return cats.GetInfo();
         }
-
         public static string MusicProgressStringFromMillis(this int MilliSecondsUpTo, int DurationMilliseconds)
         {
             TimeSpan ProgressSpan = TimeSpan.FromMilliseconds(MilliSecondsUpTo);
             TimeSpan DurationSpan = TimeSpan.FromMilliseconds(DurationMilliseconds);
             return ProgressSpan.SongProgress(DurationSpan);
         }
-
         public static string MusicProgressStringFromSeconds(this int SecondsUpTo, int DurationSeconds)
         {
             TimeSpan ProgressSpan = TimeSpan.FromSeconds(SecondsUpTo);
             TimeSpan DurationSpan = TimeSpan.FromSeconds(DurationSeconds); //meant to use from seconds.
             return ProgressSpan.SongProgress(DurationSpan);
         }
-        public static int MultiplyPercentage(this int Amount, int Percentage) //decided this needs to be clear it multiplies
-        {
-            //var Pes = (Single)Percentage / 100;
-            //int Counts = Amount;
-            //Single Results = Pes * Counts;
-            //return (int)Results;
-            decimal Firsts = Percentage / 100;
-            return (int)Math.Ceiling(Firsts * Amount);
-        }
-
+        public static int MultiplyPercentage(this int Amount, int Percentage) => (int)Math.Ceiling(((decimal)Percentage / 100) * Amount); //decided this needs to be clear it multiplies
     }
 }

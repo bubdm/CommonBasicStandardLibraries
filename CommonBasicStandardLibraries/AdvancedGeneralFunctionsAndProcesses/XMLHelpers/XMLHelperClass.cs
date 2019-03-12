@@ -74,6 +74,13 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.XMLH
                 });
             });
         }
+        //was trying to make a fluent design that was async but did not work.
+        //public async Task WriteSingleElementAsync(string Tag, string Value)
+        //{
+        //    Check();
+        //    CustomBasicList<XMLPair> ThisList = new CustomBasicList<XMLPair>() { new XMLPair(Tag, Value)};
+        //    await WriteElementsAsync(ThisList);
+        //}
         public async Task WriteSeveralElementsAsync(params XMLPair[] ElementPairs)
         {
             Check();
