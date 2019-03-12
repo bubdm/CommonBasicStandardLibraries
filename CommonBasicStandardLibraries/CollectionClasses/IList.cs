@@ -192,8 +192,8 @@ namespace CommonBasicStandardLibraries.CollectionClasses
 
         void InsertBeginning(T value); //this means it adds to the beginning.  i like this idea.
 
-        
 
+        void RemoveOnlyOneAfterAction(Predicate<T> match, Action<T> action);
 
         void RemoveAllOnly(Predicate<T> match); //looks like i can't return anything after all.
 

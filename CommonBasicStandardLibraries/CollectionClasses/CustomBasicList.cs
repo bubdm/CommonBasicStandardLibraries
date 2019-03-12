@@ -783,6 +783,34 @@ namespace CommonBasicStandardLibraries.CollectionClasses
 			OnCollectionChanged(NotifyCollectionChangedAction.Reset);
 		}
 
-        
+        public void RemoveOnlyOneAfterAction(Predicate<T> match, Action<T> action) //does not have to be there.  if not there, ignore
+        {
+            if (Exists(match) == false)
+                return; //because there is none.
+            T ThisItem;
+            try
+            {
+                ThisItem = FindOnlyOne(match); //so if more than one is found, then will raise an exception
+            }
+            catch (BasicBlankException)
+            {
+                throw new BasicBlankException("RemoveOnlyOneAction Had An Error.  Most Likely, The Condition Had More Than Element Satisfying It");
+            }
+            catch (Exception ex)
+            {
+                throw new BasicBlankException($"Other Exception Was Thrown.  The Error Was {ex.Message}");
+            }
+            action.Invoke(ThisItem);
+            RemoveSpecificItem(ThisItem); //this way it can do all other things required.
+            //foreach(T ThisItem in PrivateList)
+            //{
+            //    if (match.Invoke(ThisItem) == true)
+            //    {
+            //        action.Invoke(ThisItem);
+
+            //    }
+                    
+            //}
+        }
     }
 }
