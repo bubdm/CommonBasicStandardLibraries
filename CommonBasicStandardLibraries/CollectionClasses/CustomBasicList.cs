@@ -812,5 +812,38 @@ namespace CommonBasicStandardLibraries.CollectionClasses
                     
             //}
         }
+        public void RemoveSeveralConditionalItems(CustomBasicList<ConditionActionPair<T>> ThisList)
+        {
+            //in this case, will do one remove, not several.
+            CustomBasicList<T> RList = new CustomBasicList<T>();
+            ThisList.ForEach(FirstItem =>
+            {
+                if (Exists(FirstItem.Predicate) == true)
+                {
+                    T ThisItem;
+                    try
+                    {
+                        ThisItem = FindOnlyOne(FirstItem.Predicate);
+                    }
+                    catch (BasicBlankException)
+                    {
+                        throw new BasicBlankException("RemoveSeveralConditionalItems Had An Error.  Most Likely, The Condition Had More Than Element Satisfying One Of The Condition Lists");
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new BasicBlankException($"Other Exception Was Thrown.  The Error Was {ex.Message}");
+                    }
+                    FirstItem.Action.Invoke(ThisItem);
+                    RList.Add(ThisItem);
+                }
+            });
+            RemoveGivenList(RList, NotifyCollectionChangedAction.Remove);
+        }
+        //if i want fluency, don't do through interface.
+        public CustomBasicList<T> Append(T ThisItem)
+        {
+            Add(ThisItem);
+            return this;
+        }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Text;
 using System.Threading.Tasks;
 using static  CommonBasicStandardLibraries.BasicDataSettingsAndProcesses.BasicDataFunctions;
+using CommonBasicStandardLibraries.BasicDataSettingsAndProcesses;
 namespace CommonBasicStandardLibraries.CollectionClasses
 {
 
@@ -194,6 +195,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
 
 
         void RemoveOnlyOneAfterAction(Predicate<T> match, Action<T> action);
+        void RemoveSeveralConditionalItems(CustomBasicList<ConditionActionPair<T>> ThisList);
 
         void RemoveAllOnly(Predicate<T> match); //looks like i can't return anything after all.
 
