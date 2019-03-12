@@ -93,9 +93,9 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             //i think its best this time to have as an extension.
         }
 
-        public static CustomBasicList<ConditionActionPair<T>> Append<T> (this CustomBasicList<ConditionActionPair<T>> TempList, Predicate<T> Match, Action<T> Action)
+        public static CustomBasicList<ConditionActionPair<T>> Append<T> (this CustomBasicList<ConditionActionPair<T>> TempList, Predicate<T> Match, Action<T, string> Action, string Value = "") //if it needs to be something else. rethink
         {
-            ConditionActionPair<T> ThisC = new ConditionActionPair<T>(Match, Action);
+            ConditionActionPair<T> ThisC = new ConditionActionPair<T>(Match, Action, Value);
             TempList.Add(ThisC);
             return TempList;
         }

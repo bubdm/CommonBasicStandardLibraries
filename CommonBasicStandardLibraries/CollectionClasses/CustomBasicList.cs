@@ -833,7 +833,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
                     {
                         throw new BasicBlankException($"Other Exception Was Thrown.  The Error Was {ex.Message}");
                     }
-                    FirstItem.Action.Invoke(ThisItem);
+                    FirstItem.Action.Invoke(ThisItem, FirstItem.Value);
                     RList.Add(ThisItem);
                 }
             });
