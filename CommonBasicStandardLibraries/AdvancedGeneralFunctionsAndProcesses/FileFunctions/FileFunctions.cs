@@ -219,6 +219,12 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
 			});
 			return NewList;
 		}
+        public static async Task<CustomBasicList<string>> GetSeveralSpecificFiles(string DirectoryPath, string ExtensionEndsAt)
+        {
+            var TempList = await FileListAsync(DirectoryPath);
+            TempList.KeepConditionalItems(Items => Items.ToLower().EndsWith(ExtensionEndsAt.ToLower()));
+            return TempList;
+        }
 
         public static async Task<string> GetSpecificFile(string DirectoryPath, string ExtensionEndsAt)
         {
