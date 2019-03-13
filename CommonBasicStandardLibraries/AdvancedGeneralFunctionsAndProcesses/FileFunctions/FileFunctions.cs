@@ -192,12 +192,9 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
         public static async Task<CustomBasicList<string>> DirectoryListAsync(string WhatPath, SearchOption searchOption = SearchOption.TopDirectoryOnly)
         {
             var TDirectoryList = new CustomBasicList<string>();
-            //IEnumerable<string> TempList;
             await Task.Run(() =>
             {
-                TDirectoryList = System.IO.Directory.EnumerateDirectories(WhatPath, "", searchOption).ToCustomBasicList();
-                //foreach (var ThisItem in TempList)
-                //    TDirectoryList.Add(ThisItem);
+                TDirectoryList = System.IO.Directory.EnumerateDirectories(WhatPath, "*", searchOption).ToCustomBasicList();
             });
             return TDirectoryList;
         }
@@ -205,13 +202,9 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
 		public static async Task<CustomBasicList<string>> FileListAsync(string DirectoryPath)
         {
             CustomBasicList<string> tFileList = new CustomBasicList<string>();
-            //IEnumerable<string> TempList;
             await Task.Run(() =>
             {
                 tFileList = System.IO.Directory.EnumerateFiles(DirectoryPath, "*", System.IO.SearchOption.TopDirectoryOnly).ToCustomBasicList(); // hopefully will still work
-                                                                                                                            // Dim Tests=System.IO.Directory.EnumerateFiles(DirectoryPath, )
-                //foreach (var ThisItem in TempList)
-                //    tFileList.Add(ThisItem);
             });
             return tFileList;
         }
