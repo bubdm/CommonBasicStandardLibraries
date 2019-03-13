@@ -7,6 +7,7 @@ using CommonBasicStandardLibraries.Exceptions;
 using System.IO;
 using CommonBasicStandardLibraries.CollectionClasses;
 using static CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.BasicExtensions.ListsExtensions;
+using System.Reflection;
 
 namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.FileFunctions
 {
@@ -390,5 +391,22 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
             return new FileStream(FilePath, FileMode.Open, FileAccess.Read);
         } // this
 
+        public static async  Task<string> ResourcesAllTextFromFileAsync(object ThisObj, string FileName)
+        {
+            Assembly ThisA = Assembly.GetAssembly(ThisObj.GetType());
+            return await ThisA.ResourcesAllTextFromFileAsync(FileName);
+        }
+
+        public static async Task<Stream> ResourcesGetStreamAsync(object ThisObj, string FileName)
+        {
+            Assembly ThisA = Assembly.GetAssembly(ThisObj.GetType());
+            return await ThisA.ResourcesGetStreamAsync(FileName);
+        }
+
+        public static string GetMediaURIFromStream(object ThisObj, string FileName)
+        {
+            Assembly ThisA = Assembly.GetAssembly(ThisObj.GetType());
+            return ThisA.GetMediaURIFromStream(FileName);
+        }
     }
 }

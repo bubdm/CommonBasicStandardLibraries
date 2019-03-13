@@ -10,6 +10,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
 
         //will try to make them awaitable.
 
+        public static string ResourceLocation = "Resources"; //c# requires the actual folder where you place the resource to read the embedded resource.
 
         public static async  Task<string> FixBase64ForFileDataAsync(this string str_Image)
         {
@@ -34,21 +35,27 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
             return ThisStr;
         }
 
-        private static async Task<Stream> GetStreamAsync(object ThisObj, string FileName)
+        private static async Task<Stream> GetStreamAsync(Assembly ThisAssembly, string FileName)
         {
             Stream ThisStream=default;
 
             await Task.Run(() =>
             {
-                var ThisAssembly = Assembly.GetAssembly(ThisObj.GetType());
+                //var ThisAssembly = Assembly.GetAssembly(ThisObj.GetType());
+                
+                //var ThisAssembly = Assembly.(""); //try this one.    
                 if (FileName.Contains("/") == true || FileName.Contains(@"\") == true)
                     throw new Exception(@"Cannot contain the / or \ in the file name.   Its already smart enough to figure out even if put in folders", null);
+                var ThisList = ThisAssembly.GetManifestResourceNames();
                 var FirstName = ThisAssembly.GetName().Name; // needs 2 things affterall.  looks like simplier in .net standard 2.0
                 FirstName = FirstName.Replace(" ", "_");
                 // if there are other things that needs replacing, should do here
                 // i think this is best for maximum shortcuts
                 string InternalPath;
-                InternalPath = FirstName + "." + FileName;
+                if (ResourceLocation == "")
+                    InternalPath = FirstName + "." + FileName;
+                else
+                    InternalPath = FirstName + "." + ResourceLocation + "." + FileName;
                 // InternalPath = InternalPath.Replace("/", ".")
                 ThisStream = ThisAssembly.GetManifestResourceStream(InternalPath);
                 if (ThisStream ==null)
@@ -60,9 +67,9 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
             return ThisStream;
         }
 
-        public static string GetMediaURIFromStream(this object ThisObj, string FileName)
+        public static string GetMediaURIFromStream(this Assembly ThisAssembly, string FileName) //for the other, it has to create assembly.  however, no extensions.
         {
-            var ThisAssembly = Assembly.GetAssembly(ThisObj.GetType());
+            //var ThisAssembly = Assembly.GetAssembly(ThisObj.GetType());
             if (FileName.Contains("/") == true || FileName.Contains(@"\") == true)
                 throw new Exception(@"Cannot contain the / or \ in the file name.   Its already smart enough to figure out even if put in folders", null);
             var FirstName = ThisAssembly.GetName().Name; // needs 2 things affterall.  looks like simplier in .net standard 2.0
@@ -74,9 +81,9 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
             return InternalPath;
         }
 
-        public static async Task<string> ResourcesAllTextFromFileAsync(this object ThisObj, string FileName)
+        public static async Task<string> ResourcesAllTextFromFileAsync(this Assembly ThisAssembly, string FileName)
         {
-            var ThisStream = await GetStreamAsync(ThisObj, FileName);
+            var ThisStream = await GetStreamAsync(ThisAssembly, FileName);
             using (var ThisRead = new StreamReader(ThisStream))
             {
                 return await ThisRead.ReadToEndAsync();
@@ -95,9 +102,9 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
         //will attempt to async only.  hopefully i don't regret this.
         //on the other hand the main on console now support await
 
-        public static async Task<Stream> ResourcesGetStreamAsync(this object ThisObj, string FileName)
+        public static async Task<Stream> ResourcesGetStreamAsync(this Assembly ThisAssembly, string FileName)
         {
-            return await GetStreamAsync(ThisObj, FileName);
+            return await GetStreamAsync(ThisAssembly, FileName);
         }
 
         // no need for extensions because i already have the extension library.  i will just add 2 more to it for the awaits
