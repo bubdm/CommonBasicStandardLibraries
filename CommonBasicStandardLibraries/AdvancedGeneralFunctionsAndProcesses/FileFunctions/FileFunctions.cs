@@ -199,17 +199,17 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
             return TDirectoryList;
         }
 
-		public static async Task<CustomBasicList<string>> FileListAsync(string DirectoryPath)
+		public static async Task<CustomBasicList<string>> FileListAsync(string DirectoryPath, SearchOption ThisOption = SearchOption.TopDirectoryOnly)
         {
             CustomBasicList<string> tFileList = new CustomBasicList<string>();
             await Task.Run(() =>
             {
-                tFileList = System.IO.Directory.EnumerateFiles(DirectoryPath, "*", System.IO.SearchOption.TopDirectoryOnly).ToCustomBasicList(); // hopefully will still work
+                tFileList = System.IO.Directory.EnumerateFiles(DirectoryPath, "*", ThisOption).ToCustomBasicList(); // hopefully will still work
             });
             return tFileList;
         }
 
-		public static async Task<CustomBasicList<string>> FileListAsync(CustomBasicList<string> DirectoryList)
+		public static async Task<CustomBasicList<string>> FileListAsync(CustomBasicList<string> DirectoryList) //this can be just top because you already sent in a directory list
 		{
 			CustomBasicList<string> NewList = new CustomBasicList<string>();
 			await DirectoryList.ForEachAsync(async x =>
@@ -219,12 +219,42 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
 			});
 			return NewList;
 		}
-        public static async Task<CustomBasicList<string>> GetSeveralSpecificFiles(string DirectoryPath, string ExtensionEndsAt)
+        public static async Task<CustomBasicList<string>> GetSeveralSpecificFiles(string DirectoryPath, string ExtensionEndsAt, SearchOption SearchOption = SearchOption.TopDirectoryOnly) //to not break compatibility
         {
-            var TempList = await FileListAsync(DirectoryPath);
+            var TempList = await FileListAsync(DirectoryPath, SearchOption);
             TempList.KeepConditionalItems(Items => Items.ToLower().EndsWith(ExtensionEndsAt.ToLower()));
             return TempList;
         }
+        /// <summary>
+        /// This is used in cases where you know what file names are okay and only those will show the complete paths.  i am guessing that if one from the good list is not found, then raise an exception
+        /// </summary>
+        /// <param name="DirectoryPath">Directory To Look For</param>
+        /// <param name="ExtensionEndsAt">This is the extension of the file needed</param>
+        /// <param name="GoodList">This is a list of all files you know you need.  has names without extensions.</param>
+        /// <param name="SearchOption">default is all directories but can choose top if needed</param>
+        /// <returns></returns>
+        public static async Task<CustomBasicList<string>> GetSeveralSpecificFiles(string DirectoryPath, string ExtensionEndsAt, CustomBasicList<string> GoodList, SearchOption SearchOption = SearchOption.AllDirectories)
+        {
+            //step 1 is getting the specific files without the good list
+            CustomBasicList<string> FirstList = await GetSeveralSpecificFiles(DirectoryPath, ExtensionEndsAt, SearchOption);
+            FirstList.KeepConditionalItems(Items =>
+            {
+                string ThisName = FileName(Items).ToLower();
+                if (GoodList.Exists(Temps => Temps.ToLower() == ThisName) == true)
+                    return true;
+                return false;
+            });
+            if (FirstList.Count != GoodList.Count)
+                throw new BasicBlankException(@"Does not reconcile because there was an item on the good list that was not found or had duplicates");
+            return FirstList;
+        }
+
+        //public static async Task<CustomBasicList<string>> GetSeveralSpecificFiles(string DirectoryPath, string ExtensionEndsAt)
+        //{
+        //    var TempList = await FileListAsync(DirectoryPath);
+        //    TempList.KeepConditionalItems(Items => Items.ToLower().EndsWith(ExtensionEndsAt.ToLower()));
+        //    return TempList;
+        //}
 
         public static async Task<string> GetSpecificFile(string DirectoryPath, string ExtensionEndsAt)
         {
