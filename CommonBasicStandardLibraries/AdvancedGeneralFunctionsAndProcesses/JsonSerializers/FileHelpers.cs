@@ -10,13 +10,15 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Json
     {
         public static async Task SaveObjectAsync(string Path, object ThisObject)
         {
+            JsonSettingsGlobals.PopulateSettings();
             string ThisText=default;
-            await Task.Run(() => ThisText = js.SerializeObject(ThisObject, Newtonsoft.Json.Formatting.Indented));
+            await Task.Run(() => ThisText = js.SerializeObject(ThisObject, JsonSettingsGlobals.JsonSettingsData));
             await WriteTextAsync(Path, ThisText, false);
         }
 
         public static async Task<T> RetrieveSavedObjectAsync<T>(string Path)
         {
+            JsonSettingsGlobals.PopulateSettings();
             T ThisT;
             ThisT = default;
             string ThisText;
@@ -25,7 +27,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Json
 
             await Task.Run(() =>
             {
-                ThisT = js.DeserializeObject<T>(ThisText);
+                ThisT = js.DeserializeObject<T>(ThisText, JsonSettingsGlobals.JsonSettingsData);
             });
             return ThisT;
         }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CommonBasicStandardLibraries.BasicDataSettingsAndProcesses
 {
-    public interface IResolver
+    public interface IResolver //if i decide that i need to have the possibilty for data, will do so.
     {
         T Resolve<T>();
     }

@@ -4,7 +4,7 @@ using System.Linq;
 using CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.BasicExtensions;
 using CommonBasicStandardLibraries.BasicDataSettingsAndProcesses;
 using CommonBasicStandardLibraries.CollectionClasses;
-//using MVVMHelpers;
+using CommonBasicStandardLibraries.Exceptions;
 namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.RandomGenerator
 {
     public static class RandomGenerator
@@ -12,10 +12,16 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
         private static bool Dids = false;
         private static Random r;
         //if i need the times to shuffle, can do it.
+        private static int PrivateID;
+
+        public static int GetSeed()
+        {
+            return PrivateID;
+        }
 
         private static void ShowError()
         {
-            throw new Exception("Random number could not be generated, range to narrow");
+            throw new BasicBlankException("Random number could not be generated, range to narrow");
         }        
 
         public static string GenerateRandomPassword()
@@ -193,17 +199,21 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
 
         }
 
-        private static void DoRandomize()
+        private static void DoRandomize() //by this moment, you have to already have your interface that you need for random numbers.
         {
             if (Dids == true)
                 return;
-            // Randomize()
-            r = new Random();
+            PrivateID = Guid.NewGuid().GetHashCode(); //this may not be too bad for the new behavior for the random
+            r = new Random(PrivateID);
             Dids = true;
         }
 
-
-
+        public static void SetRandomSeed(int Value) //this can come from anywhere.  saved data, etc.
+        {
+            PrivateID = Value; //so it can be saved and used for testing (to more easily replay the game).
+            r = new Random(Value);
+            Dids = true; //this means that this will use the same value every time.  useful for debugging.
+        }
 
         private static int PrivateHowManyPossible(int MaxNumber, int StartingNumber, int PreviousCount, int SetCount)
         {

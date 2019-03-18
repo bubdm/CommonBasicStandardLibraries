@@ -61,10 +61,33 @@ namespace CommonBasicStandardLibraries.CollectionClasses
     {
 
         protected List<T> PrivateList; //was going to use ilist but we need features that only applies to the ilist.
-
+        //if i chose to not use the List but instead use the array and more of my own thing, then watch this series.
+        //https://www.youtube.com/watch?v=3L6Wv7AxjjI&list=PLRwVmtr-pp07QlmssL4igw1rnrttJXerL&index=20&t=0s
+        //this showed indexers but has other videos in the series.
+        //the beginnings of the custom list is
+        //https://www.youtube.com/watch?v=u4yaUd4hWzQ&list=PLRwVmtr-pp07QlmssL4igw1rnrttJXerL&index=12
         protected IListModifiers<T> Behavior;
 
-        public CustomBasicList() { PrivateList = new List<T>(); LoadBehavior(); FactoryRequested = new SimpleCollectionFactory<T>
+
+        //hint:
+        //he encourages if a person knows how many its going to have, start that as default
+        //because otherwise, when it has to be resized, its very memory intensive.
+        //for cases where somebody wants a new list they know what its going to have so it can set that.
+        //will help save on memory.
+        //this means i should have trimexcess
+
+        //if the amounts are small no big deal.  most game package stuff, no big deal.
+
+        //but if there is a data intensive process, then its going to be a big deal.
+        //for cases where i use .tocustomlist, it should put the guess at what you actually have.
+        //hint:
+        //its best to be intelligent for the number you put into it.
+        //if you for example put 6000 and only need 500, waste lots of space
+        //if you expect 250 and its 500, you do eat some in processing but you save in space (memory).
+        //sometimes no perfect solution.
+
+
+        public CustomBasicList(int InitCapacity = 5) { PrivateList = new List<T>(InitCapacity); LoadBehavior(); FactoryRequested = new SimpleCollectionFactory<T>
         {
             SendingType = GetType()
         };
@@ -88,7 +111,16 @@ namespace CommonBasicStandardLibraries.CollectionClasses
                 }
             }
         }
+        public int Capacity { get => PrivateList.Capacity; set => PrivateList.Capacity = value; } //now have a new function.
+        //i could decide to make the underlying an arrray.
 
+        public void TrimExcess()
+        {
+            PrivateList.TrimExcess();
+        }
+        //if i decide the interface does not have to do as much, then can modify the interface.
+        //the interface is just what members will show up if you need the interface
+        //could rethink interfaces if needed
         protected virtual void LoadBehavior() //done
         {
             Behavior = new BlankListBehavior<T>(); //so inherited version can load a different behavior.
@@ -102,7 +134,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
             {
                 SendingType = GetType()
             };
-			PrivateList = new List<T>(); //try this.
+			PrivateList = new List<T>(TempList.Count()); //telling them we know what to start with if sending a new list.
             CopyFrom(TempList);
             LoadBehavior();
             Behavior.LoadStartLists(TempList);
@@ -124,6 +156,8 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         }
 
         public int Count => PrivateList.Count; //done
+        //there is a warning that insert is an expensive operation.
+
 
         public void Add(T value) //done i think
         {
@@ -653,6 +687,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
             PrivateList.Sort(index, count, comparer);
             FinalSort(ThisList);
         }
+        //for icomparer, 1 means greater than.  -1 means less than.  0 means equal.
 
         public void Sort(IComparer<T> comparer) //done
         {
@@ -816,6 +851,8 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         {
             //in this case, will do one remove, not several.
             CustomBasicList<T> RList = new CustomBasicList<T>();
+            //there is a hint that you should use the old fashioned for using i = .  for performance.
+
             ThisList.ForEach(FirstItem =>
             {
                 if (Exists(FirstItem.Predicate) == true)
@@ -839,6 +876,54 @@ namespace CommonBasicStandardLibraries.CollectionClasses
             });
             RemoveGivenList(RList, NotifyCollectionChangedAction.Remove);
         }
-        
+        //not sure if i am forced to use my own. in that case, has to get source code to figure out the areas they are strong in performance
+        public ICustomBasicList<U> ConvertAll<U>(Converter<T, U> converter)
+        {
+            //now we have a serious problem.
+
+            IListFactory<U> Temps = FactoryRequested.GetNewFactory<U>();
+            ICustomBasicList<U> News = Temps.GetStartList();
+            News.Capacity = PrivateList.Count; //use their count
+            //in this case, you can access directly.
+            //however, if you are doing an interface, then does not work so well.
+            CustomBasicList<U> Fasts = News as CustomBasicList<U>;
+            bool rets = false;
+            if (Fasts != null)
+                rets = true;
+            for (int i = 0; i < PrivateList.Count; i++)
+            {
+                if (rets == true)
+                    Fasts.PrivateList.Add(converter(PrivateList[i]));
+                else
+                    News.Add(converter(PrivateList[i]));
+            }
+            if (News.Count != PrivateList.Count && rets == true)
+                throw new BasicBlankException("ConvertAll Does Not Reconcile");
+            return News;
+        }
+        //looks like i have to recast it.  has to be just this method.  because it has to return a custom basic list.  this is the only way around it.
+
+        //can try another approach
+
+        public CustomBasicList<U> RecastList<U>() //if i already have the list, use this.   if its from ienumerable or iqueryable, then something else.
+        {
+            object ThisObj = this;
+
+            return (CustomBasicList<U>) ThisObj; //decided that this will not be from the interface.  if i decide differently, then rethink
+        }
+
+
+        //public CustomBasicList<U>  RecastList<U>() //has to be castable from T
+        //{
+        //    CustomBasicList<U> NewList = new CustomBasicList<U>();
+        //    NewList.Capacity = PrivateList.Count;
+        //    for (int i = 0; i < PrivateList.Count; i++)
+        //    {
+        //        object ThisObj = PrivateList[i]; //if i do the wrong, thing, will end up being a runtime issue then.
+
+        //        NewList.Add((U) ThisObj);
+        //    }
+        //    return NewList;
+        //}
     }
 }

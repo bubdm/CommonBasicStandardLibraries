@@ -49,7 +49,7 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
         protected Dictionary<string, string> Errors = new Dictionary<string, string>(); // for hints
 
 
-        public IFocusOnFirst FirstControl { get; set; }
+        protected IFocusOnFirst FirstControl { get; set; }
 
         public CustomBasicCollection<string> ErrorLists { get; } = new CustomBasicCollection<string>(); //hopefully this is fine. don't know though.
 
@@ -298,15 +298,20 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
 
         public Command SaveCommand { get; set; }
 
+        public DataEntryViewModel(IFocusOnFirst TempFocus) { FirstControl = TempFocus; ThisMessage = TempFocus; RunFirst(); }
 
-
-        public DataEntryViewModel()
+        private void RunFirst()
         {
             SaveCommand = new Command(ProcessSave, s =>
             {
                 return CanSave(s);
             }, this);
             CollectErrors(); // looks like has to collect errors to begin with now.
+        }
+
+        public DataEntryViewModel()
+        {
+            RunFirst();
         }
     }
 }

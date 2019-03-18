@@ -26,6 +26,7 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.Interfaces
         void ContactListChanged();
         void FinishedStartEdit();
         void FinishedEndEdit();
+        void BackToMain(); //instead of events.
     }
 
 	public interface IErrorHandler

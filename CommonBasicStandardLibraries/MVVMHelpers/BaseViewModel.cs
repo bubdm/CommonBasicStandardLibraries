@@ -43,11 +43,11 @@ namespace CommonBasicStandardLibraries.MVVMHelpers
 
 
 
-        public ISimpleUI ThisMessage { get; set; }
+        protected ISimpleUI ThisMessage { get; set; } //maybe i should set as protected.  but instead register itself.
 
+        public BaseViewModel() { } //don't require it though so it can be called from console.   otherwise, you make it harder for testing.
 
-
-
+        public BaseViewModel(ISimpleUI TempUI) { ThisMessage = TempUI; }
 
 
         //bool isBusy;
@@ -88,9 +88,25 @@ namespace CommonBasicStandardLibraries.MVVMHelpers
 
 		async Task IErrorHandler.HandleErrorAsync(Exception ex)
 		{
-			//if we have something else we are using, do it.
-			IErrorHandler ThisError = Resolve<IErrorHandler>();
-			ILogger ThisLog = Resolve<ILogger>();
+            //if we have something else we are using, do it.
+            IErrorHandler ThisError = null;
+            ILogger ThisLog = null;
+            try
+            {
+                ThisError = Resolve<IErrorHandler>();
+            }
+            catch
+            {
+                
+            }
+            try
+            {
+                ThisLog = Resolve<ILogger>();
+            }
+            catch
+            {
+
+            }
 			Exception FirstException;
 			Exception SecondException;
 			if (ThisLog != null)
@@ -121,7 +137,9 @@ namespace CommonBasicStandardLibraries.MVVMHelpers
 
 		protected virtual Task CustomErrorHandler(Exception ex) //default implementation is to just throw it.  you can do other things if needed.
 		{
-			throw ex;
+            //CommonBasicStandardLibraries.BasicDataSettingsAndProcesses.VBCompat.Stop();
+            Exception NewEx = new Exception(ex.Message, ex);
+            throw NewEx; //hopefully can get more of a trace
 		}
 
 		

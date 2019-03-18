@@ -11,7 +11,7 @@ and cross platform converters.</Description>
     <RepositoryUrl>https://github.com/musictopia2/CommonBasicStandardLibraries</RepositoryUrl>
     <PackageProjectUrl>https://github.com/musictopia2/CommonBasicStandardLibraries</PackageProjectUrl>
     <PackageTags>MVVM Helpers mvvmhelper Collections Converters Extensions Messenging nugethelpers ExceptionHandling DependencyInjection Interfaces FileHelpers</PackageTags>
-    <Version>1.0.33</Version>
+    <Version>1.0.35</Version>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
   </PropertyGroup>
   <ItemGroup>

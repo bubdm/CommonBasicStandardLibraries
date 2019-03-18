@@ -17,6 +17,7 @@ namespace CommonBasicStandardLibraries.BasicDataSettingsAndProcesses
         //these are actually escape sequences.  however, i did not know that. will try an experiment.
 
         public const string DoubleQuote = "\""; //hopefully this simple.
+        public const string qq = "\""; //decided to do it this way so the typing is much simplier for this purpose.
 
         public const string SingleQuote = "\'";
 

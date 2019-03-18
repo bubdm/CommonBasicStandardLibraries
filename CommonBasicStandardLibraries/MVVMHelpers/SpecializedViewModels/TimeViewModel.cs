@@ -1,4 +1,5 @@
 ﻿using CommonBasicStandardLibraries.MVVMHelpers.CustomValidationClasses;
+using CommonBasicStandardLibraries.MVVMHelpers.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -143,28 +144,25 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
             return CanEnableTimeFeatures;
         }
 
-        public TimeViewModel()
+        private void RunFirst()
         {
-
-            //since we don't need parameter, i guess this is the way to do it this time.
-
-            ChangeToHourCommand = new Command( x =>
+            ChangeToHourCommand = new Command(x =>
             {
                 TimeCategory = CustomTimeAttribute.EnumTimeFormat.Hours;
             }, x =>
             {
                 return DoEnable();
             }, this);
-            ChangeToDayCommand = new Command( x =>
+            ChangeToDayCommand = new Command(x =>
             {
-				TimeCategory = CustomTimeAttribute.EnumTimeFormat.Days;
+                TimeCategory = CustomTimeAttribute.EnumTimeFormat.Days;
             }, x =>
             {
                 return CanEnableTimeFeatures;
             }, this);
-            ChangeToNoneCommand = new Command( x =>
+            ChangeToNoneCommand = new Command(x =>
             {
-				TimeCategory = CustomTimeAttribute.EnumTimeFormat.None;
+                TimeCategory = CustomTimeAttribute.EnumTimeFormat.None;
             }, x =>
             {
                 return CanEnableTimeFeatures;
@@ -176,6 +174,16 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
             {
                 return CanEnableTimeFeatures;
             }, this);
+        }
+
+        public TimeViewModel(IFocusOnFirst TempFocus) { FirstControl = TempFocus; ThisMessage = TempFocus; RunFirst(); }
+
+        public TimeViewModel()
+        {
+
+            //since we don't need parameter, i guess this is the way to do it this time.
+            RunFirst();
+            
         }
     }
 }

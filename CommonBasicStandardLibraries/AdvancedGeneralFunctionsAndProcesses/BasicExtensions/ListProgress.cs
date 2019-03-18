@@ -12,7 +12,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
         //    return new HashSet<T>(TempList);
         //}
 
-        public static string ProgressString<T> (this CustomBasicList<T> ThisList, T ThisItem, string MiscText)
+        public static string ProgressString<T> (this ICustomBasicList<T> ThisList, T ThisItem, string MiscText)
         {
             int Index = ThisList.IndexOf(ThisItem);
             if (Index == -1)
@@ -26,10 +26,11 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             Console.WriteLine($"{ThisStr} on {DateTime.Now}");
         }
 
-        public static void WriteProgress<T>(this CustomBasicList<T> ThisList, T ThisItem, string MiscText)
+        public static void WriteProgress<T>(this ICustomBasicList<T> ThisList, T ThisItem, string MiscText)
         {
             string ThisProgress = ThisList.ProgressString(ThisItem, MiscText);
             Console.WriteLine(ThisProgress);
         }
+       
     }
 }

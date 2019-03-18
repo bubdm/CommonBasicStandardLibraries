@@ -15,6 +15,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
 
         ICustomBasicList<T> GetStartList(); //based on the requested type, will create this new one.  will use some logic statments based on factory chosen.
 
+        IListFactory<U> GetNewFactory<U>(); //maybe i have to figure out how to get the new factory.  doing the same thing but producing another generic type.
 
         //L ICustomBasicList<T> GetStartList(); //this specializes in figuring out which list to start creating.
          
@@ -140,6 +141,9 @@ namespace CommonBasicStandardLibraries.CollectionClasses
 
         int Count { get; }
 
+        int Capacity { get; set; }
+        void TrimExcess();
+
         //its obvious you have to be ienumerable.
         //i think that everything that implements from this needs to get the index.
 
@@ -198,6 +202,8 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         void RemoveSeveralConditionalItems(CustomBasicList<ConditionActionPair<T>> ThisList);
 
         void RemoveAllOnly(Predicate<T> match); //looks like i can't return anything after all.
+        ICustomBasicList<U> ConvertAll<U>(Converter<T, U> converter);
+
 
 
         ICustomBasicList<T> RemoveAllAndObtain(Predicate<T> match); //this means whatever the condition is, it removes and you receive it.

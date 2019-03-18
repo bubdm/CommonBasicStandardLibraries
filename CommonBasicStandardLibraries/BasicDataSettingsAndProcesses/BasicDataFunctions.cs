@@ -41,6 +41,8 @@ namespace CommonBasicStandardLibraries.BasicDataSettingsAndProcesses
 
         public static T Resolve<T>()
         {
+            if (cons == null)
+                cons = new ContainerClasses.ContainerMain();
             return cons.Resolve<T>();
         }
 

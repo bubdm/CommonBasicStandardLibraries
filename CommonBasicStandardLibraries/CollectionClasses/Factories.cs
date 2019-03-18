@@ -8,6 +8,11 @@ namespace CommonBasicStandardLibraries.CollectionClasses
     {
         public Type SendingType { get; set; }
 
+        public IListFactory<U> GetNewFactory<U>()
+        {
+            return new SimpleCollectionFactory<U>(); //maybe this simple.  since this logic will be the same.
+        }
+
         public ICustomBasicList<T> GetStartList()
         {
             //this one does not matter because its always going to produce a basic list no matter what.
@@ -15,6 +20,9 @@ namespace CommonBasicStandardLibraries.CollectionClasses
 
             return new CustomBasicList<T>();
         } //this one will not care about type.  because it can't do any other anyways.
+
+        
+
     }
     
 }

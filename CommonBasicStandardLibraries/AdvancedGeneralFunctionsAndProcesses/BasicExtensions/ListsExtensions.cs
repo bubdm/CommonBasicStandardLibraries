@@ -22,12 +22,29 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             return new CustomBasicList<T>(TempList);
         }
 
+        //public static CustomBasicList<S> ToCastedList<T, S>(this IEnumerable<T> Templist)
+        //{
+        //    CustomBasicList<S> NewList = new CustomBasicList<S>(); //if i do count, then i have enumerate again.
+        //    foreach (T ThisT in Templist)
+        //    {
+        //        object NewObj = ThisT;
+        //        NewList.Add((S)NewObj);
+        //    }
+        //    NewList.TrimExcess();
+        //    return NewList;
+        //    //return new CustomBasicList<S>(Templist); //hopefully this can work.
+        //}
 
+        public static CustomBasicList<T> ToCastedList<T>(this IEnumerable<object> TempList) //in this case, you get another list.
+        {
+            return new CustomBasicList<T>(TempList: (IEnumerable<T>) TempList);
+        }
 
         public static CustomBasicCollection<T> ToCustomBasicCollection<T> (this IEnumerable<T> TempList)
         {
             return new CustomBasicCollection<T>(TempList);
         }
+        
 
         public static TKey GetKey<TKey, TValue>(this IDictionary<TKey, TValue> ThisDict, TValue ThisValue)
         {
@@ -98,6 +115,11 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             ConditionActionPair<T> ThisC = new ConditionActionPair<T>(Match, Action, Value);
             TempList.Add(ThisC);
             return TempList;
+        }
+
+        public static void WriteString<T>(this ICustomBasicList<T> ThisList)
+        {
+            ThisList.ForEach(Items => Console.WriteLine(Items.ToString()));
         }
     }
 }

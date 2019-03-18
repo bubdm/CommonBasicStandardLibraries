@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommonBasicStandardLibraries.MVVMHelpers.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -78,8 +79,7 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
             return true; // can usually do it.  however, sometimes, it won't do it.
         }
 
-
-        public AddEditViewModel()
+        private void RunFirst()
         {
             EnterCommand = new Command(async a =>
             {
@@ -93,6 +93,11 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
             {
                 return CanAdd(s);
             }, this);
+        }
+        public AddEditViewModel(IFocusOnFirst TempFocus) { FirstControl = TempFocus; ThisMessage = TempFocus; RunFirst(); }
+        public AddEditViewModel()
+        {
+            RunFirst();
         }
 
     }

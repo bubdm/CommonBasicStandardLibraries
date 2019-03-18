@@ -99,7 +99,7 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
         protected abstract bool IsPhone { get; } // can decide what to do whether its phone or not.
 
         private C _SelectedItem;
-        public C SelectedItem
+        public C SelectedItem //we could decide on interfaces but not sure now though.
         {
             get
             {
@@ -186,7 +186,7 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
         }
 
 
-        public IBasicContactManagerUI BasicContactManagerUI { get; set; }
+        protected IBasicContactManagerUI BasicContactManagerUI { get; set; }
 
         protected List<C> PrivateContactList;
 
@@ -580,13 +580,13 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
         public Command ShowListCommand { get; set; }
 
         public Command UndoAddEditPhoneCommand { get; set; }
-        public event BackToMainEventHandler BackToMain;
+        //public event BackToMainEventHandler BackToMain;
 
-        public delegate void BackToMainEventHandler();
+        //public delegate void BackToMainEventHandler();
 
-        public BaseContactManagerViewModel()
+        private void RunFirst()
         {
-            StartEditContactCommand = new Command( s =>
+            StartEditContactCommand = new Command(s =>
             {
                 AddEditCategory = EnumAddEditCategory.Contact;
                 EditStatus = EnumEditStatus.Edit;
@@ -596,7 +596,7 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
                 return !(SelectedItem == null);
             }, this);
 
-            StartEditPhoneCommand = new Command<P>( x =>
+            StartEditPhoneCommand = new Command<P>(x =>
             {
                 AddEditCategory = EnumAddEditCategory.Phone;
                 EditStatus = EnumEditStatus.Edit;
@@ -614,22 +614,28 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
 
             }, this);
 
-			ShowListCommand = new Command(x =>
-			{
-				SelectedItem = default;
-				PhoneChosen = default;
-				ClearItems(); // i think
-				EditStatus = EnumEditStatus.None;
-				AddEditCategory = EnumAddEditCategory.None; // you are basically starting over in this case
-				EnterCommand.ReportCanExecuteChange();
-				BackToMain?.Invoke(); // its up to each ui to decide what to do about this.
-			}, x => true, this);
+            ShowListCommand = new Command(x =>
+            {
+                SelectedItem = default;
+                PhoneChosen = default;
+                ClearItems(); // i think
+                EditStatus = EnumEditStatus.None;
+                AddEditCategory = EnumAddEditCategory.None; // you are basically starting over in this case
+                EnterCommand.ReportCanExecuteChange();
+                BasicContactManagerUI.BackToMain(); //i don't think i need async.  if i do, rethink.
+                //BackToMain?.Invoke(); // its up to each ui to decide what to do about this.
+            }, x => true, this);
 
             UndoAddEditPhoneCommand = new Command(x =>
             {
                 EditStatus = EnumEditStatus.Edit;
                 AddEditCategory = EnumAddEditCategory.Contact; // the only way you can add a number to a contact is if you are editing a contact
             }, x => true, this);
+        }
+        public BaseContactManagerViewModel(IBasicContactManagerUI ThisTemp) { BasicContactManagerUI = ThisTemp; ThisMessage = ThisTemp; FirstControl = ThisTemp; RunFirst(); }
+        public BaseContactManagerViewModel()
+        {
+            RunFirst();
         }
     }
 }

@@ -11,14 +11,16 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Json
         public static async Task<string> SerializeObjectAsync(object ThisObj) //decided to do async versions now. hopefully i don't regret this.
         {
             string ThisStr = default;
-            await Task.Run(() => ThisStr = JsonConvert.SerializeObject(ThisObj, Formatting.Indented));
+            JsonSettingsGlobals.PopulateSettings();
+            await Task.Run(() => ThisStr = JsonConvert.SerializeObject(ThisObj, JsonSettingsGlobals.JsonSettingsData));
             return ThisStr;
         }
 
         public static async Task<T> DeserializeObjectAsync<T>(string ThisStr)
         {
             T ThisT = default;
-            await Task.Run(() => ThisT = JsonConvert.DeserializeObject<T>(ThisStr));
+            JsonSettingsGlobals.PopulateSettings();
+            await Task.Run(() => ThisT = JsonConvert.DeserializeObject<T>(ThisStr, JsonSettingsGlobals.JsonSettingsData));
             return ThisT;
         }
 
