@@ -6,6 +6,7 @@ using CommonBasicStandardLibraries.Exceptions;
 using CommonBasicStandardLibraries.BasicDataSettingsAndProcesses;
 using static CommonBasicStandardLibraries.BasicDataSettingsAndProcesses.BasicDataFunctions;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.BasicExtensions
 {
@@ -37,8 +38,10 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
 
         public static CustomBasicList<T> ToCastedList<T>(this IEnumerable<object> TempList) //in this case, you get another list.
         {
-            return new CustomBasicList<T>(TempList: (IEnumerable<T>) TempList);
+            return TempList.Cast<T>().ToCustomBasicList();
+            //return new CustomBasicList<T>(TempList: (IEnumerable<T>) TempList);
         }
+
 
         public static CustomBasicCollection<T> ToCustomBasicCollection<T> (this IEnumerable<T> TempList)
         {
@@ -121,5 +124,64 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
         {
             ThisList.ForEach(Items => Console.WriteLine(Items.ToString()));
         }
+
+        public static bool HasDuplicates <TSource, TKey>(this ICustomBasicList<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            HashSet<TKey> seenKeys = new HashSet<TKey>();
+            foreach (var item in source)
+            {
+                if (seenKeys.Add(keySelector(item)) == false)
+                    return true;
+            }
+            return false;
+            
+        }
+
+        public static bool IsIntOrdered <TSource>(this ICustomBasicList<TSource> source, Func<TSource, int?> keySelector, bool ExcludeUnknowns = true)
+        {
+            CustomBasicList<int?> ThisList = source.ExtractIntegers(keySelector);
+            
+            //starts at 1.
+            
+            int x;
+            x = 0;
+            if (ExcludeUnknowns == true)
+                ThisList.RemoveAllOnly(Items => Items.HasValue == false);
+            ThisList.Sort();
+            if (ThisList.First() != 1)
+                return false; //if the first item is not in order, then its not in order.
+            foreach (var item in ThisList)
+            {
+                x++;
+                if (item != x)
+                    return false;
+            }
+            return true;
+        }
+
+        public static CustomBasicList<int?> ExtractIntegers<TSource>(this ICustomBasicList<TSource> source, Func<TSource, int?> keySelector)
+        {
+            CustomBasicList<int?> output = new CustomBasicList<int?>();
+            foreach (var item in source)
+            {
+                output.Add(keySelector(item));
+            }
+            return output;
+        }
+
+
+        public static IEnumerable<TSource> DistinctBy<TSource, TKey> //2 choices
+    (this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            HashSet<TKey> seenKeys = new HashSet<TKey>();
+            foreach (TSource element in source)
+            {
+                if (seenKeys.Add(keySelector(element)))
+                {
+                    yield return element;
+                }
+            }
+        }
+
     }
 }

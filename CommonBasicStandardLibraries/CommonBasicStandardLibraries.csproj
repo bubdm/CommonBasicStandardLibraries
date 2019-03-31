@@ -11,12 +11,11 @@ and cross platform converters.</Description>
     <RepositoryUrl>https://github.com/musictopia2/CommonBasicStandardLibraries</RepositoryUrl>
     <PackageProjectUrl>https://github.com/musictopia2/CommonBasicStandardLibraries</PackageProjectUrl>
     <PackageTags>MVVM Helpers mvvmhelper Collections Converters Extensions Messenging nugethelpers ExceptionHandling DependencyInjection Interfaces FileHelpers</PackageTags>
-    <Version>1.0.35</Version>
+    <Version>1.0.36</Version>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FileStandardTest">

@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using CommonBasicStandardLibraries.CollectionClasses;
 using System.Linq;
 using static CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.BasicExtensions.ListsExtensions;
+using static CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.BasicExtensions.Reflections;
+using System.Reflection;
+using CommonBasicStandardLibraries.Attributes;
 namespace CommonBasicStandardLibraries.BasicDataSettingsAndProcesses
 {
     public static class BasicDataFunctions
@@ -77,6 +80,13 @@ namespace CommonBasicStandardLibraries.BasicDataSettingsAndProcesses
 		{
 			return Enumerable.Range(StartAt, HowMany).ToCustomBasicList();
 		}
+
+        public static void AutoClearProperties(object ThisObj)
+        {
+            Type ThisType = ThisObj.GetType();
+            CustomBasicList<PropertyInfo> ThisList = ThisType.GetPropertiesWithAttribute<AutoClearAttribute>().ToCustomBasicList();
+            ThisList.ForEach(Items => Items.SetValue(ThisObj, default));
+        }
 
     }
 }

@@ -1,11 +1,11 @@
 ﻿using CommonBasicStandardLibraries.MVVMHelpers.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using static CommonBasicStandardLibraries.BasicDataSettingsAndProcesses.BasicDataFunctions;
+using CommonBasicStandardLibraries.Attributes;
 namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
 {
     public abstract class BaseContactManagerViewModel<C, P> : AddEditViewModel// because we have a phone and a desktop version of it.
@@ -222,8 +222,10 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
         // i think will be here for the enums
 
         private string _DisplayName;
+        
         [Required(ErrorMessage = "Must Have A Display Name")]
         [StringLength(50)]
+        [AutoClear]
         public string DisplayName
         {
             get
@@ -242,6 +244,7 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
 
         private string _Email;
         [StringLength(50)]
+        [AutoClear]
         public string Email
         {
             get
@@ -259,6 +262,7 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
 
         private string _StreetAddress;
         [StringLength(100)]
+        [AutoClear]
         public string StreetAddress
         {
             get
@@ -277,6 +281,7 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
 
         private string _City;
         [StringLength(100)]
+        [AutoClear]
         public string City
         {
             get
@@ -294,6 +299,7 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
 
         private string _State;
         [StringLength(50)]
+        [AutoClear]
         public string State
         {
             get
@@ -311,6 +317,7 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
 
         private string _ZipCode;
         [StringLength(50)]
+        [AutoClear]
         public string ZipCode
         {
             get
@@ -328,6 +335,7 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
 
 
         private string _Notes;
+        [AutoClear]
         public string Notes
         {
             get
@@ -345,6 +353,7 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
 
 
         private string _DrivingInstructions;
+        [AutoClear]
         public string DrivingInstructions
         {
             get
@@ -361,6 +370,7 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
         }
 
         private EnumRelationship? _Relationship = default;
+        [AutoClear]
         public EnumRelationship? Relationship
         {
             get
@@ -383,6 +393,7 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
         private string _PhoneNumber;
         [Required(ErrorMessage = "Must Have A Phone Number")]
         [StringLength(50)]
+        [AutoClear]
         public string PhoneNumber
         {
             get
@@ -447,10 +458,11 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
                 return;
             }
             UseBlankString = true;
-            ClearPropertiesWithAttributes();
-            Notes = "";
-            DrivingInstructions = ""; // since no attributes, i have to do manually.
-            Relationship = default;
+            //ClearPropertiesWithAttributes();
+            //Notes = "";
+            //DrivingInstructions = ""; // since no attributes, i have to do manually.
+            //Relationship = default;
+            AutoClearProperties(this);
             PhoneCategory = EnumPhoneCategory.HomeMainPhone;
         }
 

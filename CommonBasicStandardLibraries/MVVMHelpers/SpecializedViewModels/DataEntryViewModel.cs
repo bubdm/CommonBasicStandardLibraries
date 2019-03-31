@@ -3,7 +3,7 @@ using CommonBasicStandardLibraries.MVVMHelpers.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+//using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -12,6 +12,7 @@ using CommonBasicStandardLibraries.CollectionClasses;
 using CommonBasicStandardLibraries.BasicDataSettingsAndProcesses;
 using System.Threading.Tasks;
 using static CommonBasicStandardLibraries.BasicDataSettingsAndProcesses.BasicDataFunctions;
+using CommonBasicStandardLibraries.Attributes;
 namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
 {
     public abstract class DataEntryViewModel : BaseViewModel, IDataErrorInfo
@@ -101,19 +102,19 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
         protected bool UseBlankString;
         // well see what happens when it comes to integers.
 
-        protected void ClearPropertiesWithAttributes()
-        {
-            var ThisList = PropList;
-            foreach (var ThisItem in ThisList)
-            {
-                if (UseBlankString == false)
-                    ThisItem.SetValue(this, null); // even better.  well see how that works.
-                else if (ThisItem.PropertyType == typeof(string))
-                    ThisItem.SetValue(this, "");
-                else
-                    ThisItem.SetValue(this, null);
-            }
-        }
+        //protected void ClearPropertiesWithAttributes()
+        //{
+        //    var ThisList = PropList;
+        //    foreach (var ThisItem in ThisList)
+        //    {
+        //        if (UseBlankString == false)
+        //            ThisItem.SetValue(this, null); // even better.  well see how that works.
+        //        else if (ThisItem.PropertyType == typeof(string))
+        //            ThisItem.SetValue(this, "");
+        //        else
+        //            ThisItem.SetValue(this, null);
+        //    }
+        //}
 
         protected void NotifyAllChanges()
         {

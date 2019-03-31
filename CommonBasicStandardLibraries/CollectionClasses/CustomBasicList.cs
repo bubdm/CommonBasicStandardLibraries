@@ -905,12 +905,17 @@ namespace CommonBasicStandardLibraries.CollectionClasses
 
         //can try another approach
 
-        public CustomBasicList<U> RecastList<U>() //if i already have the list, use this.   if its from ienumerable or iqueryable, then something else.
-        {
-            object ThisObj = this;
 
-            return (CustomBasicList<U>) ThisObj; //decided that this will not be from the interface.  if i decide differently, then rethink
-        }
+        //recastlist does not work.
+        //according to stack overflow, if you need to cast a list, it always shows a different list.
+        //this means if you need different parts, then you need to use generics.
+
+        //public CustomBasicList<U> RecastList<U>() //if i already have the list, use this.   if its from ienumerable or iqueryable, then something else.
+        //{
+        //    object ThisObj = this;
+
+        //    return (CustomBasicList<U>) ThisObj; //decided that this will not be from the interface.  if i decide differently, then rethink
+        //}
 
 
         //public CustomBasicList<U>  RecastList<U>() //has to be castable from T

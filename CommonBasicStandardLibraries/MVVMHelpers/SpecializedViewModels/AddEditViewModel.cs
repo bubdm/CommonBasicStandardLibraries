@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using static CommonBasicStandardLibraries.BasicDataSettingsAndProcesses.BasicDataFunctions;
+using CommonBasicStandardLibraries.Attributes;
 namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
 {
     public abstract class AddEditViewModel : DataEntryViewModel
@@ -11,6 +12,7 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
         private bool PreviousValidated;
 
         private bool _AddVisible;
+        //[AutoClear]
         public bool AddVisible
         {
             get

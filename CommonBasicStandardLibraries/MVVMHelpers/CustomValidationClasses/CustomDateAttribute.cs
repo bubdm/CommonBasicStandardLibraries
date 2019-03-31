@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations; //looks like i was not able to do away from the reference to the annotations.
 using System.Text;
-
+using CommonBasicStandardLibraries.Attributes;
 namespace CommonBasicStandardLibraries.MVVMHelpers.CustomValidationClasses
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
@@ -12,10 +11,10 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.CustomValidationClasses
         public bool Required { get; set; } = false;
 
 
-        protected bool GetMyBaseValid(object value)
-        {
-            return base.IsValid(value);
-        }
+        //protected bool GetMyBaseValid(object value)
+        //{
+        //    return base.IsValid(value);
+        //}
 
         // the example showed that since its used for validation, should inherit from that
         public override bool IsValid(object value)

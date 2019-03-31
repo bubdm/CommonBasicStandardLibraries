@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+//using System.ComponentModel.DataAnnotations;
 using System.Text;
-
+using CommonBasicStandardLibraries.Attributes;
+using CommonBasicStandardLibraries.Exceptions;
 namespace CommonBasicStandardLibraries.MVVMHelpers.CustomValidationClasses
 {
     public enum EnumLessOrGreater
@@ -66,6 +67,11 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.CustomValidationClasses
                     return false;
             }
             return true;
+        }
+
+        public override bool IsValid(object CurrentValue)
+        {
+            throw new BasicBlankException("This one requires the context.  If this is required, rethink");
         }
     }
 }
