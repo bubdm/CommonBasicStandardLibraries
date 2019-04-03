@@ -97,7 +97,11 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
                 typeof(int?),
             };
 
-            //enums are not booleans.
+            if (property.PropertyType.IsEnum == true)
+                return true;
+            if (property.PropertyType.IsNullableEnum() == true)
+                return true; //i think
+
             return simpleTypesList.Contains(property.PropertyType);
         }
 

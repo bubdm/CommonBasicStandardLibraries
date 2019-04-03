@@ -62,5 +62,17 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             return ProgressSpan.SongProgress(DurationSpan);
         }
         public static int MultiplyPercentage(this int Amount, int Percentage) => (int)Math.Ceiling(((decimal)Percentage / 100) * Amount); //decided this needs to be clear it multiplies
+
+        public static T ToEnum<T>(this int param) //i may need to cast other times to enums and even generic enums.
+        {
+            var info = typeof(T);
+            if (info.IsEnum)
+            {
+                T result = (T)Enum.Parse(typeof(T), param.ToString(), true);
+                return result;
+            }
+
+            return default;
+        }
     }
 }

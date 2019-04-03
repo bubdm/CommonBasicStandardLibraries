@@ -137,6 +137,19 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             
         }
 
+        public static CustomBasicList<TSource> GetDuplicates<TSource, TKey>(this ICustomBasicList<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            HashSet<TKey> seenKeys = new HashSet<TKey>();
+            CustomBasicList<TSource> output = new CustomBasicList<TSource>();
+            foreach (var item in source)
+            {
+                if (seenKeys.Add(keySelector(item)) == false)
+                    output.Add(item);
+                    //return true;
+            }
+            return output;
+        }
+
         public static bool IsIntOrdered <TSource>(this ICustomBasicList<TSource> source, Func<TSource, int?> keySelector, bool ExcludeUnknowns = true)
         {
             CustomBasicList<int?> ThisList = source.ExtractIntegers(keySelector);
@@ -162,6 +175,16 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
         public static CustomBasicList<int?> ExtractIntegers<TSource>(this ICustomBasicList<TSource> source, Func<TSource, int?> keySelector)
         {
             CustomBasicList<int?> output = new CustomBasicList<int?>();
+            foreach (var item in source)
+            {
+                output.Add(keySelector(item));
+            }
+            return output;
+        }
+
+        public static CustomBasicList<int> ExtractIntegers<TSource>(this ICustomBasicList<TSource> source, Func<TSource, int> keySelector)
+        {
+            CustomBasicList<int> output = new CustomBasicList<int>();
             foreach (var item in source)
             {
                 output.Add(keySelector(item));
