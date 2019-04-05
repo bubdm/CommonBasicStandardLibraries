@@ -614,10 +614,12 @@ namespace CommonBasicStandardLibraries.CollectionClasses
             PropertyItemChanged();
             OnCollectionChanged(NotifyCollectionChangedAction.Move, PrivateList, 0, 0); //obviously if reversing, then the entire thing changes.
         }
-
         public void ShuffleList() //i can try to test out this idea.
         {
             //i think this one would be a move command.  you are not really removing the entire list
+            //throw new BasicBlankException("Shuffle Test");
+            if (Count == 0)
+                return; //because there is nothing to shuffle.  so can't obviously.  better than runtime error.
             List<int> ThisList = rs.GenerateRandomList(PrivateList.Count); //i think
             List<T> RList = new List<T>(); //since they removed and added, then i think its best if i just remove the entire thing.   however, let them know it really moved.
             CheckReentrancy();

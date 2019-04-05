@@ -152,6 +152,8 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
 
         public static bool IsIntOrdered <TSource>(this ICustomBasicList<TSource> source, Func<TSource, int?> keySelector, bool ExcludeUnknowns = true)
         {
+            if (source.Count == 0)
+                return true; //just act like its in order because there was nothing.
             CustomBasicList<int?> ThisList = source.ExtractIntegers(keySelector);
             
             //starts at 1.
