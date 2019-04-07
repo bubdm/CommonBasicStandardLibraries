@@ -6,13 +6,26 @@ using System.Windows.Input;
 
 namespace CommonBasicStandardLibraries.MVVMHelpers.Interfaces
 {
-    public interface ISimpleUI
+    //this is used so if i use in unit testing, then it can at least show a messagebox.
+    public interface IMessage //decided to do this so something can just display messages but do nothing else
     {
         Task ShowMessageBox(string Message);
-
+    }
+    public interface IError
+    {
         void ShowError(string Message);
+    }
+    public interface IClose
+    {
         void CloseProgram();
+    }
+    public interface ISimpleUI : IMessage, IError, IClose
+    {
+        //Task ShowMessageBox(string Message);
 
+        //void ShowError(string Message);
+        //void CloseProgram();
+        //did it this way, so a person can choose just one or all 3.
     }
 
     public interface IFocusOnFirst : ISimpleUI

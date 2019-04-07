@@ -28,6 +28,12 @@ namespace CommonBasicStandardLibraries.ContainerClasses
         private static readonly HashSet<IContainerFactory> FactoryList = new HashSet<IContainerFactory>(); //i think i want anybody to be able to add to this list.  makes the container more powerful.
         public IContainerFactory ParentFactory; //i think its implied that if you set the parent, the parent will handle all duplicates.
 
+        public void ClearContainer() //there are cases i still have to clear container (if doing multiple games and some has to re registered
+        {
+            ThisSet.Clear();
+            FactoryList.Clear();
+        }
+
         public static void AddFactoryToContainer(IContainerFactory ThisFact)
         {
             FactoryList.Add(ThisFact);
