@@ -30,7 +30,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             decimal Diffs;
             Diffs = TempAmount - TotalUsed;
             Lefts = Math.Abs(Diffs);
-            Lefts = Lefts * 100; // i think this
+            Lefts *= 100; // i think this
             decimal AddAmount;
             if (Diffs < 0)
                 AddAmount = -0.01m;
@@ -59,6 +59,10 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
                 return int.Parse(ThisDou.ToString());
             CustomBasicList<string> ThisList = ThisStr.Split(".").ToCustomBasicList();
             return int.Parse(ThisList.First());
+        }
+        public static int Multiply(this double ThisAmount, int HowMuch)
+        {
+            return (int)Math.Ceiling((ThisAmount) * HowMuch);
         }
 
     }

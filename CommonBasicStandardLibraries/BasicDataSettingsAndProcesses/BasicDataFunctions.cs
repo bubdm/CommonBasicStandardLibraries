@@ -4,8 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CommonBasicStandardLibraries.CollectionClasses;
 using System.Linq;
-using static CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.BasicExtensions.ListsExtensions;
-using static CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.BasicExtensions.Reflections;
+using CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.BasicExtensions;
 using System.Reflection;
 using CommonBasicStandardLibraries.Attributes;
 namespace CommonBasicStandardLibraries.BasicDataSettingsAndProcesses
@@ -86,6 +85,17 @@ namespace CommonBasicStandardLibraries.BasicDataSettingsAndProcesses
             Type ThisType = ThisObj.GetType();
             CustomBasicList<PropertyInfo> ThisList = ThisType.GetPropertiesWithAttribute<AutoClearAttribute>().ToCustomBasicList();
             ThisList.ForEach(Items => Items.SetValue(ThisObj, default));
+        }
+        /// <summary>
+        /// This delays number of seconds.  if you want 1 and a half, use 1.5.
+        /// </summary>
+        /// <param name="HowManySeconds"></param>
+        /// <returns></returns>
+        public static async Task DelaySeconds(double HowManySeconds)
+        {
+            int TotalTime;
+            TotalTime = HowManySeconds.Multiply(1000);
+            await Task.Delay(TotalTime);
         }
 
     }

@@ -29,7 +29,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             decimal Diffs;
             Diffs = Amount - TotalUsed;
             Lefts = Math.Abs(Diffs);
-            Lefts = Lefts * 100; // i think this
+            Lefts *= 100; // i think this
             decimal AddAmount;
             if (Diffs < 0)
                 AddAmount = -0.01m;
@@ -70,7 +70,6 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             decimal Diffs;
             if (NewSearch == -1)
             {
-                Centss = 0;
                 Diffs = CentAmount * 100;
             }
             else
@@ -78,7 +77,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
                 Centss = decimal.Parse(ThisStr.Substring(NewSearch)); // try this
                 Diffs = (CentAmount * 100) - Centss;
             }
-            Diffs = Diffs * 0.01m;
+            Diffs *= 0.01m;
             return NewPrice + Diffs;
         }
 
