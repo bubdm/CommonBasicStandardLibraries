@@ -14,18 +14,8 @@ namespace CommonBasicStandardLibraries.BasicDataSettingsAndProcesses
         public static IResolver cons; // at this point, we don't know who is going to implement this.
 
 
-    //    Public Enum EnumOS
-    //    None = 0
-    //    WindowsDT = 1
-    //    Android = 2
-    //    Linux = 3
-    //    Macintosh = 4
-    //End Enum
 
-    //Public Property OS As EnumOS
-
-
-            public enum EnumOS
+        public enum EnumOS
         {
             None,WindowsDT, WindowsRT,Android,Linux,Macintosh
         }
@@ -86,17 +76,5 @@ namespace CommonBasicStandardLibraries.BasicDataSettingsAndProcesses
             CustomBasicList<PropertyInfo> ThisList = ThisType.GetPropertiesWithAttribute<AutoClearAttribute>().ToCustomBasicList();
             ThisList.ForEach(Items => Items.SetValue(ThisObj, default));
         }
-        /// <summary>
-        /// This delays number of seconds.  if you want 1 and a half, use 1.5.
-        /// </summary>
-        /// <param name="HowManySeconds"></param>
-        /// <returns></returns>
-        public static async Task DelaySeconds(double HowManySeconds)
-        {
-            int TotalTime;
-            TotalTime = HowManySeconds.Multiply(1000);
-            await Task.Delay(TotalTime);
-        }
-
     }
 }
