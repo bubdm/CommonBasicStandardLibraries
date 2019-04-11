@@ -7,30 +7,64 @@ using CommonBasicStandardLibraries.CollectionClasses;
 using CommonBasicStandardLibraries.Exceptions;
 namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.RandomGenerator
 {
-    public static class RandomGenerator
+    /// <summary>
+    /// Was static but can't be static anymore since it could be used in unit testing.
+    /// and could have to have specific values sent to it.
+    /// </summary>
+    public partial class RandomGenerator
     {
-        private static bool Dids = false;
-        private static Random r;
-        //if i need the times to shuffle, can do it.
-        private static int PrivateID;
+        public enum EnumFormula
+        {
+            NetStandard, TwisterStandard, TwisterHigh, Twister1, Twister2, Twister3
+        }
 
-        public static int GetSeed()
+        //if i decide to include others, will do as well.
+
+
+        private bool Dids = false;
+        //private static Random r;
+
+        private Func<double> r;
+
+        //if i need the times to shuffle, can do it.
+        private int PrivateID;
+        public EnumFormula Formula = EnumFormula.TwisterStandard;
+
+        //looks like i still get to do the seed part.
+        //that is necessary because i found out from tests that if i don't, then theirs can still be same numbers.
+        //i tried with the new guid and that worked.
+
+        private readonly object ThisObj = new object(); //so it has to lock when initializing.
+
+        internal int Next(int Max) //since i did quite a bit
+        {
+            //return (int) Math.Floor(_random()*(max - min + 1) + min);
+            return (int) Math.Floor(r() * (Max));
+        }
+
+        internal int Next(int Min, int Max) //since i did quite a bit
+        {
+            //return (int) Math.Floor(_random()*(max - min + 1) + min);
+            return (int)Math.Floor(r() * (Max - Min) + Min); //should have been minus and not plus.
+        }
+
+        public int GetSeed()
         {
             return PrivateID;
         }
 
-        private static void ShowError()
+        private void ShowError()
         {
             throw new BasicBlankException("Random number could not be generated, range to narrow");
         }        
 
-        public static string GenerateRandomPassword()
+        public string GenerateRandomPassword()
         {
             RandomPasswordParameterClass ThisPassword = new RandomPasswordParameterClass();
             return GenerateRandomPassword(ThisPassword);
         }
 
-        public static string GenerateRandomPassword(RandomPasswordParameterClass ThisPassword)
+        public string GenerateRandomPassword(RandomPasswordParameterClass ThisPassword)
         {
             DoRandomize();
             CustomBasicList<int> TempResults = new CustomBasicList<int>();
@@ -48,7 +82,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
                 var loopTo = ThisPassword.HowManyNumbers;
                 for (x = 1; x <= loopTo; x++)
                 {
-                    picked = r.Next(NumberList.Count);
+                    picked = Next(NumberList.Count);
                     TempResults.Add(NumberList[picked]); // number picked
                 }
             }
@@ -65,7 +99,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
                 var loopTo1 = ThisPassword.UpperCases;
                 for (x = 1; x <= loopTo1; x++)
                 {
-                    picked = r.Next(UpperList.Count);
+                    picked = Next(UpperList.Count);
                     TempResults.Add(UpperList[picked]);
                 }
             }
@@ -82,7 +116,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
                 var loopTo2 = ThisPassword.LowerCases;
                 for (x = 1; x <= loopTo2; x++)
                 {
-                    picked = r.Next(LowerList.Count);
+                    picked = Next(LowerList.Count);
                     TempResults.Add(LowerList[picked]);
                 }
             }
@@ -92,7 +126,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
                 var loopTo3 = ThisPassword.HowManySymbols;
                 for (x = 1; x <= loopTo3; x++)
                 {
-                    picked = r.Next(ThisPassword.SymbolList.Count);
+                    picked = Next(ThisPassword.SymbolList.Count);
 
                     string ThisSym = ThisPassword.SymbolList[picked];
 
@@ -110,7 +144,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
         }       
         
 
-        public static List<int> GenerateRandomNumberList(int MaximumNumber, int HowMany, int StartingPoint = 0, int Increments = 1)
+        public List<int> GenerateRandomNumberList(int MaximumNumber, int HowMany, int StartingPoint = 0, int Increments = 1)
         {
             List<int> FirstList;
             if (Increments <= 1)
@@ -127,13 +161,13 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
             for (x = 1; x <= loopTo; x++)
             {
                 // can have repeating numbers
-                var ask1 = r.Next(FirstList.Count);
+                var ask1 = Next(FirstList.Count);
                 FinalList.Add(FirstList[ask1]);
             }
             return FinalList;
         }
 
-        private static List<int> GetPossibleIntegerList(int MinValue, int MaximumValue, int Increments)
+        private List<int> GetPossibleIntegerList(int MinValue, int MaximumValue, int Increments)
         {
             List<int> NewList = new List<int>
             {
@@ -155,7 +189,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
             while (true);
         }
 
-        public static int GetRandomNumber(int MaxNumber, int StartingPoint = 1, List<int> PreviousList = null)
+        public int GetRandomNumber(int MaxNumber, int StartingPoint = 1, List<int> PreviousList = null)
         {
             if (PreviousList == null == false)
             {
@@ -169,7 +203,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
             if (PreviousList == null == true)
             {
                 
-                RandNum = r.Next(StartingPoint, MaxNumber + 1);
+                RandNum = Next(StartingPoint, MaxNumber + 1); //plus 1 was worse.  trying -1
                 return RandNum;
             }
             
@@ -189,7 +223,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
             bool rets;
             do
             {
-                int index = r.Next(MaxNumber);
+                int index = Next(MaxNumber);
                 rets = rndIndexes.Add(index + 1);
                 if (rets == true)
                     return index + 1; //because 0 based
@@ -199,23 +233,69 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
 
         }
 
-        private static void DoRandomize() //by this moment, you have to already have your interface that you need for random numbers.
+        private void DoRandomize() //by this moment, you have to already have your interface that you need for random numbers.
         {
-            if (Dids == true)
-                return;
-            PrivateID = Guid.NewGuid().GetHashCode(); //this may not be too bad for the new behavior for the random
-            r = new Random(PrivateID);
-            Dids = true;
+            lock(ThisObj)
+            {
+                if (Dids == true)
+                    return;
+                PrivateID = Guid.NewGuid().GetHashCode(); //this may not be too bad for the new behavior for the random
+                SetUpRandom();
+                //r = new Random(PrivateID);
+
+                Dids = true;
+            }
+            
         }
 
-        public static void SetRandomSeed(int Value) //this can come from anywhere.  saved data, etc.
+        public void SetRandomSeed(int Value) //this can come from anywhere.  saved data, etc.
         {
             PrivateID = Value; //so it can be saved and used for testing (to more easily replay the game).
-            r = new Random(Value);
+            //r = new Random(Value);
+
+            SetUpRandom();
+
             Dids = true; //this means that this will use the same value every time.  useful for debugging.
         }
 
-        private static int PrivateHowManyPossible(int MaxNumber, int StartingNumber, int PreviousCount, int SetCount)
+        private void SetUpRandom()
+        {
+            if (Formula == EnumFormula.NetStandard)
+            {
+                //use random
+                Random Temps = new Random(PrivateID);
+                r = Temps.NextDouble;
+                return;
+            }
+
+            MersenneTwister ts = new MersenneTwister((uint) PrivateID);
+
+            switch (Formula)
+            {
+                case EnumFormula.Twister2:
+                    
+                case EnumFormula.TwisterStandard:
+                    r = ts.GenRandReal2;
+                    break;
+                case EnumFormula.TwisterHigh:
+                    r = ts.GenRandRes53;
+                    break;
+                case EnumFormula.Twister1:
+                    r = ts.GenRandReal1;
+                    break;
+                
+                case EnumFormula.Twister3:
+                    r = ts.GenRandReal3;
+                    break;
+                default:
+                    break;
+            }
+
+            //else
+            //throw new NotImplementedException("Has to test standard before implementing twister");
+        }
+
+        private int PrivateHowManyPossible(int MaxNumber, int StartingNumber, int PreviousCount, int SetCount)
         {
             int Count = MaxNumber - (StartingNumber - 1);
             Count -= PreviousCount;
@@ -223,7 +303,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
             return Count;
         }
 
-        public static List<int> GenerateRandomList(int MaxNumber, int HowMany = -1, int StartingNumber = 1, List<int> PreviousList = null, List<int> SetToContinue = null, bool PutBefore = false)
+        public List<int> GenerateRandomList(int MaxNumber, int HowMany = -1, int StartingNumber = 1, List<int> PreviousList = null, List<int> SetToContinue = null, bool PutBefore = false)
         {
             DoRandomize();
             if (HowMany > MaxNumber)
@@ -367,7 +447,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
             }
             while (rndIndexes.Count != AdjustedMany)
             {
-                int index = r.Next(MaxNumber);
+                int index = Next(MaxNumber);
                 rndIndexes.Add(index + 1);
             }
             for (int i = 1; i <= StartingNumber - 1; i++)
@@ -391,6 +471,22 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
                 }
             }
             return ThisList;
+        }
+
+        /// <summary>
+        /// Returns a random bool, either true or false.
+        /// </summary>
+        /// <param name="likelihood">The default likelihood of success (returning true) is 50%.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <c>likelihood</c> is less than 0 or greater than 100.</exception>
+        /// <returns>Returns a random bool, either true or false.</returns>
+        public bool NextBool(int likelihood = 50)
+        {
+            if (likelihood < 0 || likelihood > 100)
+            {
+                throw new ArgumentOutOfRangeException(nameof(likelihood), "Likelihood accepts values from 0 to 100.");
+            }
+
+            return r() * 100 < likelihood;
         }
 
     }

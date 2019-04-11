@@ -5,9 +5,11 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static CommonBasicStandardLibraries.BasicDataSettingsAndProcesses.BasicDataFunctions;
 using CommonBasicStandardLibraries.BasicDataSettingsAndProcesses;
 using CommonBasicStandardLibraries.Exceptions;
-using  rs = CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.RandomGenerator.RandomGenerator;
+using CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.RandomGenerator;
+//using  rs = CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.RandomGenerator.RandomGenerator;
 namespace CommonBasicStandardLibraries.CollectionClasses
 {
 
@@ -156,6 +158,12 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         }
 
         public int Count => PrivateList.Count; //done
+
+        private IResolver PrivateContainer;
+        private RandomGenerator rs;
+
+        public IResolver MainContainer { set => PrivateContainer = value; }
+
         //there is a warning that insert is an expensive operation.
 
 
@@ -350,10 +358,21 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         {
             return GetRandomItem(false);
         }
+        private void SetRandom()
+        {
+            if (rs != null)
+                return;
+            if (PrivateContainer == null)
+                PrivateContainer = cons;
+            if (PrivateContainer != null)
+                rs = PrivateContainer.Resolve<RandomGenerator>();
+            rs = new RandomGenerator(); //if no resolver anywhere, then has to manually create new random function.
+            //there is no other way around it.
+        }
 
         public T GetRandomItem(bool RemovePrevious) //done
         {
-            
+            SetRandom();
             int Ask1;
             Ask1 = rs.GetRandomNumber(PrivateList.Count);
             T ThisItem = PrivateList[Ask1 - 1];
@@ -365,6 +384,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
 
         public ICustomBasicList<T> GetRandomList(bool RemovePrevious, int HowManyInList) //done
         {
+            SetRandom();
             List<int> RList = rs.GenerateRandomList(PrivateList.Count, HowManyInList);
 
             var ThisList = FactoryRequested.GetStartList();
@@ -383,6 +403,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
 
         public void RemoveRandomItems(int HowMany) //done.
         {
+            SetRandom();
             List<int> RList = rs.GenerateRandomList(PrivateList.Count, HowMany);
 
             List<T> ThisList = new List<T>();
@@ -620,6 +641,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
             //throw new BasicBlankException("Shuffle Test");
             if (Count == 0)
                 return; //because there is nothing to shuffle.  so can't obviously.  better than runtime error.
+            SetRandom();
             List<int> ThisList = rs.GenerateRandomList(PrivateList.Count); //i think
             List<T> RList = new List<T>(); //since they removed and added, then i think its best if i just remove the entire thing.   however, let them know it really moved.
             CheckReentrancy();

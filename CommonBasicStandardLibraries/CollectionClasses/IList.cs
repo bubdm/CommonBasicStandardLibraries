@@ -62,6 +62,8 @@ namespace CommonBasicStandardLibraries.CollectionClasses
 
         IListFactory<T> FactoryRequested { get; set; }
 
+        IResolver MainContainer { set; } //private read though.
+
         void RemoveAt(int Index);
         void RemoveGivenList(IEnumerable<T> ThisList, NotifyCollectionChangedAction notificationmode = NotifyCollectionChangedAction.Reset); //this means if you have a list and anything on this list needs to be removed, it can be done.
         //looks like maybe not needed because i usually look through anyways.

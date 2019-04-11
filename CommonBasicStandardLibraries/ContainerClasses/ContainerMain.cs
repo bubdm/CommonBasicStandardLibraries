@@ -7,6 +7,7 @@ using CommonBasicStandardLibraries.BasicDataSettingsAndProcesses;
 using static CommonBasicStandardLibraries.BasicDataSettingsAndProcesses.BasicDataFunctions;
 using CommonBasicStandardLibraries.CollectionClasses;
 using System.Collections.Generic;
+using CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.RandomGenerator;
 //i think this is the most common things i like to do
 namespace CommonBasicStandardLibraries.ContainerClasses
 {
@@ -19,7 +20,7 @@ namespace CommonBasicStandardLibraries.ContainerClasses
         Factory = 4, //this means that whoever has a factory will get it first.  if more than one factory, then raise error so i have to rethink
     }
 
-    public class ContainerMain: IResolver //this is the main class for the container
+    public class ContainerMain: IResolver, IAdvancedResolve //this is the main class for the container
     {
         private readonly HashSet<ContainerData> ThisSet = new HashSet<ContainerData>();
         public static EnumResolveCategory ResolveCategory = EnumResolveCategory.ShowError; //default to show error so you have to rethink.
@@ -27,12 +28,19 @@ namespace CommonBasicStandardLibraries.ContainerClasses
         private int ID;
         private static readonly HashSet<IContainerFactory> FactoryList = new HashSet<IContainerFactory>(); //i think i want anybody to be able to add to this list.  makes the container more powerful.
         public IContainerFactory ParentFactory; //i think its implied that if you set the parent, the parent will handle all duplicates.
-
+        private readonly RandomGenerator Rans; //this is most common.
         public void ClearContainer() //there are cases i still have to clear container (if doing multiple games and some has to re registered
         {
             ThisSet.Clear();
             FactoryList.Clear();
         }
+
+        public ContainerMain()
+        {
+            Rans = new RandomGenerator();
+            //RegisterSingleton(Rans);
+        }
+
 
         public static void AddFactoryToContainer(IContainerFactory ThisFact)
         {
@@ -41,9 +49,29 @@ namespace CommonBasicStandardLibraries.ContainerClasses
 
         public T GetInstance<T>()
         {
+            if (typeof(T) == typeof(RandomGenerator)) //this is an exception.
+            {
+                //i originally had static random generators.  can't do anymore because of testing problems.  so this will do it instead.
+                object ThisObj = Rans;
+                return (T)ThisObj;
+            }
             return (T)GetInstance(typeof(T));
         }
-
+        public T GetInstance<T>(object Tag)
+        {
+            return (T)SimpleInstance(typeof(T), Tag);
+        }
+        private object SimpleInstance(Type ThisType, object ThisObject)
+        {
+            //this will only do simple ones period.
+            CustomBasicList<ContainerData> TempList = ThisSet.Where(Items => Items.TypeIn == ThisType && Items.ThisObject == ThisObject).ToCustomBasicList();
+            if (TempList.Count == 0)
+                throw new BasicBlankException($"{ThisType.Name} With Tag Not Found");
+            //if you send in tag, it must match the tag that was registered with.
+            if (TempList.Count > 1)
+                throw new BasicBlankException($"Had Duplicates For Instance With Tag.  Name Was {ThisType.Name}.  Rethink");
+            return GetInstance(TempList.Single(), ThisType);
+        }
         private CustomBasicList<ContainerData> PossibleList(ContainerData ThisResult, Type ThisType)
         {
             var TempList = ThisSet.Where(Items => Items.TypeIn == ThisResult.TypeIn || Items.TypeOut == ThisResult.TypeOut).ToCustomBasicList();
@@ -126,6 +154,7 @@ namespace CommonBasicStandardLibraries.ContainerClasses
 
         private object GetInstance(Type ThisType) //i want to be forced to use generics.
         {
+
             if (ParentFactory != null)
                 return ParentFactory.GetReturnObject(ThisSet.ToCustomBasicList(), ThisType); //this means if i have a parent factory, then the parent is responsible for everything.
             //i could change my mind if i choose to.  i'll have to decide later if that was the right decision or not (?)
@@ -290,6 +319,11 @@ namespace CommonBasicStandardLibraries.ContainerClasses
         T IResolver.Resolve<T>()
         {
             return GetInstance<T>();
+        }
+
+        T  IAdvancedResolve.Resolve<T>(object Tag)
+        {
+            return GetInstance<T>(Tag);
         }
     }
 }

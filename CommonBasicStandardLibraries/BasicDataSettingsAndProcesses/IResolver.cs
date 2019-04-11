@@ -10,6 +10,17 @@ namespace CommonBasicStandardLibraries.BasicDataSettingsAndProcesses
         T Resolve<T>();
     }
 
+    public interface IAdvancedResolve : IResolver
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="Tag">This is extra info so it can more easily return the proper implementation  its an object so can represent anything</param>
+        /// <returns></returns>
+        T Resolve<T>(object Tag); //sometimes a person has a tag that will be used to resolve. was going to be string but decided to make it object.
+    }
+
     public interface ISQLServer
     {
         string GetConnectionString(string DatabaseOrPath); //this way if implemented, then you can easily get the sql server connection. 

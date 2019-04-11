@@ -74,5 +74,21 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
 
             return default;
         }
+
+        public static void Times(this int @this, Action action)
+        {
+            for (var i = 0; i < @this; i++)
+            {
+                action?.Invoke();
+            }
+        }
+
+        public static void Times(this int @this, Action<int> action)
+        {
+            for (var i = 0; i < @this; i++)
+            {
+                action?.Invoke(i + 1); //we want it one based.
+            }
+        }
     }
 }
