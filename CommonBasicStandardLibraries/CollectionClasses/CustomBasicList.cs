@@ -366,7 +366,8 @@ namespace CommonBasicStandardLibraries.CollectionClasses
                 PrivateContainer = cons;
             if (PrivateContainer != null)
                 rs = PrivateContainer.Resolve<RandomGenerator>();
-            rs = new RandomGenerator(); //if no resolver anywhere, then has to manually create new random function.
+            else
+                rs = new RandomGenerator(); //if no resolver anywhere, then has to manually create new random function.
             //there is no other way around it.
         }
 
@@ -380,6 +381,11 @@ namespace CommonBasicStandardLibraries.CollectionClasses
                 RemoveItem(Ask1 - 1); //because 0 based.  i think this works
             
             return ThisItem;
+        }
+
+        public int GetSeed()
+        {
+            return rs.GetSeed();
         }
 
         public ICustomBasicList<T> GetRandomList(bool RemovePrevious, int HowManyInList) //done
