@@ -10,6 +10,7 @@ using CommonBasicStandardLibraries.BasicDataSettingsAndProcesses;
 using CommonBasicStandardLibraries.Exceptions;
 using CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.RandomGenerator;
 using static CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.RandomGenerator.RandomSetHelpers;
+using CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.BasicExtensions;
 //using  rs = CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.RandomGenerator.RandomGenerator;
 namespace CommonBasicStandardLibraries.CollectionClasses
 {
@@ -933,6 +934,20 @@ namespace CommonBasicStandardLibraries.CollectionClasses
                 throw new BasicBlankException("ConvertAll Does Not Reconcile");
             return News;
         }
+        public void ReplaceWithNewObjects(int HowMany, Func<T> func)
+        {
+            CustomBasicList<T> NewList = new CustomBasicList<T>();
+            HowMany.Times(() =>
+            {
+                NewList.Add(func.Invoke());
+            });
+            ReplaceRange(NewList);
+        }
+        public void ReplaceWithNewObjects(Func<T> func)
+        {
+            ReplaceWithNewObjects(Count, func);
+        }
+
         //looks like i have to recast it.  has to be just this method.  because it has to return a custom basic list.  this is the only way around it.
 
         //can try another approach

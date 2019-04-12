@@ -89,7 +89,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
             return _monitor;
         }
 
-        private SimpleMonitor _monitor = new SimpleMonitor();
+        private readonly SimpleMonitor _monitor = new SimpleMonitor();
 
 
 
