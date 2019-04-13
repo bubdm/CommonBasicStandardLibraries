@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-
+using CommonBasicStandardLibraries.BasicDataSettingsAndProcesses;
 namespace CommonBasicStandardLibraries.ContainerClasses
 {
     public interface IContainerFactory
@@ -17,5 +17,9 @@ namespace CommonBasicStandardLibraries.ContainerClasses
         object GetReturnObject(CustomBasicList<ContainerData> PossibleResults, Type TypeRequested); //if there is no match here, this will raise the exception.
 
         bool CanAcceptObject(CustomBasicList<ContainerData> PossibleResults, Type TypeRequested); //that way if none accept, then will raise exception.
+    }
+    public interface IAdvancedDIContainer //decided to do it this way so something else can populate it if needed.
+    {
+        IAdvancedResolve MainContainer { get; set; }
     }
 }

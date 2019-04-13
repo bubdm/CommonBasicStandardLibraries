@@ -51,8 +51,62 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         //this can do more but this part does not need to know about it.
         //since we never know how this will come about, needs to allow anything for those.
     }
+    public interface ISimpleList<T> : IEnumerable<T>
+    {
+        //these are all things that can't add or remove from list if you are using this and not the custom list.
+        Task ForEachAsync(ActionAsync<T> action);
+        //its possible for there to be an await.
 
-    public interface ICustomBasicList<T> : IEnumerable<T>, IListModifiers<T> 
+        void ForEach(Action<T> action);
+
+        void ForConditionalItems(Predicate<T> match, Action<T> action);
+        Task ForConditionalItemsAsync(Predicate<T> match, ActionAsync<T> action);
+        int Count { get; }
+
+        bool Exists(Predicate<T> match);
+
+        bool Contains(T item);
+
+        T Find(Predicate<T> match); //the first one it finds, will be this one.
+
+        T FindOnlyOne(Predicate<T> match); //this means it must find only one item.
+
+        ICustomBasicList<T> FindAll(Predicate<T> match);
+
+        int FindFirstIndex(Predicate<T> match);
+
+        int FindFirstIndex(int startIndex, Predicate<T> match);
+        int FindFirstIndex(int startIndex, int count, Predicate<T> match);
+
+        T FindLast(Predicate<T> match);
+
+        int FindLastIndex(Predicate<T> match);
+
+        int FindLastIndex(int startIndex, Predicate<T> match);
+        int FindLastIndex(int startIndex, int count, Predicate<T> match);
+
+
+        int HowMany(Predicate<T> match);
+
+        T GetSpecificItem(int Index);
+
+        //bool IsReadOnly { get; }
+
+        //i don't know if i need this to mark as readonly or not (?)
+        //i can always change it if necessary.  for now, lets not.
+
+        //for now, don't worry about IsReadOnly
+
+        int IndexOf(T value);
+
+        int IndexOf(T value, int Index);
+
+        int IndexOf(T value, int Index, int Count);
+        bool TrueForAll(Predicate<T> match); //i like this idea
+
+
+    }
+    public interface ICustomBasicList<T> : ISimpleList<T>, IListModifiers<T> 
     {
         //has to decide on everything that is needed.
         //this is everything that needs to be implemented if it wants to be a custom list.
@@ -61,9 +115,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         //can go ahead and risk allowing anybody to send in a factory.
 
         IListFactory<T> FactoryRequested { get; set; }
-
         IResolver MainContainer { set; } //private read though.
-
         void RemoveAt(int Index);
         void RemoveGivenList(IEnumerable<T> ThisList, NotifyCollectionChangedAction notificationmode = NotifyCollectionChangedAction.Reset); //this means if you have a list and anything on this list needs to be removed, it can be done.
         //looks like maybe not needed because i usually look through anyways.
@@ -108,10 +160,6 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         void InsertRange(int index, IEnumerable<T> items, NotifyCollectionChangedAction notificationmode = NotifyCollectionChangedAction.Add);
 
 
-        Task ForEachAsync(ActionAsync<T> action);
-        //its possible for there to be an await.
-
-        void ForEach(Action<T> action);
         
         /// <summary>
         /// 
@@ -128,8 +176,6 @@ namespace CommonBasicStandardLibraries.CollectionClasses
 
         bool ForSpecificItem(Predicate<T> match, Action<T> action, int HowManyToCheck = 0); //if 0, then it means that it won't check any
 
-        void ForConditionalItems(Predicate<T> match, Action<T> action);
-        Task ForConditionalItemsAsync(Predicate<T> match, ActionAsync<T> action);
 
         //i don't think we need to skip any
 
@@ -141,7 +187,6 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         //somehow i could not find it anymore.
 
 
-        int Count { get; }
 
         int Capacity { get; set; }
         void TrimExcess();
@@ -155,45 +200,6 @@ namespace CommonBasicStandardLibraries.CollectionClasses
             set;
         }
 
-        bool Exists(Predicate<T> match);
-
-        bool Contains(T item);
-
-        T Find(Predicate<T> match); //the first one it finds, will be this one.
-
-		T FindOnlyOne(Predicate<T> match); //this means it must find only one item.
-
-        ICustomBasicList<T> FindAll(Predicate<T> match);
-
-        int FindFirstIndex(Predicate<T> match);
-
-        int FindFirstIndex(int startIndex, Predicate<T> match);
-        int FindFirstIndex(int startIndex, int count, Predicate<T> match);
-
-        T FindLast(Predicate<T> match);
-
-        int FindLastIndex(Predicate<T> match);
-
-        int FindLastIndex(int startIndex, Predicate<T> match);
-        int FindLastIndex(int startIndex, int count, Predicate<T> match);
-
-
-		int HowMany(Predicate<T> match);
-
-
-
-        //bool IsReadOnly { get; }
-
-        //i don't know if i need this to mark as readonly or not (?)
-        //i can always change it if necessary.  for now, lets not.
-
-        //for now, don't worry about IsReadOnly
-
-        int IndexOf(T value);
-
-        int IndexOf(T value, int Index);
-
-        int IndexOf(T value, int Index, int Count);
 
         void InsertMiddle(int Index, T value);
 
@@ -222,7 +228,6 @@ namespace CommonBasicStandardLibraries.CollectionClasses
 
 
 
-        bool TrueForAll(Predicate<T> match); //i like this idea
         //will keep here.  if there is repeating because of inheritance problem, then can put to another interface and this one one can implement it as well.
 
         //the following could be iffy.  not sure though.

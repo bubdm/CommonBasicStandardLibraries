@@ -947,6 +947,11 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         {
             ReplaceWithNewObjects(Count, func);
         }
+        T ISimpleList<T>.GetSpecificItem(int Index)
+        {
+            return PrivateList[Index];
+        }
+        
 
         //looks like i have to recast it.  has to be just this method.  because it has to return a custom basic list.  this is the only way around it.
 
