@@ -224,8 +224,8 @@ namespace CommonBasicStandardLibraries.CollectionClasses
 
         ICustomBasicList<T> GetRange(int index, int count);
 
-        
 
+        void MoveItem(T Item, int NewIndex); //this will move an existing item to a new index.
 
 
         //will keep here.  if there is repeating because of inheritance problem, then can put to another interface and this one one can implement it as well.

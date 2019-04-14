@@ -948,6 +948,12 @@ namespace CommonBasicStandardLibraries.CollectionClasses
             ReplaceWithNewObjects(Count, func);
         }
 
+        public void MoveItem(T Item, int NewIndex)
+        {
+            int OldIndex = PrivateList.IndexOf(Item);
+            MoveItem(OldIndex, NewIndex);
+        }
+
         //try to risk not having it anymore.  since i need it for something else.
 
 
@@ -955,7 +961,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         //{
         //    return PrivateList[Index];
         //}
-        
+
 
         //looks like i have to recast it.  has to be just this method.  because it has to return a custom basic list.  this is the only way around it.
 
