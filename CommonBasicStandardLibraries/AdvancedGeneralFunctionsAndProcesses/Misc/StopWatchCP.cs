@@ -8,7 +8,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Misc
 {
     public class CustomStopWatchCP
     {
-        private Stopwatch ThisStop;
+        private readonly Stopwatch ThisStop;
         // try the built in way.  that worked.
 
         public int MaxTime { get; set; }
@@ -21,7 +21,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Misc
 
         public delegate void ProgressEventHandler(long TimeLeft); //has to be long now.
 
-        private IProgress<EnumCategory> ThisProgress;
+        private readonly IProgress<EnumCategory> ThisProgress;
 
         public enum EnumCategory
         {

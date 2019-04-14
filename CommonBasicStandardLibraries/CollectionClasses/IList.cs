@@ -88,7 +88,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
 
         int HowMany(Predicate<T> match);
 
-        T GetSpecificItem(int Index);
+        //T GetSpecificItem(int Index);
 
         //bool IsReadOnly { get; }
 
