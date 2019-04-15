@@ -74,6 +74,11 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
 
             return default;
         }
+        public static int FromEnum<T>(this T param) where T: Enum
+        {
+            object Firsts = Convert.ChangeType(param, param.GetTypeCode());
+            return (int)Firsts;
+        }
 
         public static void Times(this int @this, Action action)
         {
