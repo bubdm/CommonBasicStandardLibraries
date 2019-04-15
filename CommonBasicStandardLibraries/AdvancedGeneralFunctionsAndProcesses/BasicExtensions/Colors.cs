@@ -18,7 +18,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
 
     public static class Colors
     {
-        public static string ToColor(this string ThisStr)
+        public static string ToColor(this string ThisStr, bool ShowError = true)
         {
             switch (ThisStr)
             {
@@ -305,13 +305,32 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
                 case "YellowGreen":
                     return cs.YellowGreen;
                 default:
-                    throw new BasicBlankException($"No Color Found For {ThisStr}");
+                    if (ShowError == true)
+                        throw new BasicBlankException($"No Color Found For {ThisStr}");
+                    else
+                        return ""; //this means none.
             }
         }
         public static string ToColor<E>(this E ThisEnum) where E: Enum
         {
             string ThisStr = ThisEnum.ToString();
             return ThisStr.ToColor();
+        }
+        internal static bool HasColor<E>(this string ThisStr) where E: Enum
+        {
+            string ThisColor = ThisStr.ToColor(false);
+            return ThisColor != "";
+        }
+        public static CustomBasicCollection<E> GetColorList<E> (this E ThisEnum) where E:Enum
+        {
+            var Firsts = Enum.GetValues(ThisEnum.GetType());
+            CustomBasicCollection<E> output = new CustomBasicCollection<E>();
+            foreach (var ThisItem in Firsts)
+            {
+                if (ThisItem.ToString().HasColor<E>() == true)
+                    output.Add((E) ThisItem); //hopefully that works.
+            }
+            return output;
         }
     }
 }
