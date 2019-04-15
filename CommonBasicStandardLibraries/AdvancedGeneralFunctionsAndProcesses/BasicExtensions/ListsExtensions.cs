@@ -208,5 +208,22 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             }
         }
 
+        public static CustomBasicList<TKey> DistinctItems<TSource, TKey>
+            (this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            HashSet<TKey> seenKeys = new HashSet<TKey>();
+            CustomBasicList<TKey> output = new CustomBasicList<TKey>();
+            foreach (TSource element in source)
+            {
+                if (seenKeys.Add(keySelector(element)))
+                {
+                    output.Add(keySelector(element));
+                    //yield return element;
+                }
+            }
+            output.Sort();
+            return output;
+        }
+
     }
 }
