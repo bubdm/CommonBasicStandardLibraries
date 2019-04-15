@@ -321,10 +321,10 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             string ThisColor = ThisStr.ToColor(false);
             return ThisColor != "";
         }
-        public static CustomBasicCollection<E> GetColorList<E> (this E ThisEnum) where E:Enum
+        public static CustomBasicList<E> GetColorList<E> (this E ThisEnum) where E:Enum
         {
             var Firsts = Enum.GetValues(ThisEnum.GetType());
-            CustomBasicCollection<E> output = new CustomBasicCollection<E>();
+            CustomBasicList<E> output = new CustomBasicList<E>(); //decided to be basiclist.  because something else is the custom type
             foreach (var ThisItem in Firsts)
             {
                 if (ThisItem.ToString().HasColor<E>() == true)
