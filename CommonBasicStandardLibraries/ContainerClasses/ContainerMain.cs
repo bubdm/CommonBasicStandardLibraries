@@ -182,6 +182,9 @@ namespace CommonBasicStandardLibraries.ContainerClasses
                 return GetInstance(TempList, ThisType);
             if (TempList.Count == 1)
                 return GetInstance(TempList.Single(), ThisType);
+            TempList = ThisSet.Where(Items => ThisType.IsAssignableFrom(Items.TypeOut)).ToCustomBasicList();
+            if (TempList.Count == 1)
+                return GetInstance(TempList.Single(), ThisType);
             if (TempList.Count == 0 && FactoryList.Count == 0)
                 throw new BasicBlankException($"Looks Like Type {ThisType.Name} Was Not Registered And Had No Factories.  If It Was, Rethink");
             TempList = ThisSet.ToCustomBasicList();
@@ -194,7 +197,6 @@ namespace CommonBasicStandardLibraries.ContainerClasses
                 throw new BasicBlankException($"Since you set the priority to manuel priority, you are required to manually set the priority to resolve duplicates.  Type Was {ThisType.Name}.  Most likely all the ones with the duplicates has to be set manually, choose another option or rethink");
             return ResultList.Single().GetReturnObject(TempList, ThisType);
         }
-
         private object PrivateInstance(Type ThisType)
         {
             var constructor = ThisType.GetConstructors().OrderByDescending(Items => Items.GetParameters().Length).FirstOrDefault(); //in the video, its first or default.

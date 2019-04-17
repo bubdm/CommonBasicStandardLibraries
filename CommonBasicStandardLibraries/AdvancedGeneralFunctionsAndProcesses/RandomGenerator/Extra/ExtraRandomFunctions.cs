@@ -271,6 +271,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
                 ListToUse = FirstNamesFemale;
             else
                 ListToUse = FirstNamesMale;
+            ListToUse.rs = this;
             return ListToUse.GetRandomItem();
         }
 
@@ -278,6 +279,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
         {
             CustomBasicList<string> AllList = FirstNamesFemale.ToCustomBasicList();
             AllList.AddRange(FirstNamesMale);
+            AllList.rs = this;
             return AllList.GetRandomItem();
         }
 
@@ -285,7 +287,13 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
         /// Generates a random last name.
         /// </summary>
         /// <returns>Returns random generated last name.</returns>
-        public string NextLastName() => LastNames.GetRandomItem();
+        public string NextLastName()
+        {
+            var ThisList = LastNames;
+            ThisList.rs = this;
+            return ThisList.GetRandomItem();
+        }
+        //public string NextLastName() => LastNames.GetRandomItem();
 
         /// <summary>
         /// Generates a random gender.
@@ -294,6 +302,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
         public string NextSex()
         {
             CustomBasicList<string> ThisList = new CustomBasicList<string> { "Male", "Female" };
+            ThisList.rs = this;
             return ThisList.GetRandomItem();
         }
 

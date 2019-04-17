@@ -90,6 +90,14 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         //if you expect 250 and its 500, you do eat some in processing but you save in space (memory).
         //sometimes no perfect solution.
 
+        //internal CustomBasicList(RandomGenerator rs)
+        //{
+        //    PrivateList = new List<T>(); LoadBehavior(); FactoryRequested = new SimpleCollectionFactory<T>
+        //    {
+        //        SendingType = GetType()
+        //    };
+        //    this.rs = rs;
+        //} 
 
         public CustomBasicList(int InitCapacity = 5) { PrivateList = new List<T>(InitCapacity); LoadBehavior(); FactoryRequested = new SimpleCollectionFactory<T>
         {
@@ -162,7 +170,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         public int Count => PrivateList.Count; //done
 
         
-        private RandomGenerator rs;
+        internal RandomGenerator rs;
 
         private IResolver PrivateContainer;
         public IResolver MainContainer { set => PrivateContainer = value; }

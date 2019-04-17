@@ -5,6 +5,8 @@ using CommonBasicStandardLibraries.CollectionClasses;
 using CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Misc;
 using System.Linq;
 using CommonBasicStandardLibraries.Exceptions;
+using System.Threading.Tasks;
+
 namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.BasicExtensions
 {
     public static class Integers
@@ -95,5 +97,22 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
                 action?.Invoke(i + 1); //we want it one based.
             }
         }
+
+        public async static Task TimesAsync(this int @this, Func<Task> action)
+        {
+            for (var i = 0; i < @this; i++)
+            {
+                await action?.Invoke();
+            }
+        }
+
+        public async static Task TimesAsync(this int @this, Func<int, Task> action)
+        {
+            for (var i = 0; i < @this; i++)
+            {
+                await action?.Invoke(i + 1); //we want it one based.
+            }
+        }
+
     }
 }
