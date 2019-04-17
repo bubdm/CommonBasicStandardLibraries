@@ -3,7 +3,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Text;
 
-namespace CommonBasicStandardLibraries.NetworkStreamHelpers
+namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Misc
 {
     public class NetworkStreamHelpers
     {
@@ -13,7 +13,7 @@ namespace CommonBasicStandardLibraries.NetworkStreamHelpers
             byte[] data_buff = null;
 
             int b = 0;
-            String buff_length = "";
+            string buff_length = "";
             while ((b = ns.ReadByte()) != 4)
             {
                 buff_length += (char)b;
