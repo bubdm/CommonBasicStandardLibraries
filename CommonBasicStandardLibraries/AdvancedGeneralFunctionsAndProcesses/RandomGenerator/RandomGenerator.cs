@@ -303,7 +303,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
             return Count;
         }
 
-        public List<int> GenerateRandomList(int MaxNumber, int HowMany = -1, int StartingNumber = 1, List<int> PreviousList = null, List<int> SetToContinue = null, bool PutBefore = false)
+        public CustomBasicList<int> GenerateRandomList(int MaxNumber, int HowMany = -1, int StartingNumber = 1, List<int> PreviousList = null, List<int> SetToContinue = null, bool PutBefore = false)
         {
             DoRandomize();
             if (HowMany > MaxNumber)
@@ -332,7 +332,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
 
             OldC = StartingNumber - 1;
             int Counts;
-            List<int> OldList = new List<int>();
+            CustomBasicList<int> OldList = new CustomBasicList<int>();
             int PreC = 0;
             int SetC = 0;
             if (PreviousList != null)
@@ -386,7 +386,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
                 if (OldList.Count > TempList.Count)
                     throw new Exception("Unable to get the one number remaining.  Something is corrupted.  Rethink");
                 if (OldList.Count == 0)
-                    return new List<int> { StartingNumber };
+                    return new CustomBasicList<int> { StartingNumber };
 
                 int PossibleItem = 0;
 
@@ -404,8 +404,8 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
                 if (PossibleItem == 0)
                     throw new Exception("The single item not found");
                 if (SetToContinue == null)
-                    return new List<int> { PossibleItem }; //should not bother doing the random items because there is only one.
-                List<int> FinalList = new List<int>();
+                    return new CustomBasicList<int> { PossibleItem }; //should not bother doing the random items because there is only one.
+                CustomBasicList<int> FinalList = new CustomBasicList<int>();
                 if (PutBefore == true)
                 {
                     FinalList.AddRange(SetToContinue);
@@ -461,12 +461,12 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
                     rndIndexes.Remove(Index);
                 }
             }
-            List<int> ThisList = rndIndexes.ToList();
+            CustomBasicList<int> ThisList = rndIndexes.ToCustomBasicList();
             if (SetToContinue != null && PutBefore == false)
             {
                 foreach (int Index in SetToContinue)
                 {
-                    ThisList.Remove(Index);
+                    ThisList.RemoveSpecificItem(Index);
                     ThisList.Add(Index);
                 }
             }

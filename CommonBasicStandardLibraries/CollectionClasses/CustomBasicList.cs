@@ -402,7 +402,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         public ICustomBasicList<T> GetRandomList(bool RemovePrevious, int HowManyInList) //done
         {
             SetRandom(ref PrivateContainer, ref rs);
-            List<int> RList = rs.GenerateRandomList(PrivateList.Count, HowManyInList);
+            CustomBasicList<int> RList = rs.GenerateRandomList(PrivateList.Count, HowManyInList);
 
             var ThisList = FactoryRequested.GetStartList();
 
@@ -421,7 +421,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         public void RemoveRandomItems(int HowMany) //done.
         {
             SetRandom(ref PrivateContainer, ref rs);
-            List<int> RList = rs.GenerateRandomList(PrivateList.Count, HowMany);
+            CustomBasicList<int> RList = rs.GenerateRandomList(PrivateList.Count, HowMany);
 
             List<T> ThisList = new List<T>();
             foreach (int Index in RList)
@@ -659,7 +659,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
             if (Count == 0)
                 return; //because there is nothing to shuffle.  so can't obviously.  better than runtime error.
             SetRandom(ref PrivateContainer, ref rs);
-            List<int> ThisList = rs.GenerateRandomList(PrivateList.Count); //i think
+            CustomBasicList<int> ThisList = rs.GenerateRandomList(PrivateList.Count); //i think
             List<T> RList = new List<T>(); //since they removed and added, then i think its best if i just remove the entire thing.   however, let them know it really moved.
             CheckReentrancy();
             foreach (int Index in ThisList)
@@ -675,7 +675,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         public void ShuffleList(int HowMany) //done
         {
             CheckReentrancy();
-            List<int> ThisList = rs.GenerateRandomList(PrivateList.Count, HowMany);
+            CustomBasicList<int> ThisList = rs.GenerateRandomList(PrivateList.Count, HowMany);
             List<T> RList = new List<T>();
             foreach (int Index in ThisList)
             {
