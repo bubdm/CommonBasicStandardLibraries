@@ -144,9 +144,9 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
         }       
         
 
-        public List<int> GenerateRandomNumberList(int MaximumNumber, int HowMany, int StartingPoint = 0, int Increments = 1)
+        public CustomBasicList<int> GenerateRandomNumberList(int MaximumNumber, int HowMany, int StartingPoint = 0, int Increments = 1)
         {
-            List<int> FirstList;
+            CustomBasicList<int> FirstList;
             if (Increments <= 1)
                 Increments = 1;
             if (StartingPoint >= MaximumNumber)
@@ -155,7 +155,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
             if (FirstList.Count < 2)
                 throw new ArgumentOutOfRangeException("MaximumNumber");
             DoRandomize();
-            List<int> FinalList = new List<int>();
+            CustomBasicList<int> FinalList = new CustomBasicList<int>();
             int x;
             var loopTo = HowMany;
             for (x = 1; x <= loopTo; x++)
@@ -167,9 +167,9 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
             return FinalList;
         }
 
-        private List<int> GetPossibleIntegerList(int MinValue, int MaximumValue, int Increments)
+        private CustomBasicList<int> GetPossibleIntegerList(int MinValue, int MaximumValue, int Increments)
         {
-            List<int> NewList = new List<int>
+            CustomBasicList<int> NewList = new CustomBasicList<int>
             {
                 MinValue
             };
