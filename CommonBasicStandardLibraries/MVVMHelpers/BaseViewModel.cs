@@ -127,7 +127,7 @@ namespace CommonBasicStandardLibraries.MVVMHelpers
 				} while (true);
 			}
 
-			if (ThisError != null)
+			if (ThisError != null && ThisError.Equals(this) == false)
 			{
 				await ThisError.HandleErrorAsync(ex);
 				return;

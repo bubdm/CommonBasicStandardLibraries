@@ -114,7 +114,7 @@ namespace CommonBasicStandardLibraries.ContainerClasses
             if (ThisList.Count < 2)
                 throw new BasicBlankException("It should have been obvious which one it was");
             if (ResolveCategory == EnumResolveCategory.ShowError)
-                throw new BasicBlankException($"There was {ThisList.Count} Items That Had A Match.  Either Change The Revolve Category Or Rethink");
+                throw new BasicBlankException($"There was {ThisList.Count} Items That Had A Match.  Was Trying To Resolve {ThisType.Name} Either Change The Revolve Category Or Rethink");
             ThisList.Sort();
             ContainerData FirstItem;
             ContainerData SecondItem;
@@ -200,7 +200,8 @@ namespace CommonBasicStandardLibraries.ContainerClasses
         private object PrivateInstance(Type ThisType)
         {
             var constructor = ThisType.GetConstructors().OrderByDescending(Items => Items.GetParameters().Length).FirstOrDefault(); //in the video, its first or default.
-
+            //if (constructor == null)
+            //    return Activator.CreateInstance(ThisType);
             var args = constructor.GetParameters().Select(Items => GetInstance(Items.ParameterType)).ToArray(); //for his test.  i could decide to use my custom collection instead.
             return Activator.CreateInstance(ThisType, args);
         }

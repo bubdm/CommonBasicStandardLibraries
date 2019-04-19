@@ -107,6 +107,29 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
             return await GetStreamAsync(ThisAssembly, FileName);
         }
 
+
+        public static Stream ResourcesGetStream(this Assembly ThisAssembly, string FileName)
+        {
+            //sometimes, it can't be async.
+            if (FileName.Contains("/") == true || FileName.Contains(@"\") == true)
+                throw new Exception(@"Cannot contain the / or \ in the file name.   Its already smart enough to figure out even if put in folders", null);
+            var ThisList = ThisAssembly.GetManifestResourceNames();
+            var FirstName = ThisAssembly.GetName().Name; // needs 2 things affterall.  looks like simplier in .net standard 2.0
+            FirstName = FirstName.Replace(" ", "_");
+            // if there are other things that needs replacing, should do here
+            // i think this is best for maximum shortcuts
+            string InternalPath;
+            if (ResourceLocation == "")
+                InternalPath = FirstName + "." + FileName;
+            else
+                InternalPath = FirstName + "." + ResourceLocation + "." + FileName;
+            // InternalPath = InternalPath.Replace("/", ".")
+            Stream ThisStream = ThisAssembly.GetManifestResourceStream(InternalPath);
+            if (ThisStream == null)
+                throw new FileNotFoundException(FileName + " does not exist");
+            return ThisStream;
+        }
+
         // no need for extensions because i already have the extension library.  i will just add 2 more to it for the awaits
 
 

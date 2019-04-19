@@ -51,7 +51,11 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         //this can do more but this part does not need to know about it.
         //since we never know how this will come about, needs to allow anything for those.
     }
-    public interface ISimpleList<T> : IEnumerable<T>
+    public interface ICountCollection
+    {
+        int Count { get; }
+    }
+    public interface ISimpleList<T> : IEnumerable<T>, ICountCollection
     {
         //these are all things that can't add or remove from list if you are using this and not the custom list.
         Task ForEachAsync(ActionAsync<T> action);
@@ -61,7 +65,6 @@ namespace CommonBasicStandardLibraries.CollectionClasses
 
         void ForConditionalItems(Predicate<T> match, Action<T> action);
         Task ForConditionalItemsAsync(Predicate<T> match, ActionAsync<T> action);
-        int Count { get; }
 
         bool Exists(Predicate<T> match);
 
@@ -106,14 +109,25 @@ namespace CommonBasicStandardLibraries.CollectionClasses
 
 
     }
-    public interface ICustomBasicList<T> : ISimpleList<T>, IListModifiers<T> 
+
+    //public interface ICustomIndexCollection<T> : IEnumerable<T>, ICountCollection
+    //{
+        
+        
+    //}
+
+    public interface ICustomBasicList<T> : ISimpleList<T>, IListModifiers<T>
     {
         //has to decide on everything that is needed.
         //this is everything that needs to be implemented if it wants to be a custom list.
         //i think that random should be done elsewhere.
-        
-        //can go ahead and risk allowing anybody to send in a factory.
 
+        //can go ahead and risk allowing anybody to send in a factory.
+        T this[int index]
+        {
+            get;
+            set;
+        }
         IListFactory<T> FactoryRequested { get; set; }
         IResolver MainContainer { set; } //private read though.
         void RemoveAt(int Index);
@@ -194,11 +208,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         //its obvious you have to be ienumerable.
         //i think that everything that implements from this needs to get the index.
 
-        T this[int index]
-        {
-            get;
-            set;
-        }
+       
 
 
         void InsertMiddle(int Index, T value);
