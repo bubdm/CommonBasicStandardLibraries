@@ -20,7 +20,7 @@ namespace CommonBasicStandardLibraries.ContainerClasses
         Factory = 4, //this means that whoever has a factory will get it first.  if more than one factory, then raise error so i have to rethink
     }
 
-    public class ContainerMain: IResolver, IAdvancedResolve //this is the main class for the container
+    public class ContainerMain: IResolver, IAdvancedResolve, IRegisterContainer //this is the main class for the container
     {
         private readonly HashSet<ContainerData> ThisSet = new HashSet<ContainerData>();
         public static EnumResolveCategory ResolveCategory = EnumResolveCategory.ShowError; //default to show error so you have to rethink.
@@ -327,6 +327,26 @@ namespace CommonBasicStandardLibraries.ContainerClasses
         T  IAdvancedResolve.Resolve<T>(object Tag)
         {
             return GetInstance<T>(Tag);
+        }
+
+        public void ReplaceObject<T>(T NewObject)
+        {
+            //this is for the out.
+            Type ThisType = typeof(T);
+            try
+            {
+                ContainerData ThisData = ThisSet.Where(Items => Items.TypeOut == ThisType && Items.IsSingle == true).Single();
+                ThisData.ThisObject = NewObject;
+            }
+            catch(Exception ex)
+            {
+                throw new BasicBlankException($"Unable to replace object.  The type you were trying to replace is {ThisType.Name}.  Error was {ex.Message}");
+            }
+        }
+
+        void IRegisterContainer.RegisterSingleton<TIn, TOut>()
+        {
+            RegisterSingleton<TIn, TOut>(0, null);
         }
     }
 }

@@ -22,4 +22,11 @@ namespace CommonBasicStandardLibraries.ContainerClasses
     {
         IAdvancedResolve MainContainer { get; set; }
     }
+    public interface IRegisterContainer
+    {
+        //this is everything to do with registering.
+        //this means this can be used for an extension.
+        void RegisterSingleton<TIn, TOut>() where TOut : TIn;
+        void RegisterType<TIn>(bool IsSingleton); //i think it should still have the issingleton.
+    }
 }
