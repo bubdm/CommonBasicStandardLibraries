@@ -27,6 +27,9 @@ namespace CommonBasicStandardLibraries.ContainerClasses
         //this is everything to do with registering.
         //this means this can be used for an extension.
         void RegisterSingleton<TIn, TOut>() where TOut : TIn;
-        void RegisterType<TIn>(bool IsSingleton); //i think it should still have the issingleton.
+
+
+        void RegisterSingleton(Type ThisType); //this means that you will register one type as singleton.
+        //void RegisterType<TIn>(bool IsSingleton); //i think it should still have the issingleton.
     }
 }

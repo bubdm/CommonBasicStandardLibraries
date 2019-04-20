@@ -230,6 +230,19 @@ namespace CommonBasicStandardLibraries.ContainerClasses
             };
             SetResults(ThisResults, 0, null);
         }
+        void IRegisterContainer.RegisterSingleton(Type ThisType)
+        {
+            //looks like another entry here.
+            ContainerData ThisResults = new ContainerData()
+            {
+                TypeOut = ThisType,
+                TypeIn = ThisType,
+                IsSingle = true,
+                IntendedTypeOnly = true, //i think
+                SimpleFunction = new Func<object>(() => PrivateInstance(ThisType))
+            };
+            SetResults(ThisResults, 0, null);
+        }
         public void RegisterInstance<TIn>(Func<TIn> ThisFunct, int TPriority = 0, object ThisObject = null) //i do like it this way because you have complete control of what you will actually get back.
         {
             object ThisObj = ThisFunct;
@@ -318,6 +331,7 @@ namespace CommonBasicStandardLibraries.ContainerClasses
             };
             SetResults(ThisResults, TPriority, ThisObject);
         }
+        
 
         T IResolver.Resolve<T>()
         {
@@ -348,5 +362,7 @@ namespace CommonBasicStandardLibraries.ContainerClasses
         {
             RegisterSingleton<TIn, TOut>(0, null);
         }
+
+        
     }
 }
