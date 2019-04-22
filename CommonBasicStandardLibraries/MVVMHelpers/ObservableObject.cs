@@ -16,30 +16,35 @@ namespace CommonBasicStandardLibraries.MVVMHelpers
 
     {
 
-		//Func<Task<T>
 
 
-		/// <summary>
 
-		/// Sets the property.
+        public bool IsNotifying { get; set; } = true; //defaults to true.
 
-		/// </summary>
+        //Func<Task<T>
 
-		/// <returns><c>true</c>, if property was set, <c>false</c> otherwise.</returns>
 
-		/// <param name="backingStore">Backing store.</param>
+        /// <summary>
 
-		/// <param name="value">Value.</param>
+        /// Sets the property.
 
-		/// <param name="validateValue">Validates value.</param>
+        /// </summary>
 
-		/// <param name="propertyName">Property name.</param>
+        /// <returns><c>true</c>, if property was set, <c>false</c> otherwise.</returns>
 
-		/// <param name="onChanged">On changed.</param>
+        /// <param name="backingStore">Backing store.</param>
 
-		/// <typeparam name="T">The 1st type parameter.</typeparam>
+        /// <param name="value">Value.</param>
 
-		protected virtual bool SetProperty<T>(
+        /// <param name="validateValue">Validates value.</param>
+
+        /// <param name="propertyName">Property name.</param>
+
+        /// <param name="onChanged">On changed.</param>
+
+        /// <typeparam name="T">The 1st type parameter.</typeparam>
+
+        protected virtual bool SetProperty<T>(
 
             ref T backingStore, T value,
 
@@ -53,6 +58,12 @@ namespace CommonBasicStandardLibraries.MVVMHelpers
 
             //if value didn't change
 
+            if (IsNotifying == false)
+            {
+                backingStore = value;
+                return false; //because nothing else will be done. this is period.
+            }
+
             if (EqualityComparer<T>.Default.Equals(backingStore, value))
 
                 return false;
@@ -64,17 +75,11 @@ namespace CommonBasicStandardLibraries.MVVMHelpers
             if (validateValue != null && !validateValue(backingStore, value))
 
                 return false;
-
-
-
-            backingStore = value;
-
             onChanged?.Invoke();
 
             OnPropertyChanged(propertyName);
             ExtraStepInChangingProperty(propertyName);
             return true;
-
         }
 
 

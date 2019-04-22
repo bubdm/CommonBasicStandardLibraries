@@ -64,7 +64,7 @@ namespace CommonBasicStandardLibraries.ContainerClasses
         private object SimpleInstance(Type ThisType, object ThisObject)
         {
             //this will only do simple ones period.
-            CustomBasicList<ContainerData> TempList = ThisSet.Where(Items => Items.TypeIn == ThisType && Items.ThisObject == ThisObject).ToCustomBasicList();
+            CustomBasicList<ContainerData> TempList = ThisSet.Where(Items => Items.TypeIn == ThisType && Items.ExtraDetails == ThisObject).ToCustomBasicList();
             if (TempList.Count == 0)
                 throw new BasicBlankException($"{ThisType.Name} With Tag Not Found");
             //if you send in tag, it must match the tag that was registered with.
@@ -267,6 +267,17 @@ namespace CommonBasicStandardLibraries.ContainerClasses
                 ThisFact = ThisFact
             };
             SetResults(ThisResults, TPriority, ThisObject);
+        }
+        public void RegisterStaticVariable<V>(V Variable, string Tag) where V: IConvertible
+        {
+            ContainerData ThisResults = new ContainerData()
+            {
+                IsSingle = true,
+                TypeIn = typeof(V),
+                TypeOut = typeof(V),
+                ThisObject = Variable
+            };
+            SetResults(ThisResults, 0, Tag); //i think
         }
 
         public void RegisterSingleton<TIn>(TIn OurObject, int TPriority = 0, object ThisObject = null)
