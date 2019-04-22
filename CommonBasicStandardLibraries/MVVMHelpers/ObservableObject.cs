@@ -76,7 +76,7 @@ namespace CommonBasicStandardLibraries.MVVMHelpers
 
                 return false;
             onChanged?.Invoke();
-
+            backingStore = value;
             OnPropertyChanged(propertyName);
             ExtraStepInChangingProperty(propertyName);
             return true;
