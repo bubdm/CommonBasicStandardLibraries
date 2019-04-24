@@ -194,6 +194,20 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             return output;
         }
 
+        public static int DistinctCount<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            int Count = 0;
+            HashSet<TKey> seenKeys = new HashSet<TKey>();
+            foreach (TSource element in source)
+            {
+                if (seenKeys.Add(keySelector(element)))
+                {
+                    Count++;
+                    //yield return element;
+                }
+            }
+            return Count;
+        }
 
         public static IEnumerable<TSource> DistinctBy<TSource, TKey> //2 choices
     (this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
