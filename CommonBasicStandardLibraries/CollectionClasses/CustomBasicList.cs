@@ -271,6 +271,11 @@ namespace CommonBasicStandardLibraries.CollectionClasses
             return PrivateList.FindLastIndex(startIndex, count, match);
         }
 
+        public int LastIndexOf(T ThisItem)
+        {
+            return PrivateList.LastIndexOf(ThisItem);
+        }
+
         public void ForEach(Action<T> action) //this is easy because i hook into the list  (done)
         {
             PrivateList.ForEach(action);
