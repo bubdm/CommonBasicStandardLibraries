@@ -134,7 +134,24 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
                     return true;
             }
             return false;
-            
+        }
+        public static IOrderedEnumerable<IGrouping<TKey, TSource>> GroupOrderDescending<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            return source.GroupBy(keySelector).OrderByDescending(Items => Items.Count());
+        }
+        public static int MaximumDuplicates<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            if (source.Count() == 0)
+                throw new BasicBlankException("There has to be at least one item.  If I am wrong, rethink");
+            var FirstList = source.GroupBy(keySelector).OrderByDescending(Items => Items.Count());
+            return FirstList.First().Count();
+        }
+        public static int MaximumDuplicates<TSource>(this IEnumerable<TSource> source)
+        {
+            if (source.Count() == 0)
+                throw new BasicBlankException("There has to be at least one item.  If I am wrong, rethink");
+            var FirstList = source.GroupBy(Items => Items).OrderByDescending(Items => Items.Count());
+            return FirstList.First().Count();
         }
 
         public static CustomBasicList<TSource> GetDuplicates<TSource, TKey>(this ICustomBasicList<TSource> source, Func<TSource, TKey> keySelector)
@@ -148,6 +165,24 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
                     //return true;
             }
             return output;
+        }
+
+        public static bool DoesReconcile<TSource, TKey> (this IEnumerable<TSource> source, IEnumerable<TSource> other, Func<TSource, TKey> keySelector)
+        {
+            if (source.Count() != other.Count())
+                return false; //because not even the same count.
+            HashSet<TKey> seenKeys = new HashSet<TKey>();
+            foreach (var item in source)
+            {
+                seenKeys.Add(keySelector(item));
+            }
+            foreach (var item in other)
+            {
+                if (seenKeys.Add(keySelector(item)))
+                    return false;
+            }
+            return true; //may need to test this idea.
+            //its case sensitive.  i think its okay since its intended for anything.
         }
 
         public static bool IsIntOrdered <TSource>(this ICustomBasicList<TSource> source, Func<TSource, int?> keySelector, bool ExcludeUnknowns = true)
@@ -173,8 +208,8 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             }
             return true;
         }
-
-        public static CustomBasicList<int?> ExtractIntegers<TSource>(this ICustomBasicList<TSource> source, Func<TSource, int?> keySelector)
+        //decided to use ienumerable now because sometimes it does not quite implement the custom list but is still needed.
+        public static CustomBasicList<int?> ExtractIntegers<TSource>(this IEnumerable<TSource> source, Func<TSource, int?> keySelector)
         {
             CustomBasicList<int?> output = new CustomBasicList<int?>();
             foreach (var item in source)
@@ -184,7 +219,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             return output;
         }
 
-        public static CustomBasicList<int> ExtractIntegers<TSource>(this ICustomBasicList<TSource> source, Func<TSource, int> keySelector)
+        public static CustomBasicList<int> ExtractIntegers<TSource>(this IEnumerable<TSource> source, Func<TSource, int> keySelector)
         {
             CustomBasicList<int> output = new CustomBasicList<int>();
             foreach (var item in source)

@@ -114,7 +114,10 @@ namespace CommonBasicStandardLibraries.CollectionClasses
 
         protected override void OnCollectionChanged(NotifyCollectionChangedAction e, object item, int index)
         {
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(e, item, index));
+            if (index > -1)
+                OnCollectionChanged(new NotifyCollectionChangedEventArgs(e, item, index));
+            else
+                OnCollectionChanged(new NotifyCollectionChangedEventArgs(e, changedItems: (System.Collections.IList) item, -1));
         }
 
         protected override void OnCollectionChanged(NotifyCollectionChangedAction e, object item, int index, int oldIndex)

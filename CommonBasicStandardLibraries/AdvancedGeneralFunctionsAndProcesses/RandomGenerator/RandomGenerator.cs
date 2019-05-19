@@ -485,7 +485,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
             {
                 throw new ArgumentOutOfRangeException(nameof(likelihood), "Likelihood accepts values from 0 to 100.");
             }
-
+            DoRandomize(); //maybe has to be here.
             return r() * 100 < likelihood;
         }
 

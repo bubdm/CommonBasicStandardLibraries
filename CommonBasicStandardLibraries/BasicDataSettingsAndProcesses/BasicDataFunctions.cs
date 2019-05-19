@@ -31,12 +31,12 @@ namespace CommonBasicStandardLibraries.BasicDataSettingsAndProcesses
             if (rets == false)
                 await Task.Delay(1);
         }
-        public static void PopulateContainer(IAdvancedDIContainer ThisMain) //this is probably the best thing to do.
-        {
-            if (ThisMain.MainContainer != null)
-                return;
-            ThisMain.MainContainer = (IAdvancedResolve) cons;
-        }
+        //public static void PopulateContainer(IAdvancedDIContainer ThisMain) //this is probably the best thing to do.
+        //{
+        //    if (ThisMain.MainContainer != null)
+        //        return;
+        //    ThisMain.MainContainer = (IAdvancedResolve) cons;
+        //}
 
         public static T Resolve<T>()
         {

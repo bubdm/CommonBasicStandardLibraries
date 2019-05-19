@@ -17,9 +17,11 @@ namespace CommonBasicStandardLibraries.MVVMHelpers
     {
 
 
+        //having the extra property is causing many problems with the part for other things.
+        //since that idea did not work anyways, decided to delete it after all.
 
 
-        public bool IsNotifying { get; set; } = true; //defaults to true.
+        //public bool IsNotifying { get; set; } = true; //defaults to true.
 
         //Func<Task<T>
 
@@ -58,11 +60,11 @@ namespace CommonBasicStandardLibraries.MVVMHelpers
 
             //if value didn't change
 
-            if (IsNotifying == false)
-            {
-                backingStore = value;
-                return false; //because nothing else will be done. this is period.
-            }
+            //if (IsNotifying == false)
+            //{
+            //    backingStore = value;
+            //    return false; //because nothing else will be done. this is period.
+            //}
 
             if (EqualityComparer<T>.Default.Equals(backingStore, value))
 

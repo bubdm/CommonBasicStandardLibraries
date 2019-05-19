@@ -20,7 +20,7 @@ namespace CommonBasicStandardLibraries.ContainerClasses
         Factory = 4, //this means that whoever has a factory will get it first.  if more than one factory, then raise error so i have to rethink
     }
 
-    public class ContainerMain: IResolver, IAdvancedResolve, IRegisterContainer //this is the main class for the container
+    public class ContainerMain: IResolver //this is the main class for the container
     {
         private readonly HashSet<ContainerData> ThisSet = new HashSet<ContainerData>();
         public static EnumResolveCategory ResolveCategory = EnumResolveCategory.ShowError; //default to show error so you have to rethink.
@@ -230,19 +230,19 @@ namespace CommonBasicStandardLibraries.ContainerClasses
             };
             SetResults(ThisResults, 0, null);
         }
-        void IRegisterContainer.RegisterSingleton(Type ThisType)
-        {
-            //looks like another entry here.
-            ContainerData ThisResults = new ContainerData()
-            {
-                TypeOut = ThisType,
-                TypeIn = ThisType,
-                IsSingle = true,
-                IntendedTypeOnly = true, //i think
-                SimpleFunction = new Func<object>(() => PrivateInstance(ThisType))
-            };
-            SetResults(ThisResults, 0, null);
-        }
+        //void RegisterSingleton(Type ThisType)
+        //{
+        //    //looks like another entry here.
+        //    ContainerData ThisResults = new ContainerData()
+        //    {
+        //        TypeOut = ThisType,
+        //        TypeIn = ThisType,
+        //        IsSingle = true,
+        //        IntendedTypeOnly = true, //i think
+        //        SimpleFunction = new Func<object>(() => PrivateInstance(ThisType))
+        //    };
+        //    SetResults(ThisResults, 0, null);
+        //}
         public void RegisterInstance<TIn>(Func<TIn> ThisFunct, int TPriority = 0, object ThisObject = null) //i do like it this way because you have complete control of what you will actually get back.
         {
             object ThisObj = ThisFunct;
@@ -349,10 +349,10 @@ namespace CommonBasicStandardLibraries.ContainerClasses
             return GetInstance<T>();
         }
 
-        T  IAdvancedResolve.Resolve<T>(object Tag)
-        {
-            return GetInstance<T>(Tag);
-        }
+        //T Resolve<T>(object Tag)
+        //{
+        //    return GetInstance<T>(Tag);
+        //}
 
         public void ReplaceObject<T>(T NewObject)
         {
@@ -369,10 +369,7 @@ namespace CommonBasicStandardLibraries.ContainerClasses
             }
         }
 
-        void IRegisterContainer.RegisterSingleton<TIn, TOut>()
-        {
-            RegisterSingleton<TIn, TOut>(0, null);
-        }
+        
 
         
     }

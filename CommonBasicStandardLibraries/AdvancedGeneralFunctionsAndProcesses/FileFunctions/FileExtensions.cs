@@ -90,6 +90,15 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
             }
         }
 
+        public static string ResourcesAllTextFromFile(this Assembly ThisAssembly, string FileName)
+        {
+            var ThisStream = ResourcesGetStream(ThisAssembly, FileName);
+            using (var ThisRead = new StreamReader(ThisStream))
+            {
+                return ThisRead.ReadToEnd();
+            }
+        }
+
         //public async static Task<string> ResourcesAllTextFromFileAsync(this object ThisObj, string FileName)
         //{
         //    var ThisStream = GetStream(ThisObj, FileName);
@@ -113,7 +122,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
             //sometimes, it can't be async.
             if (FileName.Contains("/") == true || FileName.Contains(@"\") == true)
                 throw new Exception(@"Cannot contain the / or \ in the file name.   Its already smart enough to figure out even if put in folders", null);
-            var ThisList = ThisAssembly.GetManifestResourceNames();
+            //var ThisList = ThisAssembly.GetManifestResourceNames();
             var FirstName = ThisAssembly.GetName().Name; // needs 2 things affterall.  looks like simplier in .net standard 2.0
             FirstName = FirstName.Replace(" ", "_");
             // if there are other things that needs replacing, should do here

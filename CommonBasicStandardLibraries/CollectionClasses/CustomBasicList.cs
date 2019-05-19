@@ -169,7 +169,8 @@ namespace CommonBasicStandardLibraries.CollectionClasses
 
         public int Count => PrivateList.Count; //done
 
-        
+        //if we run into problems with unit testing, then rethink this part possibly.
+
         internal RandomGenerator rs;
 
         private IResolver PrivateContainer;
@@ -693,54 +694,61 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         public void Sort() //done
         {
             CheckReentrancy();
-            List<T> ThisList = PrivateList.ToList();
+            //List<T> ThisList = PrivateList.ToList();
             PrivateList.Sort();
-            FinalSort(ThisList);
+            FinalSort();
         }
 
-        private void FinalSort(List<T> OriginalList) //done
+        private void FinalSort() //done
         {
 
+
+
             //i think it should only call move for things that actually moved.  not everything
-            bool rets= false;
-            for (var i = 0; i < PrivateList.Count; i++)
-            {
-                var oldIndex = OriginalList.IndexOf(PrivateList[i]);
-                var newIndex = i;
-                if (oldIndex != newIndex)
-                {
-                    OnCollectionChanged(NotifyCollectionChangedAction.Move, OriginalList[oldIndex], newIndex, oldIndex);
-                }
+            //bool rets= false;
+            //for (var i = 0; i < PrivateList.Count; i++)
+            //{
+            //    var oldIndex = OriginalList.IndexOf(PrivateList[i]);
+            //    var newIndex = i;
+            //    if (oldIndex != newIndex)
+            //    {
+            //        OnCollectionChanged(NotifyCollectionChangedAction.Move, OriginalList[oldIndex], newIndex, oldIndex);
+            //    }
                         
-                        //collection.Move(oldIndex, newIndex);
-            }
-            if (rets == true)
-                PropertyItemChanged(); //i think only one is needed to notify the property item.  i don't there is a need to do over and over again for this.
+            //            //collection.Move(oldIndex, newIndex);
+            //}
+
+            //OnCollectionChanged(New NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move, Items, 0, 0))
+
+            //OnCollectionChanged(New NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move, Items, 0, 0))
+            OnCollectionChanged(NotifyCollectionChangedAction.Move, PrivateList, 0, 0);
+            //if (rets == true)
+                //PropertyItemChanged(); //i think only one is needed to notify the property item.  i don't there is a need to do over and over again for this.
         }
 
         public void Sort(Comparison<T> comparison) //done
         {
             CheckReentrancy();
-            List<T> ThisList = PrivateList.ToList();
+            //List<T> ThisList = PrivateList.ToList();
             PrivateList.Sort(comparison);
-            FinalSort(ThisList);
+            FinalSort();
         }
 
         public void Sort(int index, int count, IComparer<T> comparer) //done
         {
             CheckReentrancy();
-            List<T> ThisList = PrivateList.ToList();
+            //List<T> ThisList = PrivateList.ToList();
             PrivateList.Sort(index, count, comparer);
-            FinalSort(ThisList);
+            FinalSort();
         }
         //for icomparer, 1 means greater than.  -1 means less than.  0 means equal.
 
         public void Sort(IComparer<T> comparer) //done
         {
             CheckReentrancy();
-            List<T> ThisList = PrivateList.ToList();
+            //List<T> ThisList = PrivateList.ToList();
             PrivateList.Sort(comparer);
-            FinalSort(ThisList);
+            FinalSort();
         }
 
         public bool TrueForAll(Predicate<T> match) //done
