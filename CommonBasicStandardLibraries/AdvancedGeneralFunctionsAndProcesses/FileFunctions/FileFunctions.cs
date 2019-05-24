@@ -384,7 +384,37 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
             await Task.Run(() => ThisList = File.ReadAllLines(FilePath).ToCustomBasicList());
             return ThisList;
         }
+        /// <summary>
+        /// This will copy the folder and all sub folders and files.
+        /// if the destination already exist, then will exit since this cannot replace.
+        /// </summary>
+        /// <param name="OldFolder"></param>
+        /// <param name="NewFolder"></param>
+        /// <returns></returns>
+        public static async Task CopyFolderAsync(string sourceFolder, string destFolder)
+        {
+            await Task.Run(async () =>
+            {
+                if (Directory.Exists(destFolder))
+                    return;
+                Directory.CreateDirectory(destFolder); //most of the time, can't copy if files are already there.
 
+                string[] files = Directory.GetFiles(sourceFolder);
+                foreach (string file in files)
+                {
+                    string name = Path.GetFileName(file);
+                    string dest = Path.Combine(destFolder, name);
+                    File.Copy(file, dest);
+                }
+                string[] folders = Directory.GetDirectories(sourceFolder);
+                foreach (string folder in folders)
+                {
+                    string name = Path.GetFileName(folder);
+                    string dest = Path.Combine(destFolder, name);
+                    await CopyFolderAsync(folder, dest);
+                }
+            });
+        }
 
         public static Stream GetStreamForReading(string FilePath) // some classes require the actual stream.  therefore will use this
         {

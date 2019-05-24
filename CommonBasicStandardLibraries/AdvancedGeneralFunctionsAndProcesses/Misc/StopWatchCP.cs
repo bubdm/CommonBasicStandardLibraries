@@ -28,7 +28,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Misc
             Progress = 1,
             TimeUp = 2
         }
-
+        public bool IsRunning => ThisStop.IsRunning;
         public CustomStopWatchCP()
         {
             ThisStop = new Stopwatch();
