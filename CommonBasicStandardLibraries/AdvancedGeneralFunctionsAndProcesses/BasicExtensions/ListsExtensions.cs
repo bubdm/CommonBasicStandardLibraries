@@ -135,6 +135,19 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             }
             return false;
         }
+        public static bool HasOnlyOne<TSource, TKey>(this ICustomBasicList<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            HashSet<TKey> seenKeys = new HashSet<TKey>();
+            if (source.Count == 0)
+                return false; //because there are none.
+            foreach (var item in source)
+            {
+                seenKeys.Add(keySelector(item));
+                if (seenKeys.Count > 1)
+                    return false;
+            }
+            return true;
+        }
         public static IOrderedEnumerable<IGrouping<TKey, TSource>> GroupOrderDescending<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             return source.GroupBy(keySelector).OrderByDescending(Items => Items.Count());
