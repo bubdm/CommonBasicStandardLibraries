@@ -179,12 +179,20 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         //there is a warning that insert is an expensive operation.
 
 
-        public void Add(T value) //done i think
+        public void Add(T value, NotifyCollectionChangedAction notificationmode = NotifyCollectionChangedAction.Add) //done i think
         {
             int Index = PrivateList.Count;
-            InsertItem(Index, value);
+            if (notificationmode == NotifyCollectionChangedAction.Add)
+                InsertItem(Index, value);
+            else if (notificationmode == NotifyCollectionChangedAction.Reset)
+                InsertOnly(Index, value);
+            else
+                throw new BasicBlankException("Only supported scenarios are add and reset for adding");
         }
-
+        public void Add(T value)
+        {
+            Add(value, NotifyCollectionChangedAction.Add);
+        }
         //because i really don't have to have 2 different interfaces.  that causes problems too.
         public void AddRange(IEnumerable<T> ThisList, NotifyCollectionChangedAction notificationmode = NotifyCollectionChangedAction.Add) //done
         {
@@ -638,7 +646,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         {
             PrivateList.Clear();
             Behavior.Clear();
-            Add(value);
+            Add(value, NotifyCollectionChangedAction.Reset);
         }
 
         public void ReplaceItem(T OldItem, T NewItem) //i think done
@@ -785,6 +793,14 @@ namespace CommonBasicStandardLibraries.CollectionClasses
             PropertyCountChanged();
             PropertyItemChanged();
             OnCollectionChanged(NotifyCollectionChangedAction.Add, item, index);
+        }
+        private void InsertOnly(int index, T item)
+        {
+            CheckReentrancy();
+            PrivateInsertItem(index, item);
+            PropertyCountChanged();
+            PropertyItemChanged();
+            OnCollectionChanged(NotifyCollectionChangedAction.Reset, null, -1);
         }
 
         private void PrivateInsertItem(int index, T item) //done i think
