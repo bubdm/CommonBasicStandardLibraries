@@ -849,7 +849,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
             CheckReentrancy();
-            int StartIndex = PrivateList.Count();
+            //int StartIndex = PrivateList.Count();
             PrivateInsertRange(index, items);
             PropertyCountChanged();
             PropertyItemChanged();
@@ -860,7 +860,8 @@ namespace CommonBasicStandardLibraries.CollectionClasses
                 OnCollectionChanged(notificationmode);
                 return;
             }
-            OnCollectionChanged(notificationmode, items, StartIndex);
+            List<T> Added = items.ToList(); //unfortunately, can't use the custom list this time.
+            OnCollectionChanged(notificationmode, Added, -1);
         }
 
 		public int HowMany(Predicate<T> match)
