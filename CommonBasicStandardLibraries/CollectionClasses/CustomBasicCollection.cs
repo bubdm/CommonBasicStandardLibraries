@@ -130,7 +130,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
 
         protected override void OnCollectionChanged(NotifyCollectionChangedAction e, object oldItem, object newItem, int index)
         {
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(e, index, newItem, index));
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(e, newItem, oldItem, index));
         }
 
         protected override void PropertyCountChanged()
