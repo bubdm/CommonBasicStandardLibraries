@@ -288,6 +288,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
                     return cs.Thistle;
                 case "Tomato":
                     return cs.Tomato;
+                case "None":
                 case "Transparent":
                     return cs.Transparent;
                 case "Turquoise":
