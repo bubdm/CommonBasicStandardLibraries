@@ -656,7 +656,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
             PrivateRemoveItem(Index, OldItem);
             PrivateInsertItem(Index, NewItem);  //hopefully this works.
             PropertyItemChanged();
-            OnCollectionChanged(NotifyCollectionChangedAction.Replace, NewItem, NewItem, Index);
+            OnCollectionChanged(NotifyCollectionChangedAction.Replace, OldItem, NewItem, Index); //hopefully does not cause a breaking change but has to take a risk.
         }
 
         public void Reverse() //i think
