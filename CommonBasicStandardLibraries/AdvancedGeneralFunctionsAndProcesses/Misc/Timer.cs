@@ -20,6 +20,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Misc
             _backs = new System.ComponentModel.BackgroundWorker();
             _backs.WorkerSupportsCancellation = true;
             _backs.DoWork += Backs_DoWork;
+            _backs.RunWorkerCompleted += Backs_RunWorkerCompleted;
         }
         private bool Processing;
 
@@ -62,7 +63,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Misc
                 _backs.CancelAsync();
         }
 
-        public float TimeElapsed => Elapsed / 1000;
+        public float TimeElapsed => (float) Elapsed / 1000;
         
 
         private void Backs_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
