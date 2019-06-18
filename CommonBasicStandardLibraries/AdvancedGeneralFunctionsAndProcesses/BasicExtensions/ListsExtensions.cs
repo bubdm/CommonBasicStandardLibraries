@@ -152,6 +152,12 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
         {
             return source.GroupBy(keySelector).OrderByDescending(Items => Items.Count());
         }
+
+        public static IOrderedEnumerable<IGrouping<TKey, TSource>> GroupOrderAscending<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            return source.GroupBy(keySelector).OrderBy(Items => Items.Count());
+        }
+
         public static int MaximumDuplicates<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {
             if (source.Count() == 0)
