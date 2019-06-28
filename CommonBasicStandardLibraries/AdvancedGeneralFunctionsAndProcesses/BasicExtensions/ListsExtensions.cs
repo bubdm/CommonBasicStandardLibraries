@@ -13,9 +13,13 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
     public static class ListsExtensions
     {
 
-        public static void Add<M>(Dictionary<int, M> thisDict, M thisItem)
+        public static void Add<T>(this Dictionary<int, T> thisDict, T thisItem)
         {
             thisDict.Add(thisDict.Count + 1, thisItem); //this is used in cases where we do a dictionary just for the purpose of one based items
+        }
+        public static T GetRandomItem<T>(this Dictionary<int, T> thisList)
+        {
+            return thisList.Values.ToCustomBasicList().GetRandomItem();
         }
 
         //decided to put thelistextensions as now part of the main extension namespace
