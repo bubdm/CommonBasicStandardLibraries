@@ -7,6 +7,7 @@ using CommonBasicStandardLibraries.BasicDataSettingsAndProcesses;
 using static CommonBasicStandardLibraries.BasicDataSettingsAndProcesses.BasicDataFunctions;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Collections;
 
 namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.BasicExtensions
 {
@@ -57,14 +58,16 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
         {
             return new CustomBasicCollection<T>(TempList);
         }
-        
+
+       
 
         public static TKey GetKey<TKey, TValue>(this IDictionary<TKey, TValue> ThisDict, TValue ThisValue)
         {
+            
             if (ThisDict == null)
                 throw new ArgumentNullException(nameof(ThisDict));
 
-            foreach(KeyValuePair<TKey, TValue> ThisPair in ThisDict)
+            foreach (KeyValuePair<TKey, TValue> ThisPair in ThisDict)
             {
                 if (ThisValue.Equals(ThisPair.Value) == true || ReferenceEquals(ThisPair.Value, ThisValue) == true)
                     return ThisPair.Key;
