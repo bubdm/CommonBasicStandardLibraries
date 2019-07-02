@@ -222,6 +222,23 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             return NextText.Trim();
         }
 
+        public static string TextWithSpaces(this string thisText)
+        {
+            string newText = thisText;
+            int x = 0;
+            string finals = "";
+            foreach (var thisChar in newText)
+            {
+                bool rets = int.TryParse(thisChar.ToString(), out _);
+                if (char.IsLower(thisChar) == false && x > 0 && rets == false)
+                    finals += " " + thisChar;
+                else
+                    finals += thisChar;
+                x++;
+            }
+            return finals;
+        }
+
         public static int GetSeconds(this string TimeString)
         {
             var TempList = TimeString.Split(":").ToList();
