@@ -114,5 +114,21 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             }
         }
 
+
+        public static bool IsNumberOdd(this int x)
+        {
+            int results = x % 2;
+            return Math.Abs(results) == 1;
+            //throw new BasicBlankException(x)
+            //int thiss = x % 2;
+           // throw new BasicBlankException(thiss.ToString());
+        }
+
+//        if(num%2 == 0){
+//  Console.WriteLine("Number is even")
+//}else{
+//  Console.WriteLine("Number is odd")
+//}
+
     }
 }
