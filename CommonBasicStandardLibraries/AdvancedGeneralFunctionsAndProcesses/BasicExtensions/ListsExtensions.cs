@@ -8,6 +8,7 @@ using static CommonBasicStandardLibraries.BasicDataSettingsAndProcesses.BasicDat
 using System.Threading.Tasks;
 using System.Linq;
 using System.Collections;
+using System.Reflection;
 
 namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.BasicExtensions
 {
@@ -74,6 +75,49 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             }
             throw new BasicBlankException($"The Value Of {ThisValue} Was Not Found In The Dictionary");
         }
+        public static CustomBasicList<string> GetStringListFromGivenProperty<T> (this ICustomBasicList<T> thisList, string propertyName)
+        {
+            CustomBasicList<string> output = new CustomBasicList<string>();
+            thisList.ForEach(thisItem =>
+            {
+                output.Add(thisItem.GetStringValue(propertyName));
+            });
+            return output;
+        }
+        public static CustomBasicList<T> CreateCustomListFromIntegers<T>(CustomBasicList<int> thisList, string propertyName)
+            where T: new()
+        {
+            CustomBasicList<T> output = new CustomBasicList<T>();
+            thisList.ForEach(thisItem =>
+            {
+                T newItem = new T();
+                var thisProp = thisItem.GetType().GetRuntimeProperty(propertyName);
+                thisProp.SetValue(newItem, thisItem);
+                output.Add(newItem);
+            });
+            return output;
+        }
+
+        public static CustomBasicList<T> CreateCustomListFromString<T>(CustomBasicList<string> thisList, string propertyName)
+            where T : new()
+        {
+            CustomBasicList<T> output = new CustomBasicList<T>();
+            thisList.ForEach(thisItem =>
+            {
+                T newItem = new T();
+                var thisProp = thisItem.GetType().GetRuntimeProperty(propertyName);
+                thisProp.SetValue(newItem, thisItem);
+                output.Add(newItem);
+            });
+            return output;
+        }
+
+        private static string GetStringValue<T>(this T thisItem, string propertyName)
+        {
+            var thisProp = thisItem.GetType().GetRuntimeProperty(propertyName);
+            return (string) thisProp.GetValue(thisItem); //try this way.
+        }
+
 
         public static void PopulateBlankList(this ICustomBasicList<string> ThisList, int HowMany)
         {
