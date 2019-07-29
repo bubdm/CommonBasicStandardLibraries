@@ -412,7 +412,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         {
             return rs.GetSeed();
         }
-
+        
         public ICustomBasicList<T> GetRandomList(bool RemovePrevious, int HowManyInList) //done
         {
             SetRandom(ref PrivateContainer, ref rs);
