@@ -668,8 +668,6 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         }
         public void ShuffleList() //i can try to test out this idea.
         {
-            //i think this one would be a move command.  you are not really removing the entire list
-            //throw new BasicBlankException("Shuffle Test");
             if (Count == 0)
                 return; //because there is nothing to shuffle.  so can't obviously.  better than runtime error.
             SetRandom(ref PrivateContainer, ref rs);
@@ -689,6 +687,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         public void ShuffleList(int HowMany) //done
         {
             CheckReentrancy();
+            SetRandom(ref PrivateContainer, ref rs);
             CustomBasicList<int> ThisList = rs.GenerateRandomList(PrivateList.Count, HowMany);
             List<T> RList = new List<T>();
             foreach (int Index in ThisList)
