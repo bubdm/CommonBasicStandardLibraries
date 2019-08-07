@@ -367,10 +367,26 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
         {
             await Task.Run(() => File.Delete(Path));
         }
-
+        public static void RunTest() => throw new BasicBlankException("Good On New Routine Only");
         public static async Task RenameFileAsync(string OldFile, string NewName)
         {
-            await Task.Run(() => File.Move(OldFile, NewName));
+            if (File.Exists(OldFile) == false && File.Exists(NewName) && OldFile.ToLower().Contains("storage/emulated"))
+                return; //because you already renamed.  i will assume this only for sd card situations.
+            await Task.Run(() =>
+            {
+                try
+                {
+                    File.Move(OldFile, NewName);
+                }
+                catch
+                {
+
+                }
+                if (File.Exists(NewName) == false)
+                    throw new BasicBlankException("Failed to rename file.  Most likely permission problem.  Rethink");
+                if (File.Exists(OldFile))
+                    File.Delete(OldFile);
+            });
         }
 
         public static async Task RenameDirectoryAsync(string OldDirectory, string NewName)
