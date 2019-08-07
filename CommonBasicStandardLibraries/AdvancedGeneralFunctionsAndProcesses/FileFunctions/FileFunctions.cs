@@ -367,7 +367,6 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
         {
             await Task.Run(() => File.Delete(Path));
         }
-        public static void RunTest() => throw new BasicBlankException("Good On New Routine Only");
         public static async Task RenameFileAsync(string OldFile, string NewName)
         {
             if (File.Exists(OldFile) == false && File.Exists(NewName) && OldFile.ToLower().Contains("storage/emulated"))
