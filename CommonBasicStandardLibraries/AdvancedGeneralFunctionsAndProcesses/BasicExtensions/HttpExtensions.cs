@@ -1,6 +1,7 @@
 ﻿using CommonBasicStandardLibraries.Exceptions;
 using Newtonsoft.Json;
 using System;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +22,16 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             string thisStr = JsonConvert.SerializeObject(value); //can't use await this time for the custom method to send to server.
             StringContent content = new StringContent(thisStr);
             return await client.PostAsync(uri, content);
+        }
+        public static async Task SaveDownloadFileAsync(this HttpClient client, string requesturi, string path) //so if it fails, you will know
+        {
+            //i like download file better.  this is when it does the standard way.  if using custom, then i can still do custom way.
+            HttpResponseMessage output = await client.GetAsync(requesturi);
+            if (output.IsSuccessStatusCode == false)
+                throw new BasicBlankException($"Was not okay.  The code returned was {output.StatusCode}");
+            using FileStream stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite, FileShare.None);
+            var results = await output.Content.ReadAsByteArrayAsync();
+            await stream.WriteAsync(results, 0, results.Length);
         }
         public static async Task<HttpResponseMessage> PostJsonAsync<T>(this HttpClient client, string uri, T value)
         {
