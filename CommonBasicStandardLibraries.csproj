@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>8.0</LangVersion>
+	<Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Company>None</Company>
+    <Authors>musictopia</Authors>
+    <Description>This has lots of common standard libraries like MVVM Helpers, New Collection Classes, Extensions, Exceptions,
+and cross platform converters.</Description>
+    <RepositoryUrl>https://github.com/musictopia2/CommonBasicStandardLibraries</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/musictopia2/CommonBasicStandardLibraries</PackageProjectUrl>
+    <PackageTags>MVVM Helpers mvvmhelper Collections Converters Extensions Messenging nugethelpers ExceptionHandling DependencyInjection Interfaces FileHelpers</PackageTags>
+    <Version>2.0.00</Version><!--Decided to increase to 2.0 because needs to beware of possible breaking changes.  plus this uses .net standard 2.1 as well. -->
+	<!--decided to risk not using the newton jsonsoft now.  hopefully the risk pays off.  the good news is i have the old copy in 3.0 just in case.  -->
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+  
+  
+</Project>
