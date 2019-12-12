@@ -19,6 +19,10 @@ and cross platform converters.</Description>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DatabaseHelpers\Attributes\" />
+    <Folder Include="DatabaseHelpers\Extensions\" />
+  </ItemGroup>
   
   
 </Project>
