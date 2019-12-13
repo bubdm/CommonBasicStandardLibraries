@@ -15,18 +15,14 @@ namespace CommonBasicStandardLibraries.DatabaseHelpers.MiscInterfaces
     /// </summary>
     public interface ISqliteManuelDataAccess
     {
-        
+        //this assumes you already have a connection string.
         CustomBasicList<T> LoadData<T, U>(string sqlStatement,
-                               U parameters,
-                               string connectionStringName);
+                               U parameters);
         Task<CustomBasicList<T>> LoadDataAsync<T, U>(string sqlStatement,
-                               U parameters,
-                               string connectionStringName);
+                               U parameters);
         void SaveData<T>(string sqlStatement,
-                               T parameters,
-                               string connectionStringName);
+                               T parameters);
         Task SaveDataAsync<T>(string sqlStatement,
-                               T parameters,
-                               string connectionStringName);
+                               T parameters);
     }
 }
