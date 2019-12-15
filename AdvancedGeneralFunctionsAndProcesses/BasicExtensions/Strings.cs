@@ -12,7 +12,11 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
 {
     public static class Strings
     {
-        private static string MonthReplace = "";
+        private static string _monthReplace = "";
+        public static CustomBasicList<string> CommaDelimitedList(string payLoad)
+        {
+            return payLoad.Split(",").ToCustomBasicList(); //comma alone.
+        }
         public static bool IsNumeric(this string thisStr)
         {
             return int.TryParse(thisStr, out _); //you are forced to assign variable no matter what now.
@@ -22,7 +26,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             CustomBasicList<string> possList = new CustomBasicList<string>() { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
             int possNum;
             possNum = 0;
-            MonthReplace = "";
+            _monthReplace = "";
             int currentNum;
             foreach (var thisPoss in possList)
             {
@@ -31,7 +35,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
                     currentNum = thisPoss.GetMonthID();
                     if (currentNum > 0)
                     {
-                        MonthReplace = thisPoss;
+                        _monthReplace = thisPoss;
                         if (possNum > 0)
                             throw new Exception("There should not have been 2 months in the same line.  Rethink");
                         possNum = currentNum;
@@ -43,9 +47,9 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
         public static CustomBasicList<string> SplitStringEliminateMonth(this string thisStr)
         {
             thisStr = thisStr.Trim();
-            if (MonthReplace == null == true || MonthReplace == "")
+            if (_monthReplace == null == true || _monthReplace == "")
                 return new CustomBasicList<string>() { thisStr };
-            var thisList = thisStr.Split(MonthReplace);
+            var thisList = thisStr.Split(_monthReplace);
             if (thisList.Count() != 2)
                 throw new Exception("There should be only 2 items splited, not " + thisList.Count()); //i am guessing has to be this way now.
             CustomBasicList<string> newList = new CustomBasicList<string>();
