@@ -45,11 +45,11 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
             FirstControl.FocusOnFirstControl();
         }
         private CustomBasicList<PropertyInfo> _propList = new CustomBasicList<PropertyInfo>();
-        private bool _AttemptedToSubmitForm;
+        private bool _attemptedToSubmitForm;
         public bool AttemptedToSubmitForm
         {
-            get => _AttemptedToSubmitForm;
-            set => SetProperty(ref _AttemptedToSubmitForm, value);
+            get => _attemptedToSubmitForm;
+            set => SetProperty(ref _attemptedToSubmitForm, value);
         }
         protected bool UseBlankString;
         protected void NotifyAllChanges()
