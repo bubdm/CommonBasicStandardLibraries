@@ -28,7 +28,7 @@ namespace CommonBasicStandardLibraries.ContainerClasses
         private readonly HashSet<ContainerData> _thisSet = new HashSet<ContainerData>();
         public static EnumResolveCategory ResolveCategory = EnumResolveCategory.ShowError; //default to show error so you have to rethink.
 
-        private int ID;
+        private int _id;
         //private static readonly HashSet<IContainerFactory> FactoryList = new HashSet<IContainerFactory>(); //i think i want anybody to be able to add to this list.  makes the container more powerful.
         //public IContainerFactory ParentFactory; //i think its implied that if you set the parent, the parent will handle all duplicates.
         private readonly RandomGenerator _rans; //this is most common.
@@ -49,6 +49,31 @@ namespace CommonBasicStandardLibraries.ContainerClasses
             //RegisterSingleton(Rans);
         }
 
+
+        //just in case the web or something that uses servicecollection needs random, might as well give it as well.
+
+        public CustomBasicList<ContainerResults> GetContainerList() //so it can be added to the off the shelf dependency injection system.
+        {
+            CustomBasicList<ContainerResults> output = new CustomBasicList<ContainerResults>()
+            {
+                new ContainerResults()
+                {
+                    PayLoad = _rans
+                }
+            };
+
+            CustomBasicList<ContainerResults> realItems = _thisSet.Select(items =>
+            {
+                ContainerResults results = new ContainerResults();
+                results.PayLoad = items.ThisObject;
+                results.IsSingle = items.IsSingle;
+                results.TypeFrom = items.TypeIn;
+                results.TypeTo = items.TypeOut;
+                return results;
+            }).ToCustomBasicList();
+            output.AddRange(realItems);
+            return output;
+        }
 
         //public static void AddFactoryToContainer(IContainerFactory ThisFact)
         //{
@@ -300,8 +325,8 @@ namespace CommonBasicStandardLibraries.ContainerClasses
         {
             thisResults.Priority = tPriority; //2 different things.
             thisResults.ExtraDetails = thisObject;
-            ID++;
-            thisResults.ID = ID; //needed for lifo and fifo methods.
+            _id++;
+            thisResults.ID = _id; //needed for lifo and fifo methods.
             //ThisResults.Check(); //so if something is wrong, will error out at this moment.
             _thisSet.Add(thisResults);
         }
@@ -331,7 +356,7 @@ namespace CommonBasicStandardLibraries.ContainerClasses
         //    AddFactoryToContainer(ThisFact); //i think i should automatically add a factory for a possibility if i do one.  if i am wrong, can rethink.
         //    SetResults(ThisResults, TPriority, ThisObject);
         //}
-
+        
         public void RegisterSingleton<TIn, TOut>(int tPriority = 0, object? thisObject = null) where TOut : TIn //if you specified priority on any, then all will be priority.
         {
             ContainerData thisResults = new ContainerData()
