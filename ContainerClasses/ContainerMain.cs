@@ -209,6 +209,16 @@ namespace CommonBasicStandardLibraries.ContainerClasses
             //if (ParentFactory != null)
             //    return ParentFactory.GetReturnObject(_thisSet.ToCustomBasicList(), thisType); //this means if i have a parent factory, then the parent is responsible for everything.
             //i could change my mind if i choose to.  i'll have to decide later if that was the right decision or not (?)
+            if (thisType == typeof(RandomGenerator))
+                return _rans; //i think this is best.
+            if (thisType == typeof(HttpClient))
+            {
+                if (_needsHttpClient == false)
+                {
+                    NeedsClient(); //could be done automatically.  hopefully that works.
+                }
+                return _client!;
+            }
             CustomBasicList<ContainerData> tempList;
             tempList = _thisSet.Where(items => items.TypeIn == thisType).ToCustomBasicList();
             //bool HadAtLeastOne = false;
@@ -236,6 +246,7 @@ namespace CommonBasicStandardLibraries.ContainerClasses
             tempList = _thisSet.Where(Items => thisType.IsAssignableFrom(Items.TypeOut)).ToCustomBasicList();
             if (tempList.Count == 1)
                 return GetInstance(tempList.Single());
+            CommonBasicStandardLibraries.BasicDataSettingsAndProcesses.VBCompat.Stop();
             throw new BasicBlankException($"Looks Like Type {thisType.Name} Was Not Registered.  If I am wrong, rethink");
             //if (tempList.Count == 0 && FactoryList.Count == 0)
             //    throw new BasicBlankException($"Looks Like Type {thisType.Name} Was Not Registered And Had No Factories.  If It Was, Rethink");

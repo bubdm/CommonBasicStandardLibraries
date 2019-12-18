@@ -22,8 +22,9 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Misc
         protected HttpClient Client;
         public CustomWebAPIClient(ISimpleConfig sims, HttpClient client)
         {
-            Client = client;
-            SetUp(sims);
+            return; //to experiment.  somehow not working currently.
+            //Client = client;
+            //SetUp(sims);
         }
         private async void SetUp(ISimpleConfig sims)
         {
