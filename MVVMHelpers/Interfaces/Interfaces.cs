@@ -37,5 +37,17 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.Interfaces
     public interface ICustomCommand : ICommand
     {
         void ReportCanExecuteChange(); //looks like i am forced to do it this way.
+
+    }
+    public interface IWebCommand
+    {
+        //for now, just certain things.  can add more as needed anyways.
+        bool CanExecute(); //the non generics one should accept no parameters
+        Task ExecuteAsync();
+    }
+    public interface IWebCommand<T>
+    {
+        bool CanExecute(T args);
+        Task ExecuteAsync(T args);
     }
 }

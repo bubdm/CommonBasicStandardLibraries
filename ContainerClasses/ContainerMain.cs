@@ -8,6 +8,7 @@ using static CommonBasicStandardLibraries.BasicDataSettingsAndProcesses.BasicDat
 using CommonBasicStandardLibraries.CollectionClasses;
 using System.Collections.Generic;
 using CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.RandomGenerator;
+using System.Net.Http;
 //i think this is the most common things i like to do
 namespace CommonBasicStandardLibraries.ContainerClasses
 {
@@ -32,7 +33,15 @@ namespace CommonBasicStandardLibraries.ContainerClasses
         //private static readonly HashSet<IContainerFactory> FactoryList = new HashSet<IContainerFactory>(); //i think i want anybody to be able to add to this list.  makes the container more powerful.
         //public IContainerFactory ParentFactory; //i think its implied that if you set the parent, the parent will handle all duplicates.
         private readonly RandomGenerator _rans; //this is most common.
+        private HttpClient? _client;
+        private void NeedsClient() //i like doing it automatically after all now.
+        {
+            _needsHttpClient = true;
+            if (_client == null)
+                _client = new HttpClient();
+        }
 
+        private bool _needsHttpClient;//if set to true, then if it requests httpclient, will be a brand new one if not already there
         //decided to not even have the ability to clear container since game package had its own system.
         //its probably best its kept this way.  they both implement iresolver so when needed, works.
 
@@ -58,7 +67,8 @@ namespace CommonBasicStandardLibraries.ContainerClasses
             {
                 new ContainerResults()
                 {
-                    PayLoad = _rans
+                    PayLoad = _rans,
+                    IsSingle = true
                 }
             };
 
@@ -87,6 +97,15 @@ namespace CommonBasicStandardLibraries.ContainerClasses
                 //i originally had static random generators.  can't do anymore because of testing problems.  so this will do it instead.
                 object thisObj = _rans;
                 return (T)thisObj;
+            }
+            if (typeof(T) == typeof(HttpClient))
+            {
+                if (_needsHttpClient == false)
+                {
+                    NeedsClient(); //could be done automatically.  hopefully that works.
+                }
+                object output = _client!;
+                return (T)output;
             }
             return (T)GetInstance(typeof(T));
         }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using static CommonBasicStandardLibraries.MVVMHelpers.InternalCommandList;
 namespace CommonBasicStandardLibraries.MVVMHelpers
 {
-    public class Command<T> : ICustomCommand
+    public class Command<T> : ICustomCommand, IWebCommand<T>
     {
 
 
@@ -116,14 +116,20 @@ namespace CommonBasicStandardLibraries.MVVMHelpers
                 }
             }
         }
+
+        public bool CanExecute(T args) //hopefully this won't cause any problems (?)
+        {
+            return CanExecute((object) args!);
+        }
+
         public event EventHandler? CanExecuteChanged; //i am forced to make this public.
     }
 
 
-    public class Command : ICustomCommand
+    public class Command : ICustomCommand, IWebCommand
     {
         private readonly Func<object, Task>? _executeMethod;
-        private readonly Func<object, bool> CanExecuteMethod;
+        private readonly Func<object, bool> _canExecuteMethod;
         private readonly IErrorHandler _errorHandler;
         private readonly Action<object>? _oldcommand;
         public static bool CurrentlyExecuting()
@@ -137,14 +143,14 @@ namespace CommonBasicStandardLibraries.MVVMHelpers
         public Command(Func<object, Task> action, Func<object, bool> cans, IErrorHandler errors)
         {
             _executeMethod = action;
-            CanExecuteMethod = cans;
+            _canExecuteMethod = cans;
             _errorHandler = errors;
             AddCommand(this);
         }
         public Command(Action<object> action, Func<object, bool> _Cans, IErrorHandler errors) //i think its best to do it this way because i really don't want to have to do several waitblanks when its not really needed
         {
             _oldcommand = action;
-            CanExecuteMethod = _Cans;
+            _canExecuteMethod = _Cans;
             _errorHandler = errors;
             AddCommand(this);
         }
@@ -189,12 +195,12 @@ namespace CommonBasicStandardLibraries.MVVMHelpers
                 return false;
             }
 
-            if (CanExecuteMethod == null == true)
+            if (_canExecuteMethod == null == true)
             {
                 return true;// if nothing is sent, implies it can be executed.  otherwise, needs logic to decide whether it can be executed. never makes sense to have a command that can never be executed
             }
 
-            return CanExecuteMethod!(parameter); // i think this is how that part is done.
+            return _canExecuteMethod!(parameter); // i think this is how that part is done.
         }
         public void Execute(object parameter)
         {
@@ -209,6 +215,17 @@ namespace CommonBasicStandardLibraries.MVVMHelpers
         {
             CanExecuteChanged?.Invoke(this, new EventArgs()); // try this
         }
+
+        bool IWebCommand.CanExecute()
+        {
+            return CanExecute(null!);
+        }
+
+        Task IWebCommand.ExecuteAsync()
+        {
+            return ExecuteAsync(null!);
+        }
+
         public event EventHandler? CanExecuteChanged; //i am forced to make this public.
     }
 }
