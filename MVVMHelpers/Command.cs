@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using static CommonBasicStandardLibraries.MVVMHelpers.InternalCommandList;
 namespace CommonBasicStandardLibraries.MVVMHelpers
 {
-    public class Command<T> : ICustomCommand, IWebCommand<T>
+    public class Command<T> : ICustomCommand, IAsyncCommand<T>
     {
 
 
@@ -126,7 +126,7 @@ namespace CommonBasicStandardLibraries.MVVMHelpers
     }
 
 
-    public class Command : ICustomCommand, IWebCommand
+    public class Command : ICustomCommand, IAsyncCommand
     {
         private readonly Func<object, Task>? _executeMethod;
         private readonly Func<object, bool> _canExecuteMethod;
@@ -216,12 +216,12 @@ namespace CommonBasicStandardLibraries.MVVMHelpers
             CanExecuteChanged?.Invoke(this, new EventArgs()); // try this
         }
 
-        bool IWebCommand.CanExecute()
+        bool IAsyncCommand.CanExecute()
         {
             return CanExecute(null!);
         }
 
-        Task IWebCommand.ExecuteAsync()
+        Task IAsyncCommand.ExecuteAsync()
         {
             return ExecuteAsync(null!);
         }
