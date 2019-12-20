@@ -1,4 +1,5 @@
-﻿using CommonBasicStandardLibraries.MVVMHelpers;
+﻿using CommonBasicStandardLibraries.Exceptions;
+using CommonBasicStandardLibraries.MVVMHelpers;
 using CommonBasicStandardLibraries.MVVMHelpers.Interfaces;
 using System;
 using System.Threading.Tasks; //most of the time, i will be using asyncs.
@@ -51,15 +52,66 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
         //{
         //    model.BackCommand = new Command<T>(async item => await model.ProcessCommandAsync(model.BackAction), item => true, error);
         //}
-        public static void CreateTwoCommands(this INavigateVM model, Command? command, Func<Task>? action, IErrorHandler error)
+        //public static Command CreateTwoCommands(this INavigateVM model, Func<Task>? action, IErrorHandler error)
+        //{
+        //    model.CreateBackCommand(error);
+        //    return new Command(async item => await model.ProcessCommandAsync(action), item => false, error);
+        //}
+        //public static void CreateTwoCommands<T>(this IActionVM model, Func<T, Task>? action, IErrorHandler error)
+        //{
+        //    model.CreateBackCommand(error);
+        //    model.ActionCommand = new Command<T>(async item => await model.ProcessCommandAsync(action, item), item => true, error);
+        //}
+        //public static Command<T> CreateTwoCommands<T>(this INavigateVM model, ActionContainer<T> action, IErrorHandler error)
+        //{
+        //    model.CreateBackCommand(error);
+        //    return new Command<T>(async item =>
+        //    {
+        //        await model.ProcessCommandAsync(action.Action, item);
+        //        //if (action.Action == null)
+        //        //    throw new BasicBlankException("Help");
+        //        //throw new BasicBlankException("Still working partially");
+        //    }, item => true, error);
+
+        //    //return new Command(async item => await model.ProcessCommandAsync(
+        //    //    {
+        //    //}action: action!.Action, (T) item), item => true, error);
+        //    //return new Command(async item =>
+        //    //{
+        //    //    if (action == null)
+        //    //        throw new BasicBlankException("Help");
+        //    //}, item => true, error);
+        //    //return  new Command(async item => await model.ProcessCommandAsync(action, (T) item), item => true, error);
+        //}
+        //for now, we won't have both the generic and regular.  if i change my mind, has to think about naming.
+        public static Command CreateTwoCommands<T>(this INavigateVM model, ActionContainer<T> action, IErrorHandler error)
         {
             model.CreateBackCommand(error);
-            command = new Command(async item => await model.ProcessCommandAsync(action), item => true, error);
+            return new Command(async item =>
+            {
+                await model.ProcessCommandAsync(action.Action, (T)item);
+                //if (action.Action == null)
+                //    throw new BasicBlankException("Help");
+                //throw new BasicBlankException("Still working partially");
+            }, item => true, error);
+
+            //return new Command(async item => await model.ProcessCommandAsync(
+            //    {
+            //}action: action!.Action, (T) item), item => true, error);
+            //return new Command(async item =>
+            //{
+            //    if (action == null)
+            //        throw new BasicBlankException("Help");
+            //}, item => true, error);
+            //return  new Command(async item => await model.ProcessCommandAsync(action, (T) item), item => true, error);
         }
-        public static void CreateTwoCommands<T>(this INavigateVM model, Command<T>? command, Func<T, Task>? action, IErrorHandler error)
-        {
-            model.CreateBackCommand(error);
-            command = new Command<T>(async item => await model.ProcessCommandAsync(action, item), item => true, error);
-        }
+
+
+        //for now, not working out as expected unfortunately.
+        //if i named it the same way, then bad news is harder to maintain because the name would have to be the same.
+        //there could be 2 actions.  that would still not be a good solution.
+        //if i really wanted to do this, i would have to have another class.
+        //should try this on the hotel first.
+
     }
 }

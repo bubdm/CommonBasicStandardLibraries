@@ -59,9 +59,4 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.Interfaces
         Command? BackCommand { get; set; }
         Func<Task>? BackAction { get; set; }
     }
-    //public interface INavigateVM<T> : IToggleVM
-    //{
-    //    Command<T>? BackCommand { get; set; }
-    //    Func<T, Task>? BackAction { get; set; }
-    //}
 }

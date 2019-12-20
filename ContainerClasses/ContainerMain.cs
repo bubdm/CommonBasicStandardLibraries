@@ -246,7 +246,7 @@ namespace CommonBasicStandardLibraries.ContainerClasses
             tempList = _thisSet.Where(Items => thisType.IsAssignableFrom(Items.TypeOut)).ToCustomBasicList();
             if (tempList.Count == 1)
                 return GetInstance(tempList.Single());
-            CommonBasicStandardLibraries.BasicDataSettingsAndProcesses.VBCompat.Stop();
+            //CommonBasicStandardLibraries.BasicDataSettingsAndProcesses.VBCompat.Stop();
             throw new BasicBlankException($"Looks Like Type {thisType.Name} Was Not Registered.  If I am wrong, rethink");
             //if (tempList.Count == 0 && FactoryList.Count == 0)
             //    throw new BasicBlankException($"Looks Like Type {thisType.Name} Was Not Registered And Had No Factories.  If It Was, Rethink");
