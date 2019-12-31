@@ -30,7 +30,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Misc
         {
             string firstPart = await sims.GetStringAsync(Key);
             Uri secondPart = new Uri(firstPart);
-            BaseAddress = new Uri(secondPart, @"hotelservice/api/");
+            BaseAddress = new Uri(secondPart, ServicePath);
         }
         protected async Task SaveResults(string extras, string errorMessage)
         {
