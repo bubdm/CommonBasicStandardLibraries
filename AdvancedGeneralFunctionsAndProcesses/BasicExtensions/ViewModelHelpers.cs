@@ -87,13 +87,8 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
         public static Command CreateTwoCommands<T>(this INavigateVM model, ActionContainer<T> action, IErrorHandler error)
         {
             model.CreateBackCommand(error);
-            return new Command(async item =>
-            {
-                await model.ProcessCommandAsync(action.Action, (T)item);
-                //if (action.Action == null)
-                //    throw new BasicBlankException("Help");
-                //throw new BasicBlankException("Still working partially");
-            }, item => true, error);
+            return model.CreateExtraCommand(action, error);
+            
 
             //return new Command(async item => await model.ProcessCommandAsync(
             //    {
@@ -105,6 +100,26 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             //}, item => true, error);
             //return  new Command(async item => await model.ProcessCommandAsync(action, (T) item), item => true, error);
         }
+        public static Command CreateExtraCommand<T>(this INavigateVM model, ActionContainer<T> action, IErrorHandler error)
+        {
+            return new Command(async item =>
+            {
+                await model.ProcessCommandAsync(action.Action, (T)item);
+                //if (action.Action == null)
+                //    throw new BasicBlankException("Help");
+                //throw new BasicBlankException("Still working partially");
+            }, item => true, error);
+        }
+        public static Command CreateExtraCommand(this INavigateVM model, ActionContainer action, IErrorHandler error)
+        {
+            //i may have extra things that has to happen in order to be valid.  if that is so, then rethinking will be required.
+            return new Command(async item =>
+            {
+                await model.ProcessCommandAsync(action.Action);
+            }, item => true, error);
+        }
+        //if one has more than one extra command, then rethinking could be required.
+        //including an extra actioncontainer.  in that case, you still call the extra command
 
 
         //for now, not working out as expected unfortunately.
