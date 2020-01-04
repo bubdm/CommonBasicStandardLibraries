@@ -100,7 +100,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             //}, item => true, error);
             //return  new Command(async item => await model.ProcessCommandAsync(action, (T) item), item => true, error);
         }
-        public static Command CreateExtraCommand<T>(this INavigateVM model, ActionContainer<T> action, IErrorHandler error)
+        public static Command CreateExtraCommand<T>(this IToggleVM model, ActionContainer<T> action, IErrorHandler error)
         {
             return new Command(async item =>
             {
@@ -110,7 +110,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
                 //throw new BasicBlankException("Still working partially");
             }, item => true, error);
         }
-        public static Command CreateExtraCommand(this INavigateVM model, ActionContainer action, IErrorHandler error)
+        public static Command CreateExtraCommand(this IToggleVM model, ActionContainer action, IErrorHandler error)
         {
             //i may have extra things that has to happen in order to be valid.  if that is so, then rethinking will be required.
             return new Command(async item =>
