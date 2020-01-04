@@ -11,7 +11,7 @@ namespace CommonBasicStandardLibraries.MVVMHelpers
 
     /// </summary>
 
-    public class BaseViewModel : ObservableObject, IErrorHandler
+    public class BaseViewModel : ObservableObject, IErrorHandler, IMappable
 
     {
         string _title = string.Empty;

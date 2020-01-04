@@ -1,4 +1,5 @@
-﻿using CommonBasicStandardLibraries.Attributes;
+﻿using CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.BasicExtensions;
+using CommonBasicStandardLibraries.Attributes;
 using CommonBasicStandardLibraries.CollectionClasses;
 using CommonBasicStandardLibraries.MVVMHelpers.Interfaces;
 using System;
@@ -45,31 +46,31 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
             Contact = 1,
             Phone = 2
         }
-        private EnumEditStatus _EditStatus = EnumEditStatus.None;
+        private EnumEditStatus _editStatus = EnumEditStatus.None;
         public EnumEditStatus EditStatus
         {
             get
             {
-                return _EditStatus;
+                return _editStatus;
             }
 
             set
             {
-                if (SetProperty(ref _EditStatus, value) == true)
+                if (SetProperty(ref _editStatus, value) == true)
                     ChangeScreens();
             }
         }
-        private EnumAddEditCategory _AddEditCategory = EnumAddEditCategory.None;
+        private EnumAddEditCategory _addEditCategory = EnumAddEditCategory.None;
         public EnumAddEditCategory AddEditCategory
         {
             get
             {
-                return _AddEditCategory;
+                return _addEditCategory;
             }
 
             set
             {
-                if (SetProperty(ref _AddEditCategory, value) == true)
+                if (SetProperty(ref _addEditCategory, value) == true)
                     // code to run
                     ChangeScreens();
             }
@@ -83,17 +84,17 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
             OnPropertyChanged(nameof(MainListVisible));
         }
         protected abstract bool IsPhone { get; } // can decide what to do whether its phone or not.
-        private C? _SelectedItem;
+        private C? _selectedItem;
         public C? SelectedItem //we could decide on interfaces but not sure now though.
         {
             get
             {
-                return _SelectedItem;
+                return _selectedItem;
             }
 
             set
             {
-                if (SetProperty(ref _SelectedItem, value) == true)
+                if (SetProperty(ref _selectedItem, value) == true)
                 {
                     EnterCommand!.ReportCanExecuteChange();
                     StartEditContactCommand!.ReportCanExecuteChange(); // not sure why it worked on desktop.
@@ -176,7 +177,7 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
         {
             return new CustomBasicList<EnumRelationship>() { EnumRelationship.Family, EnumRelationship.Business, EnumRelationship.CurrentChurch, EnumRelationship.OldCollege, EnumRelationship.Other, EnumRelationship.PreviousChurch };
         }
-        private string _DisplayName = "";
+        private string _displayName = "";
         [Required(ErrorMessage = "Must Have A Display Name")]
         [StringLength(50)]
         [AutoClear]
@@ -184,151 +185,151 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
         {
             get
             {
-                return _DisplayName;
+                return _displayName;
             }
 
             set
             {
-                if (SetProperty(ref _DisplayName, value) == true)
+                if (SetProperty(ref _displayName, value) == true)
                 {
                 }
             }
         }
-        private string _Email = "";
+        private string _email = "";
         [StringLength(50)]
         [AutoClear]
         public string Email
         {
             get
             {
-                return _Email;
+                return _email;
             }
 
             set
             {
-                if (SetProperty(ref _Email, value) == true)
+                if (SetProperty(ref _email, value) == true)
                 {
                 }
             }
         }
-        private string _StreetAddress = "";
+        private string _streetAddress = "";
         [StringLength(100)]
         [AutoClear]
         public string StreetAddress
         {
             get
             {
-                return _StreetAddress;
+                return _streetAddress;
             }
 
             set
             {
-                if (SetProperty(ref _StreetAddress, value) == true)
+                if (SetProperty(ref _streetAddress, value) == true)
                 {
                 }
             }
         }
-        private string _City = "";
+        private string _city = "";
         [StringLength(100)]
         [AutoClear]
         public string City
         {
             get
             {
-                return _City;
+                return _city;
             }
 
             set
             {
-                if (SetProperty(ref _City, value) == true)
+                if (SetProperty(ref _city, value) == true)
                 {
                 }
             }
         }
-        private string _State = "";
+        private string _state = "";
         [StringLength(50)]
         [AutoClear]
         public string State
         {
             get
             {
-                return _State;
+                return _state;
             }
 
             set
             {
-                if (SetProperty(ref _State, value) == true)
+                if (SetProperty(ref _state, value) == true)
                 {
                 }
             }
         }
-        private string _ZipCode = "";
+        private string _zipCode = "";
         [StringLength(50)]
         [AutoClear]
         public string ZipCode
         {
             get
             {
-                return _ZipCode;
+                return _zipCode;
             }
 
             set
             {
-                if (SetProperty(ref _ZipCode, value) == true)
+                if (SetProperty(ref _zipCode, value) == true)
                 {
                 }
             }
         }
-        private string _Notes = "";
+        private string _notes = "";
         [AutoClear]
         public string Notes
         {
             get
             {
-                return _Notes;
+                return _notes;
             }
 
             set
             {
-                if (SetProperty(ref _Notes, value) == true)
+                if (SetProperty(ref _notes, value) == true)
                 {
                 }
             }
         }
-        private string _DrivingInstructions = "";
+        private string _drivingInstructions = "";
         [AutoClear]
         public string DrivingInstructions
         {
             get
             {
-                return _DrivingInstructions;
+                return _drivingInstructions;
             }
 
             set
             {
-                if (SetProperty(ref _DrivingInstructions, value) == true)
+                if (SetProperty(ref _drivingInstructions, value) == true)
                 {
                 }
             }
         }
-        private EnumRelationship? _Relationship = default;
+        private EnumRelationship? _relationship = default;
         [AutoClear]
         public EnumRelationship? Relationship
         {
             get
             {
-                return _Relationship;
+                return _relationship;
             }
 
             set
             {
-                if (SetProperty(ref _Relationship, value) == true)
+                if (SetProperty(ref _relationship, value) == true)
                     // code to run
                     OnRelationShipChange();
             }
         }
         protected virtual void OnRelationShipChange() { }
-        private string _PhoneNumber = "";
+        private string _phoneNumber = "";
         [Required(ErrorMessage = "Must Have A Phone Number")]
         [StringLength(50)]
         [AutoClear]
@@ -336,17 +337,17 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
         {
             get
             {
-                return _PhoneNumber;
+                return _phoneNumber;
             }
 
             set
             {
-                if (SetProperty(ref _PhoneNumber, value) == true)
+                if (SetProperty(ref _phoneNumber, value) == true)
                 {
                 }
             }
         }
-        private EnumPhoneCategory? _PhoneCategory;
+        private EnumPhoneCategory? _phoneCategory;
 
         public BaseContactManagerViewModel(IFocusOnFirst tempFocus, ISimpleUI tempUI, IBasicContactManagerUI customerui) : base(tempFocus, tempUI)
         {
@@ -358,12 +359,12 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
         {
             get
             {
-                return _PhoneCategory;
+                return _phoneCategory;
             }
 
             set
             {
-                if (SetProperty(ref _PhoneCategory, value) == true)
+                if (SetProperty(ref _phoneCategory, value) == true)
                 {
                 }
             }
@@ -397,7 +398,7 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
                 return;
             }
             UseBlankString = true;
-            AutoClearProperties(this); //could be iffy.
+            this.AutoClearProperties(); //could be iffy.
             PhoneCategory = EnumPhoneCategory.HomeMainPhone;
         }
         protected override void AddOtherPropertiesAttributes(PropertyInfo thisProp)

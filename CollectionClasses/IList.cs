@@ -1,4 +1,5 @@
 ﻿using CommonBasicStandardLibraries.BasicDataSettingsAndProcesses;
+using CommonBasicStandardLibraries.MVVMHelpers.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -29,7 +30,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
     {
         int Count { get; }
     }
-    public interface ISimpleList<T> : IEnumerable<T>, ICountCollection
+    public interface ISimpleList<T> : IEnumerable<T>, ICountCollection, IMappable //i do want to be able to map lists.
     {
         //these are all things that can't add or remove from list if you are using this and not the custom list.
         Task ForEachAsync(ActionAsync<T> action);

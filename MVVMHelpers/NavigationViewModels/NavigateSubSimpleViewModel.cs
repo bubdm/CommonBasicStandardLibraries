@@ -1,5 +1,6 @@
 ﻿using CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.BasicExtensions;
 using CommonBasicStandardLibraries.MVVMHelpers.Interfaces;
+using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 namespace CommonBasicStandardLibraries.MVVMHelpers.NavigationViewModels
@@ -16,8 +17,9 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.NavigationViewModels
         {
             this.CreateBackCommand(this); //this simple.
         }
-
+        [JsonIgnore]
         public Command? BackCommand { get; set; }
+        [JsonIgnore]
         public Func<Task>? BackAction { get; set; }
     }
 }

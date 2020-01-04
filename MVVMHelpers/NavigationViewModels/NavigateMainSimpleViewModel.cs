@@ -8,6 +8,7 @@ using static CommonBasicStandardLibraries.MVVMHelpers.Command; //this is used so
 using System.Linq; //sometimes i do use linq.
 using CommonBasicStandardLibraries.MVVMHelpers.Interfaces;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace CommonBasicStandardLibraries.MVVMHelpers.NavigationViewModels
 {
@@ -18,6 +19,20 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.NavigationViewModels
             Visible = true; //the main one should start out with visible.
         }
 
-        public bool Visible { get; set; }
+        private bool _visible;
+        [JsonIgnore]
+        public bool Visible
+        {
+            get { return _visible; }
+            set
+            {
+                if (SetProperty(ref _visible, value))
+                {
+                    //can decide what to do when property changes
+                }
+
+            }
+        }
+
     }
 }

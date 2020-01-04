@@ -1,5 +1,6 @@
 ﻿using CommonBasicStandardLibraries.CollectionClasses;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -75,6 +76,11 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             //enums are not booleans.
             return simpleTypesList.Contains(property.PropertyType);
         }
+        public static bool IsString(this PropertyInfo property)
+        {
+            var newTypes = new List<Type> { typeof(string) };
+            return newTypes.Contains(property.PropertyType);
+        }
         public static bool IsInt(this PropertyInfo property)
         {
             var simpleTypesList = new List<Type>
@@ -88,6 +94,38 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
                 return true; //i think
 
             return simpleTypesList.Contains(property.PropertyType);
+        }
+        public static bool IsEnumerable(this PropertyInfo property)
+        {
+            if (property.IsString())
+            {
+                return false;
+            }
+            bool output = false;
+
+            Type[] firstList = property.PropertyType.GetInterfaces();
+
+            foreach (var i in firstList)
+            {
+                if (i.IsGenericType && i.GetGenericTypeDefinition().Equals(typeof(IEnumerable<>)))
+                {
+                    output = true;
+                }
+            }
+            return output;
+        }
+        private static bool CanMapProperty(this PropertyInfo property)
+        {
+            bool output = false;
+            if (property.IsEnumerable())
+            {
+                output = true;
+            }
+            if (property.IsSimpleType())
+            {
+                output = true;
+            }
+            return output;
         }
         public static TAttribute? GetAttribute<TAttribute>(this Type type) where TAttribute : class
         {
@@ -110,6 +148,10 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
         public static IEnumerable<PropertyInfo> GetProperties(this Type type, Func<PropertyInfo, bool> predicate)
         {
             return type.GetProperties().Where(predicate);
+        }
+        public static CustomBasicList<PropertyInfo> GetMappableProperties(this Type type)
+        {
+            return type.GetProperties(x => x.CanMapProperty()).ToCustomBasicList();
         }
         public static CustomBasicList<TAttribute>? GetCustomAttributes<TAttribute>(this Type type) where TAttribute : class
         {

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.BasicExtensions;
 namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
 {
-    public abstract class DataEntryViewModel : BaseViewModel, IDataErrorInfo
+    public abstract class DataEntryViewModel : BaseViewModel, IDataErrorInfo, IClearable //this is intended to clear out the entries.
     {
         string IDataErrorInfo.Error //this implements the Error property
         {

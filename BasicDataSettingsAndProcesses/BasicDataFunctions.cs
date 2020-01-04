@@ -46,11 +46,11 @@ namespace CommonBasicStandardLibraries.BasicDataSettingsAndProcesses
 		{
 			return Enumerable.Range(startAt, howMany).ToCustomBasicList();
 		}
-        public static void AutoClearProperties(object thisObj)
-        {
-            Type thisType = thisObj.GetType();
-            CustomBasicList<PropertyInfo> thisList = thisType.GetPropertiesWithAttribute<AutoClearAttribute>().ToCustomBasicList();
-            thisList.ForEach(items => items.SetValue(thisObj, default));
-        }
+        //public static void AutoClearProperties(object thisObj)
+        //{
+        //    Type thisType = thisObj.GetType();
+        //    CustomBasicList<PropertyInfo> thisList = thisType.GetPropertiesWithAttribute<AutoClearAttribute>().ToCustomBasicList();
+        //    thisList.ForEach(items => items.SetValue(thisObj, default));
+        //}
     }
 }
