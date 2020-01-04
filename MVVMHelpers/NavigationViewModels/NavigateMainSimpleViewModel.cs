@@ -11,23 +11,13 @@ using System.Threading.Tasks;
 
 namespace CommonBasicStandardLibraries.MVVMHelpers.NavigationViewModels
 {
-    public abstract class NavigateSimpleViewModel : BaseViewModel, INavigateVM
+    public class NavigateMainSimpleViewModel : BaseViewModel, IToggleVM
     {
-
-
-        public NavigateSimpleViewModel(ISimpleUI tempUI) : base(tempUI)
+        public NavigateMainSimpleViewModel(ISimpleUI tempUI) : base(tempUI)
         {
-            CreateBackButton(); //this way if you want to have another implementation to the error info, that would be possible.
-
+            Visible = true; //the main one should start out with visible.
         }
 
-        protected virtual void CreateBackButton()
-        {
-            this.CreateBackCommand(this); //this simple.
-        }
-
-        public Command? BackCommand { get; set; }
-        public Func<Task>? BackAction { get; set; }
         public bool Visible { get; set; }
     }
 }

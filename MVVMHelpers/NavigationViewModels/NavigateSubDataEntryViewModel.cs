@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 using CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels;
 namespace CommonBasicStandardLibraries.MVVMHelpers.NavigationViewModels
 {
-    public class NavigateDataEntryViewModel : DataEntryViewModel, INavigateVM
+    public class NavigateSubDataEntryViewModel : DataEntryViewModel, INavigateVM
     {
-        public NavigateDataEntryViewModel(IFocusOnFirst tempFocus, ISimpleUI tempUI) : base(tempFocus, tempUI)
+        public NavigateSubDataEntryViewModel(IFocusOnFirst tempFocus, ISimpleUI tempUI) : base(tempFocus, tempUI)
         {
         }
 
