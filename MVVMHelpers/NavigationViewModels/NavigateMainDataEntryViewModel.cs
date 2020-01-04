@@ -16,8 +16,19 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.NavigationViewModels
     {
         public NavigateMainDataEntryViewModel(IFocusOnFirst tempFocus, ISimpleUI tempUI) : base(tempFocus, tempUI)
         {
+            Visible = true;
         }
+        public Func<Task>? SaveAction { get; set; } //this is standard just like a normal data entry has a save command
 
         public bool Visible { get; set; }
+        protected override Task ProcessSave(object thisObj)
+        {
+            if (SaveAction == null)
+            {
+                return Task.CompletedTask;
+            } //for data entry, would never use generics to pass parameters
+            //because you are entering something and the parent knows about the children.
+            return SaveAction!.Invoke();
+        }
     }
 }
