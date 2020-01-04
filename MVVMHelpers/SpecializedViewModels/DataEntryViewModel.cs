@@ -44,6 +44,11 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.SpecializedViewModels
             AttemptedToSubmitForm = false; // because are preparing for next time.
             FirstControl.FocusOnFirstControl();
         }
+        public void FocusOnFirstControl()
+        {
+            FirstControl.FocusOnFirstControl(); //i think for now, it will work this way.
+            //may require rethinking (not sure yet).
+        }
         private CustomBasicList<PropertyInfo> _propList = new CustomBasicList<PropertyInfo>();
         private bool _attemptedToSubmitForm;
         public bool AttemptedToSubmitForm
