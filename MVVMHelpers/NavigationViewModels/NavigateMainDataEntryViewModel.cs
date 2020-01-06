@@ -36,7 +36,10 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.NavigationViewModels
 
             }
         }
-
+        public Task SaveClicked()
+        {
+            return this.ProcessCommandAsync(SaveCommand); //to support web.
+        }
         protected override Task ProcessSave(object thisObj)
         {
 

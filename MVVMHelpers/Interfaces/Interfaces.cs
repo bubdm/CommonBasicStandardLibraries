@@ -50,7 +50,7 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.Interfaces
         bool CanExecute(T args);
         Task ExecuteAsync(T args);
     }
-    public interface IToggleVM
+    public interface IToggleVM : IClearable //if you can toggle, then you should be able to clear too.  that is probably best.
     {
         bool Visible { get; set; }
     }

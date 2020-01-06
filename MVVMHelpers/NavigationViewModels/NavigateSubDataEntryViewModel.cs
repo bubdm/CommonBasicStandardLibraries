@@ -29,6 +29,10 @@ namespace CommonBasicStandardLibraries.MVVMHelpers.NavigationViewModels
         public Command? BackCommand { get; set; }
         [JsonIgnore]
         public Func<Task>? BackAction { get; set; }
+        public Task BackClicked()
+        {
+            return this.ProcessCommandAsync(BackCommand);
+        }
         
     }
 }
