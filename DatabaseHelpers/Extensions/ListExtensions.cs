@@ -5,7 +5,7 @@ using CommonBasicStandardLibraries.DatabaseHelpers.MiscClasses;
 using System.Collections.Generic;
 using System.Linq;
 using static CommonBasicStandardLibraries.DatabaseHelpers.MiscClasses.SortInfo;
-namespace DapperHelpersLibrary.Extensions
+namespace CommonBasicStandardLibraries.DatabaseHelpers.Extensions
 {
     public static class ListExtensions
     {

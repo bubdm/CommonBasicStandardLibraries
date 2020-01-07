@@ -2,7 +2,7 @@
 using CommonBasicStandardLibraries.DatabaseHelpers.ConditionClasses;
 using System.Linq;
 using cs = CommonBasicStandardLibraries.DatabaseHelpers.ConditionClasses.ConditionOperators;
-namespace DapperHelpersLibrary.Extensions
+namespace CommonBasicStandardLibraries.DatabaseHelpers.Extensions
 {
     public static class ConditionExtensions
     {
