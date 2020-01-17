@@ -20,6 +20,7 @@ namespace CommonBasicStandardLibraries.BasicDataSettingsAndProcesses
     {
         T Resolve<T>();
         object GetInstance(Type type); //needs this as well.
+        void RegisterInstanceType(Type type); //i need this too.
     }
 
     //we have to keep the iresolver because the custom lists rely on it for the random functions.

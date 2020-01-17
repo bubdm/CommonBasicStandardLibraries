@@ -416,8 +416,17 @@ namespace CommonBasicStandardLibraries.ContainerClasses
             }
         }
 
-        
-
-        
+        public void RegisterInstanceType(Type type)
+        {
+            ContainerData thisResults = new ContainerData()
+            {
+                IsSingle = false,
+                TypeOut = type,
+                TypeIn = type,
+                IntendedTypeOnly = true,
+                SimpleFunction = new Func<object>(() => PrivateInstance(type))
+            };
+            SetResults(thisResults, 0, null!);
+        }
     }
 }
