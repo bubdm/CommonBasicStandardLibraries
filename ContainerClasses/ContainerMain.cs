@@ -202,8 +202,8 @@ namespace CommonBasicStandardLibraries.ContainerClasses
                 throw new BasicBlankException("Most likely error did not get caught because can't have 2 classes that are types only that are the same type.  Otherwise, too complex");
             return GetInstance(firstItem);
         }
-
-        private object GetInstance(Type thisType) //i want to be forced to use generics.
+        //needs to be public after all.
+        public object GetInstance(Type thisType) //i want to be forced to use generics.
         {
 
             //if (ParentFactory != null)

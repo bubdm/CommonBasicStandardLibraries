@@ -19,6 +19,7 @@ namespace CommonBasicStandardLibraries.BasicDataSettingsAndProcesses
     public interface IResolver //if i decide that i need to have the possibilty for data, will do so.
     {
         T Resolve<T>();
+        object GetInstance(Type type); //needs this as well.
     }
 
     //we have to keep the iresolver because the custom lists rely on it for the random functions.
