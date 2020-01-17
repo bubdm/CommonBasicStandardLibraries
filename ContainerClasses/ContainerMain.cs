@@ -418,6 +418,12 @@ namespace CommonBasicStandardLibraries.ContainerClasses
 
         public void RegisterInstanceType(Type type)
         {
+
+            if (_thisSet.Any(x => x.TypeIn == type && x.TypeOut == type))
+            {
+                return; //i think it should just ignore in that case.
+            }
+
             ContainerData thisResults = new ContainerData()
             {
                 IsSingle = false,
