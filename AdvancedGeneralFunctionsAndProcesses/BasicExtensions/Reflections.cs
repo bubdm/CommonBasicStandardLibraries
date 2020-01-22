@@ -61,7 +61,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
                 return true;
             return simpleTypesList.Contains(property.PropertyType);
         }
-        private static bool IsNullableEnum(this Type t)
+        internal static bool IsNullableEnum(this Type t)
         {
             Type u = Nullable.GetUnderlyingType(t);
             return (u != null) && u.IsEnum;
