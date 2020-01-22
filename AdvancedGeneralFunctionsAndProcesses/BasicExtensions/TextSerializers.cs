@@ -3,6 +3,7 @@ using CommonBasicStandardLibraries.BasicDataSettingsAndProcesses;
 using CommonBasicStandardLibraries.CollectionClasses;
 using CommonBasicStandardLibraries.Exceptions;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -66,10 +67,19 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             }
             return output;
         }
-
+        /// <summary>
+        /// this will load a single object
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static async Task<T> LoadTextSingleAsync<T>(string path) where T : new()
         {
             var properties = GetProperties<T>();
+            if (File.Exists(path) == false)
+            {
+                return new T();
+            }
             var lines = await File.ReadAllLinesAsync(path);
             if (lines.Count() != properties.Count)
             {
@@ -86,6 +96,465 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             return output;
         }
 
+        private static object? GetValue(string item, Type type)
+        {
+            if (type == typeof(int))
+            {
+                //try to parse to integers.
+                bool rets = int.TryParse(item, out int y);
+                if (rets == false)
+                {
+                    throw new BasicBlankException($"When trying to parse dictionary to integer.  Means corruption");
+                }
+                return y;
+                //p.SetValue(row, y); //hopefully this simple.
+            }
+            else if (type == typeof(int?))
+            {
+                if (item == "")
+                {
+                    return null;
+                }
+                else
+                {
+                    bool rets = int.TryParse(item, out int y);
+                    if (rets == false)
+                    {
+                        throw new BasicBlankException($"When trying to parse to integer.  Means corruption");
+                    }
+                    return y;
+                }
+
+            }
+            else if (type.IsEnum)
+            {
+                bool rets = int.TryParse(item, out int y);
+                if (rets == false)
+                {
+                    throw new BasicBlankException($"When trying to parse to enum.  Means corruption");
+                }
+                return y;
+            }
+
+            else if (type.IsNullableEnum())
+            {
+                if (item == "")
+                {
+                    return null;
+                }
+                else
+                {
+                    bool rets = int.TryParse(item, out int y);
+                    if (rets == false)
+                    {
+                        throw new BasicBlankException($"When trying to parse to enum.  Means corruption");
+                    }
+                    return y;
+                }
+            }
+
+            else if (type == typeof(bool))
+            {
+                bool rets = bool.TryParse(item, out bool y);
+                if (rets == false)
+                {
+                    throw new BasicBlankException($"When trying to parse to parse to boolean.  Means corruption");
+                }
+                return y;
+
+            }
+            else if (type == typeof(bool?))
+            {
+                if (item == "")
+                {
+                    return null;
+                }
+                else
+                {
+                    bool rets = bool.TryParse(item, out bool y);
+                    if (rets == false)
+                    {
+                        throw new BasicBlankException($"When trying to parse to parse to boolean.  Means corruption");
+                    }
+                    return y;
+                }
+            }
+            else if (type == typeof(decimal))
+            {
+                bool rets = decimal.TryParse(item, out decimal y);
+                if (rets == false)
+                {
+                    throw new BasicBlankException($"When trying to parse to parse to decimal.  Means corruption");
+                }
+                return y;
+
+            }
+            else if (type == typeof(decimal?))
+            {
+                if (item == "")
+                {
+                    return null;
+                }
+                else
+                {
+                    bool rets = decimal.TryParse(item, out decimal y);
+                    if (rets == false)
+                    {
+                        throw new BasicBlankException($"When trying to parse to decimal.  Means corruption");
+                    }
+                    return y;
+                }
+            }
+            else if (type == typeof(float))
+            {
+                bool rets = float.TryParse(item, out float y);
+                if (rets == false)
+                {
+                    throw new BasicBlankException($"When trying to parse to parse to float.  Means corruption");
+                }
+                return y;
+
+            }
+            else if (type == typeof(float?))
+            {
+                if (item == "")
+                {
+                    return null;
+                }
+                else
+                {
+                    bool rets = float.TryParse(item, out float y);
+                    if (rets == false)
+                    {
+                        throw new BasicBlankException($"When trying to parse to float.  Means corruption");
+                    }
+                    return y;
+                }
+            }
+            else if (type == typeof(double))
+            {
+                bool rets = double.TryParse(item, out double y);
+                if (rets == false)
+                {
+                    throw new BasicBlankException($"When trying to parse to double.  Means corruption");
+                }
+                return y;
+
+            }
+            else if (type == typeof(double?))
+            {
+                if (item == "")
+                {
+                    return null;
+                }
+                else
+                {
+                    bool rets = double.TryParse(item, out double y);
+                    if (rets == false)
+                    {
+                        throw new BasicBlankException($"When trying to parse to double.  Means corruption");
+                    }
+                    return y;
+                }
+            }
+            else if (type == typeof(DateTime))
+            {
+                bool rets = DateTime.TryParse(item, out DateTime y);
+                if (rets == false)
+                {
+                    throw new BasicBlankException($"When trying to parse to datetime.  Means corruption");
+                }
+                return y;
+
+            }
+            else if (type == typeof(DateTime?))
+            {
+                if (item == "")
+                {
+                    return null;
+                }
+                else
+                {
+                    bool rets = DateTime.TryParse(item, out DateTime y);
+                    if (rets == false)
+                    {
+                        throw new BasicBlankException($"When trying to parse to datetime.  Means corruption");
+                    }
+                    return y;
+                }
+            }
+            else if (type == typeof(DateTimeOffset))
+            {
+                bool rets = DateTimeOffset.TryParse(item, out DateTimeOffset y);
+                if (rets == false)
+                {
+                    throw new BasicBlankException($"When trying to parse to datetimeoffset.  Means corruption");
+                }
+                return y;
+
+            }
+            else if (type == typeof(DateTimeOffset?))
+            {
+                if (item == "")
+                {
+                    return null;
+                }
+                else
+                {
+                    bool rets = DateTimeOffset.TryParse(item, out DateTimeOffset y);
+                    if (rets == false)
+                    {
+                        throw new BasicBlankException($"When trying to parse to datetimeoffset.  Means corruption");
+                    }
+                    return y;
+                }
+            }
+            else if (type == typeof(Guid))
+            {
+                bool rets = Guid.TryParse(item, out Guid y);
+                if (rets == false)
+                {
+                    throw new BasicBlankException($"When trying to parse to guid.  Means corruption");
+                }
+                return y;
+            }
+            else if (type == typeof(Guid?))
+            {
+                if (item == "")
+                {
+                    return null;
+                }
+                else
+                {
+                    bool rets = Guid.TryParse(item, out Guid y);
+                    if (rets == false)
+                    {
+                        throw new BasicBlankException($"When trying to parse to guid.  Means corruption");
+                    }
+                    return y;
+                }
+            }
+            else if (type == typeof(char))
+            {
+                bool rets = char.TryParse(item, out char y);
+                if (rets == false)
+                {
+                    throw new BasicBlankException($"When trying to parse to char.  Means corruption");
+                }
+                return y;
+            }
+            else if (type == typeof(char?))
+            {
+                if (item == "")
+                {
+                    return null;
+                }
+                else
+                {
+                    bool rets = char.TryParse(item, out char y);
+                    if (rets == false)
+                    {
+                        throw new BasicBlankException($"When trying to parse to char.  Means corruption");
+                    }
+                    return y;
+                }
+            }
+            else if (type == typeof(short))
+            {
+                bool rets = short.TryParse(item, out short y);
+                if (rets == false)
+                {
+                    throw new BasicBlankException($"When trying to parse to short.  Means corruption");
+                }
+                return y;
+            }
+            else if (type == typeof(short?))
+            {
+                if (item == "")
+                {
+                    return null;
+                }
+                else
+                {
+                    bool rets = short.TryParse(item, out short y);
+                    if (rets == false)
+                    {
+                        throw new BasicBlankException($"When trying to parse to short.  Means corruption");
+                    }
+                    return y;
+                }
+            }
+            else if (type == typeof(ushort))
+            {
+                bool rets = ushort.TryParse(item, out ushort y);
+                if (rets == false)
+                {
+                    throw new BasicBlankException($"When trying to parse to ushort.  Means corruption");
+                }
+                return y;
+            }
+            else if (type == typeof(ushort?))
+            {
+                if (item == "")
+                {
+                    return null;
+                }
+                else
+                {
+                    bool rets = ushort.TryParse(item, out ushort y);
+                    if (rets == false)
+                    {
+                        throw new BasicBlankException($"When trying to parse to ushort.  Means corruption");
+                    }
+                    return y;
+                }
+            }
+            else if (type == typeof(uint))
+            {
+                bool rets = uint.TryParse(item, out uint y);
+                if (rets == false)
+                {
+                    throw new BasicBlankException($"When trying to parse to uint.  Means corruption");
+                }
+                return y;
+            }
+            else if (type == typeof(uint?))
+            {
+                if (item == "")
+                {
+                    return null;
+                }
+                else
+                {
+                    bool rets = uint.TryParse(item, out uint y);
+                    if (rets == false)
+                    {
+                        throw new BasicBlankException($"When trying to parse to uint.  Means corruption");
+                    }
+                    return y;
+                }
+            }
+            else if (type == typeof(long))
+            {
+                bool rets = long.TryParse(item, out long y);
+                if (rets == false)
+                {
+                    throw new BasicBlankException($"When trying to parse to long.  Means corruption");
+                }
+                return y;
+            }
+            else if (type == typeof(long?))
+            {
+                if (item == "")
+                {
+                    return null;
+                }
+                else
+                {
+                    bool rets = long.TryParse(item, out long y);
+                    if (rets == false)
+                    {
+                        throw new BasicBlankException($"When trying to parse to long.  Means corruption");
+                    }
+                    return y;
+                }
+            }
+            else if (type == typeof(ulong))
+            {
+                bool rets = ulong.TryParse(item, out ulong y);
+                if (rets == false)
+                {
+                    throw new BasicBlankException($"When trying to parse to ulong.  Means corruption");
+                }
+                return y;
+            }
+            else if (type == typeof(ulong?))
+            {
+                if (item == "")
+                {
+                    return null;
+                }
+                else
+                {
+                    bool rets = ulong.TryParse(item, out ulong y);
+                    if (rets == false)
+                    {
+                        throw new BasicBlankException($"When trying to parse to ulong.  Means corruption");
+                    }
+                    return y;
+                }
+            }
+            else if (type == typeof(string))
+            {
+                return item;
+            }
+            else
+            {
+                throw new BasicBlankException("Rethink");
+            }
+        }
+        public static async Task SaveDictionaryAsync<TKey, TValue>(this Dictionary<TKey, TValue> list, string path)
+        {
+            CustomBasicList<string> output = new CustomBasicList<string>();
+            foreach (var item in list)
+            {
+                output.Add($"{item.Key!.ToString()},{item.Value!.ToString()}");
+            }
+            await File.WriteAllLinesAsync(path, output, Encoding.UTF8);
+            //return output;
+        }
+        public static async Task<Dictionary<TKey, TValue>> LoadTextDictionaryAsync<TKey, TValue>(this string path, string delimiter = ",")
+        {
+            Type key = typeof(TKey);
+            bool rets = key.IsSimpleType();
+            if (rets == false)
+            {
+                throw new BasicBlankException("First item is not simple for dictionary");
+            }
+            Type value = typeof(TValue);
+            if (rets == false)
+            {
+                throw new BasicBlankException("Second item is not simple for dictionary");
+            }
+            if (File.Exists(path) == false)
+            {
+                return new Dictionary<TKey, TValue>();
+            }
+
+            //var firstProperties = GetProperties<TKey>();
+            //if (firstProperties.Count > 1)
+            //{
+            //    throw new BasicBlankException("")
+            //}
+            var lines = await File.ReadAllLinesAsync(path);
+
+            Dictionary<TKey, TValue> output = new Dictionary<TKey, TValue>();
+            foreach (var line in lines)
+            {
+                var fins = line.Split(delimiter);
+                if (fins.Count() != 2)
+                {
+                    throw new BasicBlankException("Must have 2 items for a dictionary.  Rethink");
+                }
+                string firstString = fins[0];
+                string secondString = fins[1];
+                object? firstValue = GetValue(firstString, key);
+                if (firstValue == null)
+                {
+                    throw new BasicBlankException("I don't think that key can be null for dictionary");
+                }
+                object? secondValue = GetValue(secondString, value);
+                if (secondValue == null)
+                {
+                    throw new BasicBlankException("I don't think the value can be null for dictionary");
+                }
+                output.Add((TKey)firstValue, (TValue)secondValue);
+            }
+
+            return output;
+
+        }
+
         /// <summary>
         /// this will load the text file and return a list of the object you want.
         /// </summary>
@@ -99,6 +568,10 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             var properties = GetProperties<T>();
 
             CustomBasicList<T> output = new CustomBasicList<T>();
+            if (File.Exists(path) == false)
+            {
+                return output;
+            }
             var lines = await File.ReadAllLinesAsync(path);
             foreach (var line in lines)
             {

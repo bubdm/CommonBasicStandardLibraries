@@ -19,7 +19,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             var attributeName = typeof(TAttribute).Name;
             return propertyInfo.GetCustomAttributes(true).Any(attr => attr.GetType().Name == attributeName);
         }
-        public static bool IsSimpleType(this PropertyInfo property)
+        public static bool IsSimpleType(this Type type)
         {
             var simpleTypesList = new List<Type>
             {
@@ -55,11 +55,54 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
                 typeof(DateTime?),
                 typeof(DateTimeOffset?)
             };
-            if (property.PropertyType.IsEnum == true)
+            if (type.IsEnum == true)
                 return true;
-            if (property.PropertyType.IsNullableEnum() == true)
-                return true;
-            return simpleTypesList.Contains(property.PropertyType);
+            //if (property.PropertyType.IsNullableEnum() == true)
+            //    return true;
+            return simpleTypesList.Contains(type);
+        }
+        public static bool IsSimpleType(this PropertyInfo property)
+        {
+            return property.PropertyType.IsSimpleType();
+            //var simpleTypesList = new List<Type>
+            //{
+            //    //typeof(byte),
+            //    //typeof(sbyte),
+            //    typeof(short),
+            //    typeof(ushort),
+            //    typeof(int),
+            //    typeof(uint),
+            //    typeof(long),
+            //    typeof(ulong),
+            //    typeof(float),
+            //    typeof(double),
+            //    typeof(decimal),
+            //    typeof(bool),
+            //    typeof(string),
+            //    typeof(char),
+            //    typeof(Guid),
+            //    typeof(DateTime),
+            //    typeof(DateTimeOffset),
+            //    typeof(short?),
+            //    typeof(ushort?),
+            //    typeof(int?),
+            //    typeof(uint?),
+            //    typeof(long?),
+            //    typeof(ulong?),
+            //    typeof(float?),
+            //    typeof(double?),
+            //    typeof(decimal?),
+            //    typeof(bool?),
+            //    typeof(char?),
+            //    typeof(Guid?),
+            //    typeof(DateTime?),
+            //    typeof(DateTimeOffset?)
+            //};
+            //if (property.PropertyType.IsEnum == true)
+            //    return true;
+            //if (property.PropertyType.IsNullableEnum() == true)
+            //    return true;
+            //return simpleTypesList.Contains(property.PropertyType);
         }
         internal static bool IsNullableEnum(this Type t)
         {
