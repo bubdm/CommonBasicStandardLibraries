@@ -27,61 +27,7 @@ namespace CommonBasicStandardLibraries.NuGetHelpers
         {
             return await GetSpecificFileAsync(directoryPath, ".csproj");
         }
-        //risk not having the test anymore.
-
-        //public async Task TestTraditionalNet()
-        //{
-        //    //this is only used temporarily.
-        //    //just until i can get it working for the sample.
-        //    //has to hard code what i am using.   will use console only for showing messages
-        //    Console.WriteLine("Trying To Create Nuget Packages For Traditional .Net Class Libraries");
-        //    //step 1 is generating the nuget xml format
-        //    _batPath = @"C:\TempFiles\E.bat"; //this will be the bat path.
-        //    await WriteAllTextAsync(_batPath, "nuget spec ClassLibrary1.csproj");
-
-        //    ProcessStartInfo psi = new ProcessStartInfo(_batPath);
-        //    psi.WorkingDirectory = @"C:\VS\DesktopDlls4.7.1\Tests\ClassLibrary1";
-        //    await DeleteSeveralFiles(psi.WorkingDirectory, ".nuspec");
-        //    psi.CreateNoWindow = true;
-        //    psi.WindowStyle = ProcessWindowStyle.Hidden;
-        //    psi.UseShellExecute = true;
-        //    Process process = Process.Start(psi);
-        //    bool rets = process.WaitForExit(5000);
-        //    if (rets == true)
-        //    {
-        //        if (await NewFileCreated(psi.WorkingDirectory, ".nuspec") == false)
-        //            throw new Exception("No File Created");
-        //        string NuPath = await GetSpecificFile(psi.WorkingDirectory, ".nuspec");
-        //        XElement ThisElement = XElement.Load(NuPath);
-        //        XElement TempElement = ThisElement.Elements("metadata").Single();
-        //        TempElement.Elements("licenseUrl").Remove();
-        //        TempElement.Elements("projectUrl").Remove();
-        //        TempElement.Elements("iconUrl").Remove();
-        //        TempElement.Elements("releaseNotes").Remove();
-        //        TempElement.Elements("copyright").Remove();
-        //        TempElement.Elements("tags").Remove();
-        //        ThisElement.Save(NuPath);
-        //        //so far so good.
-
-        //        //for testing, use shortcut
-        //        await WriteAllTextAsync(_batPath, @"nuget pack -Properties Configuration=Release -OutputDirectory bin\Release -Version 2.0.0");
-        //        string NewPath = $@"{psi.WorkingDirectory}\bin\Release";
-        //        await DeleteSeveralFiles(NewPath, ".nupkg");
-        //        process = Process.Start(psi);
-        //        rets = process.WaitForExit(5000);
-        //        if (rets == true)
-        //        {
-        //            if (await NewFileCreated(NewPath, ".nupkg") == false)
-        //                throw new Exception("Rethink");
-        //            await DeleteSeveralFiles(psi.WorkingDirectory, ".nuspec");
-        //            Console.WriteLine("I think nuget package was created successfully.  Please Check");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("Rethink");
-        //    }
-        //}
+        
 
         private void IncrementVersion(ref string strVersion) //was going to do as extension but did not work out.  so was forced to just send in for this case.
         {
@@ -126,7 +72,6 @@ namespace CommonBasicStandardLibraries.NuGetHelpers
         }
         private void UpdateProgress(string text)
         {
-            ThisMod!.Progress = text;
             Console.WriteLine(text);
         }
         public async Task UploadAloneAsync()

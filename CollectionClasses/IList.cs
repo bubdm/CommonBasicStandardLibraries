@@ -1,5 +1,5 @@
 ﻿using CommonBasicStandardLibraries.BasicDataSettingsAndProcesses;
-using CommonBasicStandardLibraries.MVVMHelpers.Interfaces;
+using CommonBasicStandardLibraries.MVVMFramework.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;

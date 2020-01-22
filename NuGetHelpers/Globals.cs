@@ -2,7 +2,7 @@
 {
     internal static class NuGetGlobals
     {
-        public static NugetViewModel? ThisMod;
+        public static NugetUIClass? ThisUI;
         public static INugetSettings? ThisSetting;
         public static NugetBusiness? ThisBus;
     }
