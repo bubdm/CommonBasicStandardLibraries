@@ -13,7 +13,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
 {
     public static class TextSerializers
     {
-        public static async Task SaveTextFileAsync<T>(this IModel payLoad, string path)
+        public static async Task SaveTextAsync<T>(this IModel payLoad, string path)
             where T : IModel
         {
             var properties = GetProperties<T>();
@@ -493,7 +493,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
                 throw new BasicBlankException("Rethink");
             }
         }
-        public static async Task SaveDictionaryAsync<TKey, TValue>(this Dictionary<TKey, TValue> list, string path)
+        public static async Task SaveTextAsync<TKey, TValue>(this Dictionary<TKey, TValue> list, string path)
         {
             CustomBasicList<string> output = new CustomBasicList<string>();
             foreach (var item in list)
