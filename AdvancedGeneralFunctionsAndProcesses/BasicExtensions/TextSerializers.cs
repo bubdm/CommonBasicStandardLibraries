@@ -73,7 +73,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static async Task<T> LoadTextSingleAsync<T>(string path) where T : new()
+        public static async Task<T> LoadTextSingleAsync<T>(this string path) where T : new()
         {
             var properties = GetProperties<T>();
             if (File.Exists(path) == false)
@@ -562,7 +562,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
         /// <param name="path"></param>
         /// <param name="delimiter"></param>
         /// <returns></returns>
-        public static async Task<CustomBasicList<T>> LoadTextListAsync<T>(string path, string delimiter = ",")
+        public static async Task<CustomBasicList<T>> LoadTextListAsync<T>(this string path, string delimiter = ",")
             where T : new()
         {
             var properties = GetProperties<T>();
