@@ -22,7 +22,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Conf
                 throw new BasicBlankException($"Path at {path} does not exist.");
             if (path.ToLower().EndsWith("txt") == false)
                 throw new BasicBlankException(@"Only text files are supported.  Rethink");
-            CustomBasicList<string> firstList = await TextFromFileListAsync(path);
+            CustomBasicList<string> firstList = await ReadAllLinesAsync(path);
             Dictionary<string, string> output = new Dictionary<string, string>();
             //CustomBasicList<ConfigPair> output = new CustomBasicList<ConfigPair>();
             firstList.ForEach(row =>

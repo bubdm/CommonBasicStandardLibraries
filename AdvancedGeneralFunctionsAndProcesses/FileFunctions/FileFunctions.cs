@@ -463,7 +463,14 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
         {
             PrivateWriteAllText(filePath, whatText, append, Encoding.Default, true);
         }
-
+        public static void WriteAllLines(string filePath, CustomBasicList<string> lines)
+        {
+            File.WriteAllLines(filePath, lines);
+        }
+        public static void WriteAllLines(string filePath, CustomBasicList<string> lines, Encoding encoding)
+        {
+            File.WriteAllLines(filePath, lines, encoding);
+        }
         public static async Task FileCopyAsync(string originalFile, string newFile)
         {
             await Task.Run(() => File.Copy(originalFile, newFile, true));
@@ -517,7 +524,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
             await Task.Run(() => Directory.Move(oldDirectory, newName));
         }
 
-        public static async  Task<CustomBasicList<string>> TextFromFileListAsync(string filePath)
+        public static async  Task<CustomBasicList<string>> ReadAllLinesAsync(string filePath)
         {
             var temps = await File.ReadAllLinesAsync(filePath);
             return temps.ToCustomBasicList();
@@ -598,7 +605,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
             Directory.Move(oldDirectory, newName);
         }
 
-        public static CustomBasicList<string> TextFromFileList(string filePath)
+        public static CustomBasicList<string> ReadAllLines(string filePath)
         {
             return File.ReadAllLines(filePath).ToCustomBasicList();
         }
