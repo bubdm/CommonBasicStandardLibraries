@@ -7,20 +7,20 @@ using System.Threading.Tasks;
 using static CommonBasicStandardLibraries.MVVMFramework.Commands.InternalCommandList;
 namespace CommonBasicStandardLibraries.MVVMFramework.Commands
 {
-
-	
-
 	public class ReflectiveCommand : ICustomCommand
 	{
 		private readonly PropertyInfo? _canExecutep;
 		private readonly MethodInfo _execute;
 		private readonly object _model;
-
 		private readonly MethodInfo? _canExecuteM;
 
 		private bool _isAsync;
 		private readonly string _functionName = "";
-
+		//this is needed so the data entry forms will know when it can focus on control.
+		public static bool CurrentlyExecuting()
+		{
+			return IsExecuting;
+		}
 
 		public ReflectiveCommand(object model, MethodInfo execute, MethodInfo canExecuteM)
 		{
