@@ -13,7 +13,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
         /// </summary>
         /// <param name="dateUsed"></param>
         /// <returns></returns>
-        public static DateTime WhenIsThanksgivingThisYear(DateTime dateUsed)
+        public static DateTime WhenIsThanksgivingThisYear(this DateTime dateUsed)
         {
             //var thisDate = DateTime.Now;
             int x;
