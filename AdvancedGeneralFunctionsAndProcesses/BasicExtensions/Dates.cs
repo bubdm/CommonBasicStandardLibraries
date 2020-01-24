@@ -7,13 +7,19 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
         {
             return thisDate.DayOfWeek.ToString() + " " + thisDate.Month + "/" + thisDate.Day + "/" + thisDate.Year;
         }
-        public static DateTime WhenIsThanksgivingThisYear()
+        /// <summary>
+        /// had to introduce a breaking change.
+        /// so when using for testing, will still work.
+        /// </summary>
+        /// <param name="dateUsed"></param>
+        /// <returns></returns>
+        public static DateTime WhenIsThanksgivingThisYear(DateTime dateUsed)
         {
-            var thisDate = DateTime.Now;
+            //var thisDate = DateTime.Now;
             int x;
             for (x = 22; x <= 30; x++)
             {
-                var tempDate = new DateTime(thisDate.Year, 11, x);
+                var tempDate = new DateTime(dateUsed.Year, 11, x);
                 if (tempDate.DayOfWeek == DayOfWeek.Thursday)
                     return tempDate;
             }
@@ -33,7 +39,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
                     return false;
                 var tempDate = DateTime.Now;
                 thisDate = new DateTime(tempDate.Year, 11, thisDate.Day);
-                var tDate = WhenIsThanksgivingThisYear();
+                var tDate = WhenIsThanksgivingThisYear(DateTime.Now);
                 tDate = tDate.AddDays(1);
                 if (thisDate >= tDate)
                     return true;
