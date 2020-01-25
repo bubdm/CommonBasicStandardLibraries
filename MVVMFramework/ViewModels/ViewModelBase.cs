@@ -54,7 +54,7 @@ namespace CommonBasicStandardLibraries.MVVMFramework.ViewModels
         }
         protected bool HasErrors()
         {
-            return Errors.Any();
+            return ErrorLists.Any(); //try this one.
         }
         protected bool IsOK()
         {
@@ -81,17 +81,20 @@ namespace CommonBasicStandardLibraries.MVVMFramework.ViewModels
             foreach (var ThisItem in thisList)
                 OnPropertyChanged(ThisItem.Name);// i think
         }
-
-        private void CollectErrors()
+        //hopefully i am able to manually collect errors.
+        protected void CollectErrors()
         {
             Errors.Clear();
             ErrorLists.Clear();
             foreach (var thisProp in PropList)
                 GetPropErrors(thisProp);
-            OnPropertyChanged(nameof(ErrorLists)); // this changed now.
+            //OnPropertyChanged(nameof(ErrorLists)); // for this one, i have to do differently unfortunately because of how data entry processes work.
+            CheckMiscErrors();
+            
             ValidationCompleted();
         }
 
+        protected virtual void CheckMiscErrors() { }
 
         public virtual bool IsValid
         {
@@ -147,11 +150,16 @@ namespace CommonBasicStandardLibraries.MVVMFramework.ViewModels
         }
         protected virtual void AddOtherPropertiesAttributes(PropertyInfo thisProp) { }
 
-        protected void AddErrorMessage(PropertyInfo thisProp, string errorMessage)
+        private void AddErrorMessage(PropertyInfo thisProp, string errorMessage)
         {
             Errors.Add(thisProp.Name, errorMessage);
             AddMiscError(errorMessage);
         }
+        //protected void AddErrorMessage(string thisProp, string errorMessage)
+        //{
+        //    Errors.Add(thisProp, errorMessage);
+        //    AddMiscError(errorMessage);
+        //}
         protected void AddMiscError(string errorMessage)
         {
             ErrorLists.Add(errorMessage);

@@ -14,7 +14,20 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
         {
             Type thisType = thisObj.GetType();
             CustomBasicList<PropertyInfo> thisList = thisType.GetPropertiesWithAttribute<AutoClearAttribute>().ToCustomBasicList();
-            thisList.ForEach(items => items.SetValue(thisObj, default));
+            foreach (var item in thisList)
+            {
+                if (item.PropertyType == typeof(string))
+                {
+                    item.SetValue(thisObj, "");
+                }
+                else
+                {
+                    item.SetValue(thisObj, default);
+                }
+            }
+
+
+            //thisList.ForEach(items => items.SetValue(thisObj, default));
         }
 
         public static T AutoMap<T>(this IMappable payLoad) //this does the most simple option.  if i need something more complex, i will have more details to figure out what to do.
