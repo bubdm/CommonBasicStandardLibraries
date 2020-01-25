@@ -1,13 +1,15 @@
 ﻿using CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.BasicExtensions;
 using CommonBasicStandardLibraries.Attributes;
 using CommonBasicStandardLibraries.CollectionClasses;
+using CommonBasicStandardLibraries.Messenging;
 using CommonBasicStandardLibraries.MVVMFramework.CustomValidationClasses;
+using CommonBasicStandardLibraries.MVVMFramework.UIHelpers;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-
+using static CommonBasicStandardLibraries.BasicDataSettingsAndProcesses.BasicDataFunctions;
 namespace CommonBasicStandardLibraries.MVVMFramework.ViewModels
 {
     //decided that this one would handle either data entry or regular now.
@@ -208,6 +210,15 @@ namespace CommonBasicStandardLibraries.MVVMFramework.ViewModels
                 if (CustomRDate.IsValid(newValue!, this) == false)
                     AddErrorMessage(thisProp, CustomRDate.ErrorMessage);
             AddOtherPropertiesAttributes(thisProp);
+        }
+        protected void FinishSaved()
+        {
+            AttemptedToSubmitForm = false;
+            this.AutoClearProperties();
+            IEventAggregator aggregator = cons!.Resolve<IEventAggregator>();
+            aggregator.FocusOnFirst();
+
+            //FocusOnFirst
         }
     }
 }

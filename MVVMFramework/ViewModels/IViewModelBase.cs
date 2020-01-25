@@ -2,7 +2,7 @@
 
 namespace CommonBasicStandardLibraries.MVVMFramework.ViewModels
 {
-    public interface IViewModelBase
+    public interface IViewModelBase : IClearable
     {
         string this[string PropertyName] { get; }
 
