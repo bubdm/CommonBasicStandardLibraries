@@ -61,6 +61,26 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             //    return true;
             return simpleTypesList.Contains(type);
         }
+
+        public static bool IsDateType(this PropertyInfo property)
+        {
+            //if (bindableProperty == UIElement.VisibilityProperty && typeof(bool).IsAssignableFrom(property.PropertyType))
+            //    binding.Converter = _booleanToVisibilityConverter;
+            //if (bindableProperty == CustomTextbox.TextProperty && (typeof(DateTime).IsAssignableFrom(property.PropertyType) || typeof(DateTime?).IsAssignableFrom(property.PropertyType)))
+            //{
+            //    binding.Converter = new DateConverter(); //i think will always use my custom date converter if using custom textbox and its assignable from date and time.
+            //}
+            if (typeof(DateTime).IsAssignableFrom(property.PropertyType))
+            {
+                return true;
+            }
+            if (typeof(DateTime?).IsAssignableFrom(property.PropertyType))
+            {
+                return true;
+            }
+            return false;
+        }
+
         public static bool IsSimpleType(this PropertyInfo property)
         {
             return property.PropertyType.IsSimpleType();
