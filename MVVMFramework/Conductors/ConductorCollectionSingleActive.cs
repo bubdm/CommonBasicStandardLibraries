@@ -29,8 +29,8 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Conductors
             _mainScreen = view;
             return base.ActivateAsync(view);
         }
-
-        public Task CloseChildAsync()
+        //may need to do other things like on reminders.
+        public virtual Task CloseChildAsync()
         {
             return ConductorBehavior.CloseChildAsync(this);
         }
