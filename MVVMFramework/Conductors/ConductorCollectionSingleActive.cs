@@ -16,9 +16,12 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Conductors
             private set
             {
                 _canCloseChild = value;
+                ChangeCloseChild();
                 NotifyOfCanExecuteChange(nameof(CanCloseChild));
             }
         }
+
+        protected virtual void ChangeCloseChild() { }
 
         private IUIView? _mainScreen;
         IUIView? IConductorCollectionSingleActive<T>.MainScreen { get => _mainScreen; set => _mainScreen = value; }
