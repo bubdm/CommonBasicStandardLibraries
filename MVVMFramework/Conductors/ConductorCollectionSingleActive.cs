@@ -1,6 +1,7 @@
 ﻿using CommonBasicStandardLibraries.Exceptions;
 using CommonBasicStandardLibraries.MVVMFramework.UIHelpers;
 using CommonBasicStandardLibraries.MVVMFramework.ViewModels;
+using System;
 using System.Threading.Tasks;
 namespace CommonBasicStandardLibraries.MVVMFramework.Conductors
 {
@@ -15,10 +16,24 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Conductors
             }
             private set
             {
+                if (_changing)
+                {
+                    return; //because something else is being opened instead.
+                }
                 _canCloseChild = value;
                 ChangeCloseChild();
                 NotifyOfCanExecuteChange(nameof(CanCloseChild));
             }
+        }
+
+        protected bool IsOpened(Type type)
+        {
+            if (ActiveViewModel == null)
+            {
+                return false;
+            }
+            Type mains = ActiveViewModel.GetType();
+            return mains == type;
         }
 
         protected virtual void ChangeCloseChild() { }
@@ -32,8 +47,7 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Conductors
             _mainScreen = view;
             return base.ActivateAsync(view);
         }
-        //may need to do other things like on reminders.
-        public virtual Task CloseChildAsync()
+        public Task CloseChildAsync()
         {
             return ConductorBehavior.CloseChildAsync(this);
         }
@@ -42,11 +56,16 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Conductors
         {
             return LoadScreenAsync(viewModel);
         }
+        private bool _changing;
         protected async Task LoadScreenAsync(T viewModel)
         {
             if (ActiveViewModel != null)
+            {
+                _changing = true;
                 await CloseChildAsync(); //i think
+            }
             if (await ConductorBehavior.TryActivateItemAsync(this, _mainScreen, viewModel!))
+            {
                 if (ActiveViewModel == null)
                     throw new BasicBlankException("Failed to set the active item.  I think this will cause problems.  Rethink");
                 else
@@ -54,6 +73,8 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Conductors
                     CanCloseChild = true;
                     ActiveViewModel.Closing = () => { ActiveViewModel = null; CanCloseChild = false; };
                 }
+            }
+            _changing = false;
         }
     }
 }
