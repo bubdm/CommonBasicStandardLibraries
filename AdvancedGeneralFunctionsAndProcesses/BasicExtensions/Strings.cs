@@ -257,9 +257,24 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             string thisText;
             thisText = dateStr;
             newDate = null;
-            if (thisText.Length != 6)
+            //if it has 8 characters, try something else.
+            //because i could get it from a picker.  that has to be valid as well.
+           
+
+
+            if (thisText.Length != 6 && thisText.Length !=8)
                 return false;
-            var newText = thisText.Substring(0, 2) + "/" + thisText.Substring(2, 2) + "/" + thisText.Substring(4, 2);
+
+            int lasts;
+            if (thisText.Length == 8)
+            {
+                lasts = 4;
+            }
+            else
+            {
+                lasts = 2;
+            }
+            var newText = thisText.Substring(0, 2) + "/" + thisText.Substring(2, 2) + "/" + thisText.Substring(4, lasts);
             bool rets;
             rets = DateTime.TryParse(newText, out DateTime TempDate);
             if (rets == false)
