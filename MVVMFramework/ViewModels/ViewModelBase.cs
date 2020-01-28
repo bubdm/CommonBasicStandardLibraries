@@ -18,9 +18,15 @@ namespace CommonBasicStandardLibraries.MVVMFramework.ViewModels
 
     public abstract class ViewModelBase : ObservableObject, IHaveDisplayName, IDataErrorInfo, IViewModelBase
     {
+        //one possible solution is to have something set it.
+        //that way it can be used if necessary for data entry, etc.
+
+        public static ViewModelBase? CurrentViewModel { get; set; }
+
         public ViewModelBase()
         {
             DisplayName = ToString();
+            CurrentViewModel = this; //hopefully this way works.
         } //i think the base runs first so if nothing is specified, then will be tostring().
 
         string IDataErrorInfo.Error //this implements the Error property

@@ -31,7 +31,7 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Commands
 				_functionName = canExecuteM.Name;
 			HookUpNotifiers();
 		}
-		public ReflectiveCommand(object model, MethodInfo execute, PropertyInfo canExecute)
+		public ReflectiveCommand(object model, MethodInfo execute, PropertyInfo? canExecute)
 		{
 			_model = model;
 			_execute = execute;
