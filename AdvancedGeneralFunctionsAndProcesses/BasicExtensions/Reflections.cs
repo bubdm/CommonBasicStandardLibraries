@@ -81,7 +81,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             return false;
         }
 
-        public static bool IsIntegerField(this PropertyInfo property)
+        public static bool IsIntegerType(this PropertyInfo property)
         {
             if (typeof(int).IsAssignableFrom(property.PropertyType))
             {
