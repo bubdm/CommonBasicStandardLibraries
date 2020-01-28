@@ -54,6 +54,10 @@ namespace CommonBasicStandardLibraries.MVVMFramework.CustomValidationClasses
         }
         public override bool IsValid(object currentValue)
         {
+
+            
+
+
             throw new BasicBlankException("This one requires the context.  If this is required, rethink");
         }
     }
