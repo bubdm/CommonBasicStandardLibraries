@@ -158,7 +158,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             var newTypes = new List<Type> { typeof(string) };
             return newTypes.Contains(property.PropertyType);
         }
-        public static bool IsInt(this PropertyInfo property)
+        public static bool IsIntOrEnum(this PropertyInfo property)
         {
             var simpleTypesList = new List<Type>
             {
