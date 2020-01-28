@@ -46,5 +46,12 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             }
             return false;
         }
+        public static DateTime AddTimeToDate(this DateTime thisDate, string timestring)
+        {
+            DateTime timed = DateTime.Parse(timestring);
+            DateTime output = new DateTime(thisDate.Year, thisDate.Month, thisDate.Day, timed.Hour, timed.Minute, timed.Second);
+            return output;
+        }
+
     }
 }
