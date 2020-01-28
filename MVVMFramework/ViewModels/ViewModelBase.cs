@@ -142,6 +142,8 @@ namespace CommonBasicStandardLibraries.MVVMFramework.ViewModels
                                  return true;
                              if (s.IsDefined(typeof(StringLengthAttribute)) == true)
                                  return true;
+                             if (s.IsDefined(typeof(CustomTimeAttribute)) == true)
+                                 return true;
                              if (OtherCustomAttributes(s) == true)
                                  return true;
                              return false;
@@ -207,14 +209,21 @@ namespace CommonBasicStandardLibraries.MVVMFramework.ViewModels
             if (emAt != null)
                 if (emAt.IsValid(newValue!) == false)
                     AddErrorMessage(thisProp, emAt.ErrorMessage);
-            var CustomSDate = thisProp.GetCustomAttribute<CustomValidDateAttribute>();
-            if (CustomSDate != null)
-                if (CustomSDate.IsValid(newValue!) == false)
-                    AddErrorMessage(thisProp, CustomSDate.ErrorMessage);
-            var CustomRDate = thisProp.GetCustomAttribute<CustomDateRangeAttribute>();
-            if (CustomRDate != null)
-                if (CustomRDate.IsValid(newValue!, this) == false)
-                    AddErrorMessage(thisProp, CustomRDate.ErrorMessage);
+            var customSDate = thisProp.GetCustomAttribute<CustomValidDateAttribute>();
+            if (customSDate != null)
+                if (customSDate.IsValid(newValue!) == false)
+                    AddErrorMessage(thisProp, customSDate.ErrorMessage);
+            var customRDate = thisProp.GetCustomAttribute<CustomDateRangeAttribute>();
+            if (customRDate != null)
+                if (customRDate.IsValid(newValue!, this) == false)
+                    AddErrorMessage(thisProp, customRDate.ErrorMessage);
+
+            var customTDate = thisProp.GetCustomAttribute<CustomTimeAttribute>();
+            if (customTDate != null && customTDate.IsValid(newValue!) == false)
+            {
+                AddErrorMessage(thisProp, customTDate.ErrorMessage);
+            }
+
             AddOtherPropertiesAttributes(thisProp);
         }
         protected void FinishSaved()
