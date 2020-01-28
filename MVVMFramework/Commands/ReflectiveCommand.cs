@@ -39,7 +39,6 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Commands
 			if (_canExecutep != null)
 				_functionName = _canExecutep.Name;
 			HookUpNotifiers();
-			AddCommand(this);
 		}
 		private void HookUpNotifiers()
 		{
@@ -49,6 +48,7 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Commands
 				return; //no need to notify because the resulting part is not even there.
 			if (_model is INotifyCanExecuteChanged notifier)
 				notifier.CanExecuteChanged += Notifier_CanExecuteChanged;
+			AddCommand(this);
 		}
 
 		private void Notifier_CanExecuteChanged(object sender, CanExecuteChangedEventArgs e)
