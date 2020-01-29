@@ -57,7 +57,8 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Conductors
             return LoadScreenAsync(viewModel);
         }
         private bool _changing;
-        protected async Task LoadScreenAsync(T viewModel)
+        //decided to make it virtual so i can do other things too.
+        protected virtual async Task LoadScreenAsync(T viewModel)
         {
             if (ActiveViewModel != null)
             {
