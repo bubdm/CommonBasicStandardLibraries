@@ -1,4 +1,5 @@
-﻿using CommonBasicStandardLibraries.MVVMFramework.Commands;
+﻿using CommonBasicStandardLibraries.DatabaseHelpers.Attributes;
+using CommonBasicStandardLibraries.MVVMFramework.Commands;
 using CommonBasicStandardLibraries.MVVMFramework.EventArgClasses;
 using CommonBasicStandardLibraries.MVVMFramework.UIHelpers;
 using System;
@@ -12,7 +13,7 @@ namespace CommonBasicStandardLibraries.MVVMFramework.ViewModels
     public abstract class ObservableObject : INotifyPropertyChangedEx, INotifyCanExecuteChanged, IObservableObject, IMappable
     {
         //i do like my improved observable object.
-
+        [NotMapped] //so if any are used with dapper and sql, then will know this is never mapped.
         public virtual bool IsNotifying { get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged; //i propose even here not overridable.  if i am wrong, rethink
