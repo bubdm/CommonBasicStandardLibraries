@@ -43,12 +43,11 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Commands
 		private void HookUpNotifiers()
 		{
 			_isAsync = _execute.ReturnType.Name == "Task";
-
+			AddCommand(this);
 			if (_canExecuteM == null && _canExecutep == null)
 				return; //no need to notify because the resulting part is not even there.
 			if (_model is INotifyCanExecuteChanged notifier)
 				notifier.CanExecuteChanged += Notifier_CanExecuteChanged;
-			AddCommand(this);
 		}
 
 		private void Notifier_CanExecuteChanged(object sender, CanExecuteChangedEventArgs e)
