@@ -2,6 +2,7 @@
 using CommonBasicStandardLibraries.MVVMFramework.EventArgClasses;
 using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using static CommonBasicStandardLibraries.MVVMFramework.Commands.InternalCommandList;
@@ -16,6 +17,9 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Commands
 
 		private bool _isAsync;
 		private readonly string _functionName = "";
+
+		private bool _hasParameters;
+
 		//this is needed so the data entry forms will know when it can focus on control.
 		public static bool CurrentlyExecuting()
 		{
@@ -43,6 +47,12 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Commands
 		private void HookUpNotifiers()
 		{
 			_isAsync = _execute.ReturnType.Name == "Task";
+			var count = _execute.GetParameters().Count();
+			if (count > 1)
+			{
+				throw new BasicBlankException($"Method {_execute.Name} cannot have more than one parameter.  If more than one is needed, lots of rethinking is required");
+			}
+			_hasParameters = count == 1;
 			AddCommand(this);
 			if (_canExecuteM == null && _canExecutep == null)
 				return; //no need to notify because the resulting part is not even there.
@@ -95,12 +105,7 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Commands
 			return true;
 		}
 
-		//private void PrivateChangeCanExecute()
-		//{
-
-		//	//CanExecuteChanged(this, EventArgs.Empty);
-		//}
-
+		
 		public async void Execute(object parameter)
 		{
 
@@ -108,30 +113,35 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Commands
 			if (CanExecute(parameter) == false)
 				return;
 			IsExecuting = true;
-			//PrivateChangeCanExecute();
 			if (_isAsync == false)
-				if (parameter == null)
-					_execute.Invoke(_model, null);
-				else
+
+				if (_hasParameters)
+				{
 					_execute.Invoke(_model, new object[] { parameter });
+				}
+				else
+				{
+					_execute.Invoke(_model, null);
+				}
+				
+					
 			else
 
 				await UIHelpers.Execute.OnUIThreadAsync(async () =>
 				{
 					Task task;
-					if (parameter == null)
-						task = (Task)_execute.Invoke(_model, null);
-					else
+					if (_hasParameters)
+					{
 						task = (Task)_execute.Invoke(_model, new object[] { parameter });
+					}
+					else
+					{
+						task = (Task)_execute.Invoke(_model, null);
+					}
+					
 					await task;
 				});
-			//await Task.Delay(2000); //another experiment.
 			IsExecuting = false;
-			//PrivateChangeCanExecute();
-			//if (returnValue != null)
-			//{
-			//	HandleReturnValue(returnValue);
-			//}
 		}
 
 		public void ReportCanExecuteChange()
