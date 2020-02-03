@@ -247,7 +247,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
                 listToUse = FirstNamesFemale;
             else
                 listToUse = FirstNamesMale;
-            listToUse.rs = this;
+            listToUse._rs = this;
             return listToUse.GetRandomItem();
         }
 
@@ -255,7 +255,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
         {
             CustomBasicList<string> allList = FirstNamesFemale.ToCustomBasicList();
             allList.AddRange(FirstNamesMale);
-            allList.rs = this;
+            allList._rs = this;
             return allList.GetRandomItem();
         }
 
@@ -266,7 +266,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
         public string NextLastName()
         {
             var thisList = LastNames;
-            thisList.rs = this;
+            thisList._rs = this;
             return thisList.GetRandomItem();
         }
         //public string NextLastName() => LastNames.GetRandomItem();
@@ -278,7 +278,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
         public string NextSex()
         {
             CustomBasicList<string> thisList = new CustomBasicList<string> { "Male", "Female" };
-            thisList.rs = this;
+            thisList._rs = this;
             return thisList.GetRandomItem();
         }
 

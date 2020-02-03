@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommonBasicStandardLibraries.MVVMFramework.UIHelpers;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -50,13 +51,17 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         /// </remarks>
         protected virtual void OnCollectionChanged(NotifyCollectionChangedEventArgs e) //this is done
         {
-            if (CollectionChanged != null)
+            Execute.OnUIThread(() =>
             {
-                using (BlockReentrancy())
+                if (CollectionChanged != null)
                 {
-                    CollectionChanged(this, e);
+                    using (BlockReentrancy())
+                    {
+                        CollectionChanged(this, e);
+                    }
                 }
-            }
+            });
+            
         }
 
         /// <summary>

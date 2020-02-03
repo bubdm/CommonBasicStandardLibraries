@@ -99,7 +99,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
             }
         }
         public int Count => PrivateList.Count; //done
-        internal RandomGenerator? rs;
+        internal RandomGenerator? _rs;
         private IResolver? _privateContainer; //hopefully still okay.
         public IResolver MainContainer { set => _privateContainer = value; }
         //there is a warning that insert is an expensive operation.
@@ -283,9 +283,9 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         }
         public T GetRandomItem(bool removePrevious)
         {
-            SetRandom(ref _privateContainer!, ref rs!);
+            SetRandom(ref _privateContainer!, ref _rs!);
             int ask1;
-            ask1 = rs.GetRandomNumber(PrivateList.Count);
+            ask1 = _rs.GetRandomNumber(PrivateList.Count);
             T thisItem = PrivateList[ask1 - 1];
             if (removePrevious == true)
                 RemoveItem(ask1 - 1); //because 0 based.  i think this works
@@ -293,12 +293,12 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         }
         public int GetSeed()
         {
-            return rs!.GetSeed();
+            return _rs!.GetSeed();
         }
         public ICustomBasicList<T> GetRandomList(bool removePrevious, int howManyInList) //done
         {
-            SetRandom(ref _privateContainer!, ref rs!);
-            CustomBasicList<int> rList = rs.GenerateRandomList(PrivateList.Count, howManyInList);
+            SetRandom(ref _privateContainer!, ref _rs!);
+            CustomBasicList<int> rList = _rs.GenerateRandomList(PrivateList.Count, howManyInList);
             var thisList = FactoryRequested.GetStartList();
             foreach (int index in rList)
             {
@@ -311,8 +311,8 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         }
         public void RemoveRandomItems(int howMany)
         {
-            SetRandom(ref _privateContainer!, ref rs!);
-            CustomBasicList<int> rList = rs.GenerateRandomList(PrivateList.Count, howMany);
+            SetRandom(ref _privateContainer!, ref _rs!);
+            CustomBasicList<int> rList = _rs.GenerateRandomList(PrivateList.Count, howMany);
             List<T> thisList = new List<T>();
             foreach (int index in rList)
             {
@@ -491,8 +491,8 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         {
             if (Count == 0)
                 return; //because there is nothing to shuffle.  so can't obviously.  better than runtime error.
-            SetRandom(ref _privateContainer!, ref rs!);
-            CustomBasicList<int> thisList = rs.GenerateRandomList(PrivateList.Count); //i think
+            SetRandom(ref _privateContainer!, ref _rs!);
+            CustomBasicList<int> thisList = _rs.GenerateRandomList(PrivateList.Count); //i think
             List<T> rList = new List<T>(); //since they removed and added, then i think its best if i just remove the entire thing.   however, let them know it really moved.
             CheckReentrancy();
             foreach (int index in thisList)
@@ -507,8 +507,8 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         public void ShuffleList(int howMany)
         {
             CheckReentrancy();
-            SetRandom(ref _privateContainer!, ref rs!);
-            CustomBasicList<int> thisList = rs.GenerateRandomList(PrivateList.Count, howMany);
+            SetRandom(ref _privateContainer!, ref _rs!);
+            CustomBasicList<int> thisList = _rs.GenerateRandomList(PrivateList.Count, howMany);
             List<T> rList = new List<T>();
             foreach (int index in thisList)
             {
