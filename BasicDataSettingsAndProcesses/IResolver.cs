@@ -21,6 +21,12 @@ namespace CommonBasicStandardLibraries.BasicDataSettingsAndProcesses
         T Resolve<T>();
         object GetInstance(Type type); //needs this as well.
         void RegisterInstanceType(Type type); //i need this too.
+        /// <summary>
+        /// the purpose of this would be so something can tell if its not registered and can act accordingly.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        bool RegistrationExist<T>();
     }
 
     //we have to keep the iresolver because the custom lists rely on it for the random functions.

@@ -434,5 +434,11 @@ namespace CommonBasicStandardLibraries.ContainerClasses
             };
             SetResults(thisResults, 0, null!);
         }
+
+        bool IResolver.RegistrationExist<T>()
+        {
+            Type thisType = typeof(T);
+            return _thisSet.Any(x => thisType.IsAssignableFrom(x.TypeOut));
+        }
     }
 }
