@@ -29,7 +29,7 @@ namespace CommonBasicStandardLibraries.MVVMFramework.ViewModels
         public IContentControl? ParentContainer { get; set; }
         Action IScreen.Closing { get; set; } = () => { };
 
-
+        private IUIView? _view;
         protected void FocusOnFirst()
         {
             IEventAggregator aggregator = cons!.Resolve<IEventAggregator>();
@@ -43,6 +43,7 @@ namespace CommonBasicStandardLibraries.MVVMFramework.ViewModels
 
         async Task IScreen.ActivateAsync(IUIView view)
         {
+            _view = view;
             await ActivateAsync(view);
             //ActiveView = view;
         }
@@ -59,20 +60,22 @@ namespace CommonBasicStandardLibraries.MVVMFramework.ViewModels
         {
             return Task.CompletedTask;
         }
-        protected Task TryCloseAsync()
+        //this needed to be virtual so in cases where you have to close, you can clear out of the resources as well.
+        protected virtual async Task TryCloseAsync()
         {
-            //if (ActiveView == null)
-            //{
-            //    return Task.CompletedTask;
-            //}
-
+            
             //think about how its going to close.
             if (ParentContainer == null)
-                return Task.CompletedTask; //it will become obvious its a bug.
+            {
+                return;
+            }
             ParentContainer.Close();
             IScreen screen = this;
             screen.Closing();
-            return Task.CompletedTask;
+            if (_view != null)
+            {
+                await _view.TryCloseAsync();
+            }
             //hopefully its this simple.
         }
 
