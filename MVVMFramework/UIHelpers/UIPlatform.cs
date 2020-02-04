@@ -18,5 +18,11 @@ namespace CommonBasicStandardLibraries.MVVMFramework.UIHelpers
             Console.WriteLine(message);
             return Task.CompletedTask;
         };
+        //this only works on desktop
+        public static Action<string> DesktopValidationError { get; set; } = (message) =>
+        {
+            Console.WriteLine(message);
+        };
+
     }
 }
