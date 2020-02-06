@@ -1,11 +1,12 @@
 ﻿using CommonBasicStandardLibraries.MVVMFramework.UIHelpers;
+using CommonBasicStandardLibraries.MVVMFramework.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 namespace CommonBasicStandardLibraries.CollectionClasses
 {
-    public class CustomBasicCollection<T> : CustomBasicList<T>, INotifyCollectionChanged, INotifyPropertyChanged //i am guessing that it can still use the basic factory because when you get items from it, no observable needed anyways
+    public class CustomBasicCollection<T> : CustomBasicList<T>, INotifyCollectionChanged, INotifyPropertyChangedEx //i am guessing that it can still use the basic factory because when you get items from it, no observable needed anyways
     {
         public CustomBasicCollection() : base() { }
 
@@ -84,6 +85,9 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         }
 
         private readonly SimpleMonitor _monitor = new SimpleMonitor();
+
+        public bool IsNotifying { get; set; } = true;
+
         protected override void CheckReentrancy() //done i think
         {
             if (_monitor.Busy)
@@ -93,7 +97,9 @@ namespace CommonBasicStandardLibraries.CollectionClasses
                 // invalid for later listeners.  This keeps existing code working
                 // (e.g. Selector.SelectedItems).
                 if ((CollectionChanged != null) && (CollectionChanged.GetInvocationList().Length > 1))
+                {
                     throw new InvalidOperationException("Reentracy Not Allowed.  This means threading problem.  Rethink");
+                }
                 //throw new InvalidOperationException(SR.GetString(SR.ObservableCollectionReentrancyNotAllowed));
             }
         }
@@ -123,12 +129,37 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         }
         protected override void PropertyCountChanged()
         {
-            OnPropertyChanged(new PropertyChangedEventArgs("Count"));
+            Execute.OnUIThread(() =>
+            {
+                OnPropertyChanged(new PropertyChangedEventArgs("Count"));
+            });
         }
         protected override void PropertyItemChanged()
         {
-            OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
+            Execute.OnUIThread(() =>
+            {
+                OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
+            });
         }
+
+        public virtual void NotifyOfPropertyChange(string propertyName)
+        {
+            if (IsNotifying)
+            {
+                Execute.OnUIThread(() => OnPropertyChanged(new PropertyChangedEventArgs(propertyName)));
+            }
+        }
+
+        public void Refresh()//done.
+        {
+            Execute.OnUIThread(() =>
+            {
+                OnPropertyChanged(new PropertyChangedEventArgs("Count"));
+                OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
+            });
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset)); //this already does it.
+        }
+
         private class SimpleMonitor : IDisposable
         {
             public void Enter()
