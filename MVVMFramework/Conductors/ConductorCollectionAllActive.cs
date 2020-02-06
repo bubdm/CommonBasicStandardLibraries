@@ -10,20 +10,21 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Conductors
 
         //can't be active view model because there can be more than one obviously.
         //so the inherited classes has to specify them
+        //i do like the idea the sub classes can use the aggregator
+        protected IEventAggregator Aggregator;
 
-        private readonly IEventAggregator _trackerEventAggregor;
+        //private readonly IEventAggregator _trackerEventAggregor;
         /// <summary>
         /// this is used to subscribe to messages from child view models.
         /// </summary>
-        /// <param name="aggregator"></param>
-        protected virtual void SetSubscribers(IEventAggregator aggregator)
+        protected virtual void SetSubscribers()
         {
-            aggregator.Subscribe(this); //that is default.  could eventually do others.
+            Aggregator.Subscribe(this); //that is default.  could eventually do others.
         }
         public ConductorCollectionAllActive()
         {
-            _trackerEventAggregor = cons!.Resolve<IEventAggregator>();
-            SetSubscribers(_trackerEventAggregor);
+            Aggregator = cons!.Resolve<IEventAggregator>();
+            SetSubscribers();
         }
 
         public IUIView? MainScreen { get; set; }
