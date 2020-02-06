@@ -50,7 +50,9 @@ namespace CommonBasicStandardLibraries.MVVMFramework.ViewModels
 
         protected virtual async Task ActivateAsync(IUIView view)
         {
-            await Execute.OnUIThreadAsync(() => view.TryActivateAsync()); //i think the view model should initiate it.
+            await view.TryActivateAsync(); //hopefully no need to do on ui thread (?)
+
+            //await Execute.OnUIThreadAsync(() => view.TryActivateAsync()); //i think the view model should initiate it.
             //this is the final steps the ui needs to run.
             await ActivateAsync();
 
@@ -74,9 +76,18 @@ namespace CommonBasicStandardLibraries.MVVMFramework.ViewModels
             screen.Closing();
             if (_view != null)
             {
-                await _view.TryCloseAsync();
+                await CloseViewAsync();
             }
             //hopefully its this simple.
+        }
+
+        protected async Task CloseViewAsync()
+        {
+            if (_view == null)
+            {
+                throw new BasicBlankException("There was no view.  If needs to ignore, then take out error");
+            }
+            await _view.TryCloseAsync();
         }
 
         public virtual async Task CancelAsync()
