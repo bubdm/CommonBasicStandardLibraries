@@ -12,10 +12,10 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
     public static class ListsExtensions
     {
 
-        public static string Join(this CustomBasicList<string> list, string delimiter)
-        {
-            return string.Join(delimiter, list);
-        }
+        //public static string Join(this CustomBasicList<string> list, string delimiter)
+        //{
+        //    return string.Join(delimiter, list);
+        //}
 
         public static void Add<T>(this Dictionary<int, T> thisDict, T thisItem)
         {
