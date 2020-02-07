@@ -19,23 +19,29 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Conductors
                 return false;
             if (UIPlatform.ScreenLoader is null)
                 return false;
-            await Execute.OnUIThreadAsync(async () =>
+
+
+            IUIView childview = await UIPlatform.ViewLocator.LocateViewAsync(childViewModel)!;
+            if (childview == null)
+                throw new BasicBlankException("No view was found when trying to active an item.  Rethink");
+            if (parentViewScreen == null)
+                throw new BasicBlankException("Has to have an active view in order to activate another screen");
+            //we need a method that will do the rest of what is needed.  probably another interface.
+            await UIPlatform.ScreenLoader.LoadScreenAsync(parentViewModel, parentViewScreen, childViewModel, childview);
+            await childview.TryActivateAsync(); //to do extra things whatever is needed that is actually async.
+            if (childViewModel is IScreen screens)
             {
-                IUIView childview = await UIPlatform.ViewLocator.LocateViewAsync(childViewModel)!;
-                if (childview == null)
-                    throw new BasicBlankException("No view was found when trying to active an item.  Rethink");
-                if (parentViewScreen == null)
-                    throw new BasicBlankException("Has to have an active view in order to activate another screen");
-                //we need a method that will do the rest of what is needed.  probably another interface.
-                await UIPlatform.ScreenLoader.LoadScreenAsync(parentViewModel, parentViewScreen, childViewModel, childview);
-                await childview.TryActivateAsync(); //to do extra things whatever is needed that is actually async.
-                if (childViewModel is IScreen screens)
-                {
-                    if (parentViewModel is IHaveActiveViewModel active)
-                        active.ActiveViewModel = screens;
-                    await screens.ActivateAsync(childview);
-                }
-            });
+                if (parentViewModel is IHaveActiveViewModel active)
+                    active.ActiveViewModel = screens;
+                await screens.ActivateAsync(childview);
+            }
+
+
+            //try risk not running on ui thread here too.
+            //await Execute.OnUIThreadAsync(async () =>
+            //{
+                
+            //});
             return true;
         }
     }
