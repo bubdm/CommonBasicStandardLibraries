@@ -41,9 +41,15 @@ namespace CommonBasicStandardLibraries.CopyVS
                 await WriteTextAsync(NewPath, thisText, false);
             }
             if (DirectoryExists(ProjectPath) == false)
+            {
                 UIPlatform.ShowError($"'{ProjectPath}': Path doesn't exist");
+                return;
+            }
             if (FileExists($@"{ProjectPath}\{OldName}.vbproj") == false)
+            {
                 UIPlatform.ShowError($"'{OldName}': does not exist");
+                return;
+            }
             if (DirectoryExists($@"{NewPath}\{NewName}") == true)
             {
                 if (await ClearFolderAsync($@"{NewPath}\{NewName}") == true)
@@ -257,7 +263,7 @@ namespace CommonBasicStandardLibraries.CopyVS
         {
             CustomBasicList<string> tFileList = new CustomBasicList<string>();
             IEnumerable<string> tempList;
-            tempList = Directory.EnumerateDirectories(path, "*", SearchOption.TopDirectoryOnly);
+            tempList = Directory.EnumerateDirectories(path, "*", SearchOption.AllDirectories); //because we have multiple folders now.
             foreach (var thisItem in tempList)
                 tFileList.Add(thisItem);
             return tFileList;
