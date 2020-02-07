@@ -11,6 +11,12 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
 {
     public static class ListsExtensions
     {
+
+        public static string Join(this CustomBasicList<string> list, string delimiter)
+        {
+            return string.Join(delimiter, list);
+        }
+
         public static void Add<T>(this Dictionary<int, T> thisDict, T thisItem)
         {
             thisDict.Add(thisDict.Count + 1, thisItem); //this is used in cases where we do a dictionary just for the purpose of one based items

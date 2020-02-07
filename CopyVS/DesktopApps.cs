@@ -14,6 +14,8 @@ using CommonBasicStandardLibraries.MVVMFramework.UIHelpers;
 
 namespace CommonBasicStandardLibraries.CopyVS
 {
+    // public delegate void ProgressEventHandler(long TimeLeft);
+    public delegate Task FinishFileProcesses(CustomBasicList<string> files, string oldName, string newName, string newProjectFile);
     public class DesktopApps
     {
         #region Public Properties
@@ -22,6 +24,11 @@ namespace CommonBasicStandardLibraries.CopyVS
         public string NewPath { get; set; } = "";
         public string OldName { get; set; } = "";
         public string NewName { get; set; } = "";
+
+        public FinishFileProcesses? FinishRenaming { get; set; }
+
+        //public Func<CustomBasicList<string>, string, string, 
+
         //public ISimpleUI? ThisMessage { get; set; }//if you want to show messagebox, needs to do through here.
         #endregion
 
@@ -45,7 +52,7 @@ namespace CommonBasicStandardLibraries.CopyVS
                 UIPlatform.ShowError($"'{ProjectPath}': Path doesn't exist");
                 return;
             }
-            if (FileExists($@"{ProjectPath}\{OldName}.vbproj") == false)
+            if (FileExists($@"{ProjectPath}\{OldName}.csproj") == false)
             {
                 UIPlatform.ShowError($"'{OldName}': does not exist");
                 return;
@@ -69,6 +76,25 @@ namespace CommonBasicStandardLibraries.CopyVS
                     await ProcessRenamingAsync();
                 }
             }
+            if (FinishRenaming != null)
+            {
+                //needs to get a list of files.
+                //that something can process.
+                string newProjectPath = $@"{NewPath}\{NewName}\{NewName}.csproj";
+                if (FileExists(newProjectPath) == false)
+                {
+                    UIPlatform.ShowError($"Path of {newProjectPath} does not exist.  Rethink");
+                    return;
+                }
+                //needs to check newpath.
+                //only list cs files.
+                string checkPath = $@"{NewPath}\{NewName}";
+                Console.WriteLine($"Checking path {checkPath}");
+                var list = GetSeveralSpecificFiles(checkPath, "cs", SearchOption.AllDirectories);
+                await FinishRenaming.Invoke(list, OldName, NewName, newProjectPath);
+            }
+
+
         }
         #endregion
 
@@ -79,7 +105,10 @@ namespace CommonBasicStandardLibraries.CopyVS
             {
                 await Task.Run(() =>
                 {
-                    Directory.Delete(pPath, true);
+                    if (Directory.Exists(pPath))
+                    {
+                        Directory.Delete(pPath, true);
+                    }
                 });
                 return true;
             }
@@ -258,12 +287,15 @@ namespace CommonBasicStandardLibraries.CopyVS
                     });
                 }
             });
+
+
+
         }
         private CustomBasicList<string> GetFileList(string path)
         {
             CustomBasicList<string> tFileList = new CustomBasicList<string>();
             IEnumerable<string> tempList;
-            tempList = Directory.EnumerateDirectories(path, "*", SearchOption.AllDirectories); //because we have multiple folders now.
+            tempList = Directory.EnumerateDirectories(path, "*", SearchOption.TopDirectoryOnly); //because we have multiple folders now.
             foreach (var thisItem in tempList)
                 tFileList.Add(thisItem);
             return tFileList;
