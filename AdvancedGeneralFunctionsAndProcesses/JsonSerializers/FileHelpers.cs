@@ -9,14 +9,14 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Json
         {
             JsonSettingsGlobals.PopulateSettings();
             string? thisText = default;
-            await Task.Run(() => thisText = js.SerializeObject(thisObject, JsonSettingsGlobals.JsonSettingsData));
+            await Task.Run(() => thisText = js.SerializeObject(thisObject, JsonSettingsGlobals._jsonSettingsData));
             await WriteTextAsync(path, thisText!, false);
         }
         public static void SaveObject(string path, object thisObject)
         {
             JsonSettingsGlobals.PopulateSettings();
             string? thisText = default;
-            js.SerializeObject(thisObject, JsonSettingsGlobals.JsonSettingsData);
+            js.SerializeObject(thisObject, JsonSettingsGlobals._jsonSettingsData);
             WriteText(path, thisText!, false);
         }
         public static async Task<T> RetrieveSavedObjectAsync<T>(string path)
@@ -29,7 +29,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Json
             thisText = await AllTextAsync(path);
             await Task.Run(() =>
             {
-                thisT = js.DeserializeObject<T>(thisText, JsonSettingsGlobals.JsonSettingsData);
+                thisT = js.DeserializeObject<T>(thisText, JsonSettingsGlobals._jsonSettingsData);
             });
             return thisT;
         }
@@ -37,7 +37,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Json
         {
             JsonSettingsGlobals.PopulateSettings();
             string thisText = AllText(path);
-            return js.DeserializeObject<T>(thisText, JsonSettingsGlobals.JsonSettingsData);
+            return js.DeserializeObject<T>(thisText, JsonSettingsGlobals._jsonSettingsData);
         }
     }
 }

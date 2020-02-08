@@ -4,14 +4,14 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Json
 {
     public static class JsonSettingsGlobals
     {
-        static internal JsonSerializerSettings JsonSettingsData = new JsonSerializerSettings();
+        static internal JsonSerializerSettings _jsonSettingsData = new JsonSerializerSettings();
         static public PreserveReferencesHandling PreserveReferencesHandling { get; set; } = PreserveReferencesHandling.Objects; //looks like i can preserve references for objects but not arrays  hopefully that works.
         static public TypeNameHandling TypeNameHandling { get; set; } = TypeNameHandling.All; //defaults to it but can change if necessary.
         static internal void PopulateSettings()
         {
-            JsonSettingsData.PreserveReferencesHandling = PreserveReferencesHandling;
-            JsonSettingsData.TypeNameHandling = TypeNameHandling;
-            JsonSettingsData.Formatting = Formatting.Indented;
+            _jsonSettingsData.PreserveReferencesHandling = PreserveReferencesHandling;
+            _jsonSettingsData.TypeNameHandling = TypeNameHandling;
+            _jsonSettingsData.Formatting = Formatting.Indented;
         }
 
     }

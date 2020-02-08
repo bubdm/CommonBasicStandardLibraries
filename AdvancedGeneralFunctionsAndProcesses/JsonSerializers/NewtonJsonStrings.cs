@@ -10,7 +10,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Json
         {
             string thisStr = "";
             JsonSettingsGlobals.PopulateSettings();
-            await Task.Run(() => thisStr = JsonConvert.SerializeObject(thisObj, JsonSettingsGlobals.JsonSettingsData));
+            await Task.Run(() => thisStr = JsonConvert.SerializeObject(thisObj, JsonSettingsGlobals._jsonSettingsData));
             return thisStr;
         }
         public static async Task<T> DeserializeObjectAsync<T>(string thisStr)
@@ -19,7 +19,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Json
             T thisT = default;
 #pragma warning restore CS8653 // A default expression introduces a null value for a type parameter.
             JsonSettingsGlobals.PopulateSettings();
-            await Task.Run(() => thisT = JsonConvert.DeserializeObject<T>(thisStr, JsonSettingsGlobals.JsonSettingsData));
+            await Task.Run(() => thisT = JsonConvert.DeserializeObject<T>(thisStr, JsonSettingsGlobals._jsonSettingsData));
             return thisT;
         }
         public static T ConvertObject<T>(object thisObj)
@@ -30,13 +30,13 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Json
         public static string SerializeObject(object thisObj)
         {
             JsonSettingsGlobals.PopulateSettings();
-            return JsonConvert.SerializeObject(thisObj, JsonSettingsGlobals.JsonSettingsData);
+            return JsonConvert.SerializeObject(thisObj, JsonSettingsGlobals._jsonSettingsData);
         }
 
         public static T DeserializeObject<T>(string thisStr)
         {
             JsonSettingsGlobals.PopulateSettings();
-            return JsonConvert.DeserializeObject<T>(thisStr, JsonSettingsGlobals.JsonSettingsData);
+            return JsonConvert.DeserializeObject<T>(thisStr, JsonSettingsGlobals._jsonSettingsData);
         }
         public static async Task<T> ConvertObjectAsync<T>(object thisObj)
         {
