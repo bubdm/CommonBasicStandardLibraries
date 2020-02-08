@@ -3,8 +3,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Text;
-using System.Linq;
 namespace CommonBasicStandardLibraries.CollectionClasses
 {
 
@@ -35,7 +33,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
             {
                 throw new BasicBlankException("You cannot add nothing.  Rethink");
             }
-            if (_upTo <= MaximumAllowed -1)
+            if (_upTo <= MaximumAllowed - 1)
             {
                 _values[_upTo] = item;
                 _upTo++;
@@ -53,12 +51,6 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         {
             get
             {
-                //needs to return a specific item.
-                //if (index == 0)
-                //{
-                //    throw new ArgumentOutOfRangeException("If the most recent one was needed, should have used MostRecent method");
-                //}
-
                 if (index > MaximumAllowed - 1)
                 {
                     throw new BasicBlankException($"Only up to {MaximumAllowed} are supported");
@@ -115,7 +107,6 @@ namespace CommonBasicStandardLibraries.CollectionClasses
                 if (_upTo > MaximumAllowed - 1)
                 {
                     return; //just return period.
-                    //throw new BasicBlankException("Only 5 are supported for list");
                 }
                 _values[r] = item;
                 r--;
@@ -132,8 +123,6 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         {
             throw new NotImplementedException();
         }
-
-        //hopefully does not have to be public.
 
         internal struct Enumerator : IEnumerator<T>
         {
@@ -172,7 +161,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
                     Reset();
                     return false;
                 }
-                if (_index >= _l._upTo)
+                if (_index >= _l._upTo - 1)
                 {
                     Reset();
                     return false;
@@ -182,7 +171,6 @@ namespace CommonBasicStandardLibraries.CollectionClasses
                 _currentElement = _l._values[item];
                 return true;
             }
-            //since its not generics, then no dispose is needed this time.
 
             public void Reset()
             {
@@ -196,6 +184,6 @@ namespace CommonBasicStandardLibraries.CollectionClasses
             }
         }
 
-        
+
     }
 }
