@@ -7,12 +7,9 @@ using System.Text;
 using System.Linq;
 namespace CommonBasicStandardLibraries.CollectionClasses
 {
-    //decided to be a list of objects.
-    //because its intended to be used in lots of places and don't want to force the called to be generic as well.
-    //may have to just do objects after all in order to deserialize properly.
 
     /// <summary>
-    /// this is a list to be used to store a list of objects but only a limited number of them.
+    /// this is a list to be used to store a list that is limited.  For example, the default size is 5 so 5 items get stored..
     /// will show the newest one added first.
     /// but if there are too many, then deletes the oldest one.
     /// </summary>
