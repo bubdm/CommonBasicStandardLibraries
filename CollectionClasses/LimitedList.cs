@@ -27,6 +27,47 @@ namespace CommonBasicStandardLibraries.CollectionClasses
 
         }
 
+        public void PopulateSavedList<R>(LimitedList<R> oldList)
+        {
+            int x = 0;
+            foreach (var item in oldList)
+            {
+                _values[x] = (T) item;
+                _upTo++;
+                x++;
+            }
+        }
+
+        public LimitedList(IEnumerable<T> list)
+        {
+            if (MaximumAllowed <= 0)
+            {
+                throw new BasicBlankException("You cannot allow 0 items.  Rethink");
+            }
+            _values = new T[MaximumAllowed];
+            int r = 0;
+            foreach (var item in list)
+            {
+                r++;
+                if (r == MaximumAllowed)
+                {
+                    break;
+                }
+                //i think that if less are allowed later, then will get trimmed automatically.
+            }
+            r--;
+            foreach (var item in list)
+            {
+                if (_upTo > MaximumAllowed - 1)
+                {
+                    return; //just return period.
+                }
+                _values[r] = item;
+                r--;
+                _upTo++;
+            }
+        }
+
         public void Add(T item)
         {
             if (item == null)
@@ -84,35 +125,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
 
         public object? OldestItem => this[MaximumAllowed - 1];
 
-        public LimitedList(IEnumerable<T> list)
-        {
-            if (MaximumAllowed <= 0)
-            {
-                throw new BasicBlankException("You cannot allow 0 items.  Rethink");
-            }
-            _values = new T[MaximumAllowed];
-            int r = 0;
-            foreach (var item in list)
-            {
-                r++;
-                if (r == MaximumAllowed)
-                {
-                    break;
-                }
-                //i think that if less are allowed later, then will get trimmed automatically.
-            }
-            r--;
-            foreach (var item in list)
-            {
-                if (_upTo > MaximumAllowed - 1)
-                {
-                    return; //just return period.
-                }
-                _values[r] = item;
-                r--;
-                _upTo++;
-            }
-        }
+        
 
         public IEnumerator GetEnumerator()
         {

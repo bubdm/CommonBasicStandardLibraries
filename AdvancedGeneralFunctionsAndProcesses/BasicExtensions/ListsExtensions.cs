@@ -40,6 +40,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
         {
             return tempList.Cast<T>().ToCustomBasicList();
         }
+        
         public static CustomBasicCollection<T> ToCustomBasicCollection<T>(this IEnumerable<T> tempList)
         {
             return new CustomBasicCollection<T>(tempList);

@@ -2,6 +2,7 @@
 using CommonBasicStandardLibraries.MVVMFramework.Commands;
 using CommonBasicStandardLibraries.MVVMFramework.EventArgClasses;
 using CommonBasicStandardLibraries.MVVMFramework.UIHelpers;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,6 +15,7 @@ namespace CommonBasicStandardLibraries.MVVMFramework.ViewModels
     {
         //i do like my improved observable object.
         [NotMapped] //so if any are used with dapper and sql, then will know this is never mapped.
+        [JsonIgnore]
         public virtual bool IsNotifying { get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged; //i propose even here not overridable.  if i am wrong, rethink
