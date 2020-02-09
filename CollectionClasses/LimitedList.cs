@@ -87,8 +87,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
             }
             _values[MaximumAllowed - 1] = item;
         }
-
-        public object? this[int index]
+        public T this[int index]
         {
             get
             {
@@ -100,18 +99,23 @@ namespace CommonBasicStandardLibraries.CollectionClasses
                 int checkstart = _upTo - 1;
                 if (_upTo == 0)
                 {
-                    return default; //because there is none.
+                    return default!; //because there is none.
                 }
-                int maxs = 5;
+                int maxs = MaximumAllowed;
                 do
                 {
                     if (upto == index || checkstart == 0)
                     {
-                        return _values[checkstart];
+                        return _values[upto];
                     }
-                    checkstart--;
-                    maxs--;
                     upto++;
+                    //if (upto == index || checkstart == 0)
+                    //{
+                    //    
+                    //}
+                    //checkstart--;
+                    maxs--;
+                    //upto++;
                     if (maxs == 0)
                     {
                         throw new BasicBlankException("I think its wrong.  Rethink");
@@ -121,9 +125,9 @@ namespace CommonBasicStandardLibraries.CollectionClasses
             }
 
         }
-        public object? MostRecent => this[0];
+        public T MostRecent => this[0];
 
-        public object? OldestItem => this[MaximumAllowed - 1];
+        public T OldestItem => this[MaximumAllowed - 1];
 
         
 
