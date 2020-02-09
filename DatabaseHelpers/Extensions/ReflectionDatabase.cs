@@ -40,6 +40,9 @@ namespace CommonBasicStandardLibraries.DatabaseHelpers.Extensions
             bool rets = property.HasAttribute<NotMappedAttribute>();
             if (rets == true)
                 return false; //because its not mapped.
+            if (property.PropertyType.IsNullableEnum() == true)
+                return true; //because i broke the television otherwise.  nullable enums is not simple type anymore but if exception, has to include.
+            //don't remember but there was a case where i could not consider nullableenums.
             return property.IsSimpleType();
         }
         public static string GetTableName<E>() //decided to put here even though you start with no parameters.
