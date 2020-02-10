@@ -3,6 +3,7 @@ using CommonBasicStandardLibraries.Exceptions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.BasicExtensions
@@ -227,9 +228,16 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
         {
             return type.GetProperties().Where(predicate);
         }
-        public static MethodInfo GetMethod(this Type type, string name)
+        /// <summary>
+        /// This gets the methodinfo to be used for creating reflection type commands.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="flag">use the | to specify more than one thing for binding flags to narrow down what it looks for.</param>
+        /// <returns></returns>
+        public static MethodInfo GetMethod(this Type type, string name, BindingFlags flag)
         {
-            MethodInfo output = type.GetMethods().Where(x => x.Name == name).SingleOrDefault();
+            MethodInfo output = type.GetMethods(flag).Where(x => x.Name == name).SingleOrDefault();
             if (output == null)
             {
                 throw new BasicBlankException($"Method with the name of {name} was not found");
