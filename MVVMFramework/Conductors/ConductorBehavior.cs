@@ -28,19 +28,22 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Conductors
                 throw new BasicBlankException("Has to have an active view in order to activate another screen");
             //we need a method that will do the rest of what is needed.  probably another interface.
             await UIPlatform.ScreenLoader.LoadScreenAsync(parentViewModel, parentViewScreen, childViewModel, childview);
-            await childview.TryActivateAsync(); //to do extra things whatever is needed that is actually async.
             if (childViewModel is IScreen screens)
             {
                 if (parentViewModel is IHaveActiveViewModel active)
                     active.ActiveViewModel = screens;
                 await screens.ActivateAsync(childview);
             }
-
+            else
+            {
+                await childview.TryActivateAsync(); //to do extra things whatever is needed that is actually async.
+                //should not activate twice.
+            }
 
             //try risk not running on ui thread here too.
             //await Execute.OnUIThreadAsync(async () =>
             //{
-                
+
             //});
             return true;
         }
