@@ -1,4 +1,5 @@
 ﻿using CommonBasicStandardLibraries.CollectionClasses;
+using CommonBasicStandardLibraries.Exceptions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -225,6 +226,15 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
         public static IEnumerable<PropertyInfo> GetProperties(this Type type, Func<PropertyInfo, bool> predicate)
         {
             return type.GetProperties().Where(predicate);
+        }
+        public static MethodInfo GetMethod(this Type type, string name)
+        {
+            MethodInfo output = type.GetMethods().Where(x => x.Name == name).SingleOrDefault();
+            if (output == null)
+            {
+                throw new BasicBlankException($"Method with the name of {name} was not found");
+            }
+            return output;
         }
         public static CustomBasicList<PropertyInfo> GetMappableProperties(this Type type)
         {
