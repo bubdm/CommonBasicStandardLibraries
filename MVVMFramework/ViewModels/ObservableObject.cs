@@ -65,6 +65,10 @@ namespace CommonBasicStandardLibraries.MVVMFramework.ViewModels
             //OnPropertyChanged(propertyName);
             NotifyOfPropertyChange(propertyName ?? string.Empty);
             ExtraStepInChangingProperty(propertyName);
+            if (IsNotifying == false)
+            {
+                return false; //because not notifying so it won't repaint again.
+            }
             return true;
         }
         protected virtual void ExtraStepInChangingProperty([CallerMemberName()] string? propertyName = null) { }
