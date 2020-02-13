@@ -1,5 +1,6 @@
 ﻿using CommonBasicStandardLibraries.CollectionClasses;
 using CommonBasicStandardLibraries.Exceptions;
+using CommonBasicStandardLibraries.MVVMFramework.ViewModels;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -228,22 +229,29 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
         {
             return type.GetProperties().Where(predicate);
         }
-        /// <summary>
-        /// This gets the methodinfo to be used for creating reflection type commands.
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="name"></param>
-        /// <param name="flag">use the | to specify more than one thing for binding flags to narrow down what it looks for.</param>
-        /// <returns></returns>
-        public static MethodInfo GetMethod(this Type type, string name, BindingFlags flag)
+
+        public static MethodInfo GetPrivateMethod(this ObservableObject payLoad, string name)
         {
-            MethodInfo output = type.GetMethods(flag).Where(x => x.Name == name).SingleOrDefault();
+            Type type = payLoad.GetType();
+
+
+
+            MethodInfo output = type.GetMethod(name, BindingFlags.Instance | BindingFlags.NonPublic);
+
+            if (output != null)
+            {
+                return output;
+            }
+            output = type.GetMethod(name);
             if (output == null)
             {
                 throw new BasicBlankException($"Method with the name of {name} was not found");
             }
             return output;
         }
+
+
+        
         public static CustomBasicList<PropertyInfo> GetMappableProperties(this Type type)
         {
             return type.GetProperties(x => x.CanMapProperty()).ToCustomBasicList();
