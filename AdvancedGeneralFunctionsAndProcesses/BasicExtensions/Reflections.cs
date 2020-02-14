@@ -233,9 +233,6 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
         public static MethodInfo GetPrivateMethod(this ObservableObject payLoad, string name)
         {
             Type type = payLoad.GetType();
-
-
-
             MethodInfo output = type.GetMethod(name, BindingFlags.Instance | BindingFlags.NonPublic);
 
             if (output != null)
@@ -243,9 +240,15 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
                 return output;
             }
             output = type.GetMethod(name);
+            if (output != null)
+            {
+                return output;
+            }
+            type = type.BaseType;
+            output = type.GetMethod(name, BindingFlags.Instance | BindingFlags.NonPublic);
             if (output == null)
             {
-                throw new BasicBlankException($"Method with the name of {name} was not found");
+                throw new BasicBlankException($"Method with the name of {name} was not found  Type was {type.Name}");
             }
             return output;
         }
