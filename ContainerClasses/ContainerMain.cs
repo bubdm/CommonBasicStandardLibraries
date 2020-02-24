@@ -266,7 +266,7 @@ namespace CommonBasicStandardLibraries.ContainerClasses
             var args = constructor.GetParameters().Select(Items => GetInstance(Items.ParameterType)).ToArray(); //for his test.  i could decide to use my custom collection instead.
             return Activator.CreateInstance(thisType, args);
         }
-        public void RegisterInstance<TIn, TOut>(int tPriority = 0, object? thisObject = null) where TOut : TIn
+        public void RegisterInstance<TIn, TOut>(int tPriority = 0, object? tag = null) where TOut : TIn
         {
             ContainerData thisResults = new ContainerData()
             {
@@ -275,7 +275,7 @@ namespace CommonBasicStandardLibraries.ContainerClasses
                 TypeIn = typeof(TIn),
                 SimpleFunction = new Func<object>(() => PrivateInstance(typeof(TOut)))
             };
-            SetResults(thisResults, tPriority, thisObject!);
+            SetResults(thisResults, tPriority, tag!);
         }
         public void RegisterType<TIn>(bool isSingleton) //i think if you want to register a type, you are not allowed to use a factory.
         {
@@ -303,7 +303,7 @@ namespace CommonBasicStandardLibraries.ContainerClasses
         //    };
         //    SetResults(ThisResults, 0, null);
         //}
-        public void RegisterInstance<TIn>(Func<TIn> thisFunct, int TPriority = 0, object? thisObject = null) //i do like it this way because you have complete control of what you will actually get back.
+        public void RegisterInstance<TIn>(Func<TIn> thisFunct, int TPriority = 0, object? tag = null) //i do like it this way because you have complete control of what you will actually get back.
         {
             object thisObj = thisFunct;
             Func<object> newFunct = (Func<object>)thisObj;
@@ -314,7 +314,7 @@ namespace CommonBasicStandardLibraries.ContainerClasses
                 WasCustomFunction = true, //i think this is the only case where it was custom except for factories.
                 SimpleFunction = newFunct
             };
-            SetResults(ThisResults, TPriority, thisObject);
+            SetResults(ThisResults, TPriority, tag);
         }
         //public void RegisterInstance<TIn>(IContainerFactory ThisFact, int TPriority = 0, object ThisObject = null)
         //{
@@ -338,7 +338,7 @@ namespace CommonBasicStandardLibraries.ContainerClasses
             };
             SetResults(ThisResults, 0, tag); //i think
         }
-        public void RegisterSingleton<TIn>(TIn ourObject, int tPriority = 0, object? thisObject = null)
+        public void RegisterSingleton<TIn>(TIn ourObject, int tPriority = 0, object? tag = null)
         {
             if (ourObject == null)
                 throw new BasicBlankException("You can't register an object that does not exist.  Most likely, you tried to register it too soon.");
@@ -349,30 +349,30 @@ namespace CommonBasicStandardLibraries.ContainerClasses
                 TypeOut = ourObject.GetType(),
                 ThisObject = ourObject
             };
-            SetResults(thisResults, tPriority, thisObject);
+            SetResults(thisResults, tPriority, tag);
         }
-        private void SetResults(ContainerData thisResults, int tPriority, object? thisObject)
+        private void SetResults(ContainerData thisResults, int tPriority, object? tag)
         {
             thisResults.Priority = tPriority; //2 different things.
-            thisResults.ExtraDetails = thisObject;
+            thisResults.ExtraDetails = tag;
             _id++;
             thisResults.ID = _id; //needed for lifo and fifo methods.
             //ThisResults.Check(); //so if something is wrong, will error out at this moment.
             _thisSet.Add(thisResults);
         }
 
-        public void RegisterSingleton<TIn>(Func<TIn> ThisFunct, int TPriority = 0, object? ThisObject = null) //i do like it this way because you have complete control of what you will actually get back.
+        public void RegisterSingleton<TIn>(Func<TIn> funct, int priority = 0, object? tag = null) //i do like it this way because you have complete control of what you will actually get back.
         {
-            object ThisObj = ThisFunct;
-            Func<object> NewFunct = (Func<object>)ThisObj;
-            ContainerData ThisResults = new ContainerData()
+            object payLoad = funct;
+            Func<object> newFunc = (Func<object>)payLoad;
+            ContainerData results = new ContainerData()
             {
                 IsSingle = true,
                 TypeIn = typeof(TIn),
                 TypeOut = typeof(TIn), //this means this is all the information you will receive this time.
-                SimpleFunction = NewFunct
+                SimpleFunction = newFunc
             };
-            SetResults(ThisResults, TPriority, ThisObject);
+            SetResults(results, priority, tag);
         }
         //public void RegisterSingleton<TIn>(IContainerFactory ThisFact, int TPriority = 0, object ThisObject = null)
         //{
@@ -387,7 +387,7 @@ namespace CommonBasicStandardLibraries.ContainerClasses
         //    SetResults(ThisResults, TPriority, ThisObject);
         //}
         
-        public void RegisterSingleton<TIn, TOut>(int tPriority = 0, object? thisObject = null) where TOut : TIn //if you specified priority on any, then all will be priority.
+        public void RegisterSingleton<TIn, TOut>(int tPriority = 0, object? tag = null) where TOut : TIn //if you specified priority on any, then all will be priority.
         {
             ContainerData thisResults = new ContainerData()
             {
@@ -396,7 +396,11 @@ namespace CommonBasicStandardLibraries.ContainerClasses
                 IsSingle = true,
                 SimpleFunction = new Func<object>(() => PrivateInstance(typeof(TOut)))
             };
-            SetResults(thisResults, tPriority, thisObject);
+            SetResults(thisResults, tPriority, tag);
+        }
+        T IResolver.Resolve<T>(object tag)
+        {
+            return GetInstance<T>(tag);
         }
         T IResolver.Resolve<T>()
         {
@@ -415,7 +419,19 @@ namespace CommonBasicStandardLibraries.ContainerClasses
                 throw new BasicBlankException($"Unable to replace object.  The type you were trying to replace is {thisType.Name}.  Error was {ex.Message}");
             }
         }
-
+        public void RegisterInstance<T>(object tag)
+        {
+            Type type = typeof(T);
+            ContainerData thisResults = new ContainerData()
+            {
+                IsSingle = false,
+                TypeOut = type,
+                TypeIn = type,
+                IntendedTypeOnly = true,
+                SimpleFunction = new Func<object>(() => PrivateInstance(type))
+            };
+            SetResults(thisResults, 0, tag);
+        }
         public void RegisterInstanceType(Type type)
         {
 

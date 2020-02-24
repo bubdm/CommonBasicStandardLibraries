@@ -50,8 +50,7 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Conductors
         {
             return ConductorBehavior.TryActivateItemAsync(this, MainScreen, viewModel!);
         }
-
-
+        
         Task IConductorScreenLoader<T>.LoadScreenAsync(T viewModel)
         {
             return LoadScreenAsync(viewModel);

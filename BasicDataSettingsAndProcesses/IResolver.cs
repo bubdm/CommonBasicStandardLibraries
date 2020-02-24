@@ -19,6 +19,7 @@ namespace CommonBasicStandardLibraries.BasicDataSettingsAndProcesses
     public interface IResolver //if i decide that i need to have the possibilty for data, will do so.
     {
         T Resolve<T>();
+        T Resolve<T>(object tag);
         object GetInstance(Type type); //needs this as well.
         void RegisterInstanceType(Type type); //i need this too.
         /// <summary>
