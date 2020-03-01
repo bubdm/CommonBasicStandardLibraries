@@ -8,6 +8,11 @@ namespace CommonBasicStandardLibraries.Messenging
     public interface IEventAggregator
     {
         /// <summary>
+        /// this needs to clear all of the subscriptions.  useful when its a new game and need to make sure its all cleared out no matter what.
+        /// </summary>
+        /// <param name="parent"></param>
+        void ClearSubscriptions(object parent);
+        /// <summary>
         /// Searches the subscribed handlers to check if we have a handler for
         /// the message type supplied.
         /// This is for regular ones.

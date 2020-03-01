@@ -106,6 +106,19 @@ namespace CommonBasicStandardLibraries.Messenging
                     _handlers.RemoveSpecificItem(found);
             }
         }
+
+        public void ClearSubscriptions(object parent)
+        {
+            lock(_handlers)
+            {
+                _handlers.Clear();
+                _handlers.Add(new Handler(parent, ""));
+                //problem.
+                //the bootstrapper needs to handle clearing out to resubscribe again.
+                //probably do via delegates.
+            }
+        }
+
         private class CustomType
         {
             public Type? Type;
