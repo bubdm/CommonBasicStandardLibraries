@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using static CommonBasicStandardLibraries.MVVMFramework.Commands.InternalCommandList;
 namespace CommonBasicStandardLibraries.MVVMFramework.Commands
 {
@@ -19,6 +20,8 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Commands
 		private readonly string _functionName = "";
 
 		private bool _hasParameters;
+
+		object ICustomCommand.Context => _model;
 
 		//this is needed so the data entry forms will know when it can focus on control.
 		public static bool CurrentlyExecuting()
@@ -44,6 +47,9 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Commands
 				_functionName = _canExecutep.Name;
 			HookUpNotifiers();
 		}
+
+		
+
 		private void HookUpNotifiers()
 		{
 			_isAsync = _execute.ReturnType.Name == "Task";
@@ -148,5 +154,7 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Commands
 		{
 			CanExecuteChanged?.Invoke(this, new EventArgs());
 		}
+
+		
 	}
 }

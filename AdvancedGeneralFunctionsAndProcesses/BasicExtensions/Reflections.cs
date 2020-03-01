@@ -22,6 +22,11 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             var attributeName = typeof(TAttribute).Name;
             return propertyInfo.GetCustomAttributes(true).Any(attr => attr.GetType().Name == attributeName);
         }
+        public static bool HasAttribute<TAttribute>(this MethodInfo method)
+        {
+            var attributeName = typeof(TAttribute).Name;
+            return method.GetCustomAttributes(true).Any(attr => attr.GetType().Name == attributeName);
+        }
         public static bool IsSimpleType(this Type type)
         {
             var simpleTypesList = new List<Type>
@@ -262,6 +267,10 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
         public static CustomBasicList<TAttribute>? GetCustomAttributes<TAttribute>(this Type type) where TAttribute : class
         {
             return type.GetProperties().Where(Items => Items.HasAttribute<TAttribute>() == true).Select(News => News.GetAttribute<TAttribute>()).ToCustomBasicList()!;
+        }
+        public static CustomBasicList<MethodInfo> GetMethodsWithAttribute<TAttribute>(this Type type) where TAttribute : class
+        {
+            return type.GetMethods().Where(x => x.HasAttribute<TAttribute>()).ToCustomBasicList();
         }
     }
 }

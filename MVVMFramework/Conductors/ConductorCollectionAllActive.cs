@@ -36,7 +36,7 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Conductors
             return base.ActivateAsync(view);
         }
 
-        protected Task CloseSpecificChildAsync(IScreen childViewModel)
+        protected virtual Task CloseSpecificChildAsync(IScreen childViewModel)
         {
             return childViewModel.TryCloseAsync();
         }

@@ -10,6 +10,10 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
         {
             switch (thisStr)
             {
+                case "Boy":
+                    return cs.Blue;
+                case "Girl":
+                    return cs.DeepPink; //just in case you are playing the game of life and it needs to be converted to colors.
                 case "AliceBlue":
                     return cs.AliceBlue;
                 case "AntiqueWhite":

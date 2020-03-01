@@ -110,7 +110,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
                 throw new Exception("Cannot multiply by 0 or less in order to calculate the charge per 100");
             return tempHowMuch * perPoundCharge;
         }
-        public static string toCurrency(this decimal thisDec, int decimalPlaces = 2)
+        public static string ToCurrency(this decimal thisDec, int decimalPlaces = 2)
         {
             return thisDec.ToString("c" + decimalPlaces);
         }

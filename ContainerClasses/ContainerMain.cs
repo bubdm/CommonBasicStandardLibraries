@@ -9,6 +9,7 @@ using CommonBasicStandardLibraries.CollectionClasses;
 using System.Collections.Generic;
 using CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.RandomGenerator;
 using System.Net.Http;
+using CommonBasicStandardLibraries.DatabaseHelpers.MiscInterfaces;
 //i think this is the most common things i like to do
 namespace CommonBasicStandardLibraries.ContainerClasses
 {
@@ -419,16 +420,17 @@ namespace CommonBasicStandardLibraries.ContainerClasses
                 throw new BasicBlankException($"Unable to replace object.  The type you were trying to replace is {thisType.Name}.  Error was {ex.Message}");
             }
         }
-        public void RegisterInstance<T>(object tag)
+        public void RegisterInstance<Tin, TOut>(object tag)
         {
-            Type type = typeof(T);
+            Type typeOut = typeof(TOut);
+            Type typeIn = typeof(Tin);
             ContainerData thisResults = new ContainerData()
             {
                 IsSingle = false,
-                TypeOut = type,
-                TypeIn = type,
+                TypeOut = typeOut,
+                TypeIn = typeIn,
                 IntendedTypeOnly = true,
-                SimpleFunction = new Func<object>(() => PrivateInstance(type))
+                SimpleFunction = new Func<object>(() => PrivateInstance(typeOut))
             };
             SetResults(thisResults, 0, tag);
         }
