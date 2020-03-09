@@ -37,7 +37,7 @@ namespace CommonBasicStandardLibraries.Messenging
         /// Unsubscribes the instance from all events.
         /// </summary>
         /// <param name = "subscriber">The instance to unsubscribe.</param>
-        void Unsubscribe(object subscriber, string tag = ""); //when you unsubscribe, its for all.
+        void Unsubscribe(object subscriber, string tag = "", bool isAll = false); //when you unsubscribe, its for all.
 
         /// <summary>
         /// Publishes a message.

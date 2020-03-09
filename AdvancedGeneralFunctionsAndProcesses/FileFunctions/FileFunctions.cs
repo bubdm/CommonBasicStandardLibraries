@@ -7,11 +7,22 @@ using System.IO;
 using CommonBasicStandardLibraries.CollectionClasses;
 using static CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.BasicExtensions.ListsExtensions;
 using System.Reflection;
+using CommonBasicStandardLibraries.BasicDataSettingsAndProcesses;
 namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.FileFunctions
 {
     public static class FileFunctions
     {
-        //i think that setting the path caused too many problems.  so that will no longer be static
+        
+        public static CustomBasicList<string> GetHttpsLinks(string fileSource)
+        {
+            HtmlParser.HtmlParser parses = new HtmlParser.HtmlParser();
+
+            parses.Body = AllText(fileSource);
+            CustomBasicList<string> temps = parses.GetList("https", Constants.DoubleQuote, showErrors: false); //if not there, then just returns 0 items.
+            CustomBasicList<string> output = temps.Select(x => "https" + x).ToCustomBasicList();
+            return output; //maybe this simple (not sure).
+        }
+
 
         public static string GetApplicationDataForMobileDevices()
         {

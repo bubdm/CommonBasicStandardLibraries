@@ -94,16 +94,27 @@ namespace CommonBasicStandardLibraries.Messenging
                 _handlers.Add(new Handler(subscriber, tags));
             }
         }
-        public void Unsubscribe(object subscriber, string tags = "")
+        public void Unsubscribe(object subscriber, string tags = "", bool isAll = false)
         {
             if (subscriber == null)
                 throw new ArgumentNullException(nameof(subscriber));
 
             lock (_handlers)
             {
-                var found = _handlers.FirstOrDefault(x => x.Matches(subscriber, tags));
-                if (found != null)
-                    _handlers.RemoveSpecificItem(found);
+                if (isAll == false)
+                {
+                    var found = _handlers.FirstOrDefault(x => x.Matches(subscriber, tags));
+                    if (found != null)
+                        _handlers.RemoveSpecificItem(found);
+                    return;
+                }
+                //var fins = _handlers.ToCustomBasicList(x => x.Matches(subscriber));
+
+                var list = _handlers.Where(x => x.Matches(subscriber)).ToCustomBasicList();
+                foreach (var item in list)
+                {
+                    _handlers.RemoveSpecificItem(item);
+                }
             }
         }
 
@@ -184,7 +195,11 @@ namespace CommonBasicStandardLibraries.Messenging
             public bool IsDead => _reference.Target == null;
             public bool Matches(object instance, string tag)
             {
-                return _reference.Target == instance && this.Tag == tag;
+                return _reference.Target == instance && Tag == tag;
+            }
+            public bool Matches(object instance)
+            {
+                return _reference.Target == instance;
             }
             public CustomBasicList<CustomMethod> GetItemsToInvoke(Type messageType, EnumActionCategory thisAction)
             {
