@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using static CommonBasicStandardLibraries.MVVMFramework.Commands.InternalCommandList;
 namespace CommonBasicStandardLibraries.MVVMFramework.Commands
 {
@@ -48,7 +47,7 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Commands
 			HookUpNotifiers();
 		}
 
-		
+
 
 		private void HookUpNotifiers()
 		{
@@ -77,7 +76,6 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Commands
 
 
 
-		//private bool _executing = false;
 
 		private void Notifier_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
@@ -87,9 +85,6 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Commands
 				ReportCanExecuteChange();
 		}
 
-		//well have to see how that implements icommand.
-		//you still have icommand.
-		//its just that more is done for me.
 
 
 		public event EventHandler CanExecuteChanged = delegate { };
@@ -111,7 +106,7 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Commands
 			return true;
 		}
 
-		
+
 		public async void Execute(object parameter)
 		{
 
@@ -129,8 +124,8 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Commands
 				{
 					_execute.Invoke(_model, null);
 				}
-				
-					
+
+
 			else
 
 				await UIHelpers.Execute.OnUIThreadAsync(async () =>
@@ -144,7 +139,7 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Commands
 					{
 						task = (Task)_execute.Invoke(_model, null);
 					}
-					
+
 					await task;
 				});
 			IsExecuting = false;
@@ -155,6 +150,6 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Commands
 			CanExecuteChanged?.Invoke(this, new EventArgs());
 		}
 
-		
+
 	}
 }

@@ -232,8 +232,6 @@ namespace CommonBasicStandardLibraries.MVVMFramework.ViewModels
             this.AutoClearProperties();
             IEventAggregator aggregator = cons!.Resolve<IEventAggregator>();
             aggregator.FocusOnFirst();
-
-            //FocusOnFirst
         }
     }
 }

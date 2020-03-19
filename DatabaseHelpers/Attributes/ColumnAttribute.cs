@@ -1,12 +1,6 @@
-﻿/// <summary>
-/// 
-/// </summary>
-namespace CommonBasicStandardLibraries.DatabaseHelpers.Attributes
+﻿namespace CommonBasicStandardLibraries.DatabaseHelpers.Attributes
 {
     using System;
-    /// <summary>
-    /// 
-    /// </summary>
     [AttributeUsage(AttributeTargets.Property, Inherited = true)]
     public class ColumnAttribute : Attribute
     {
@@ -16,7 +10,6 @@ namespace CommonBasicStandardLibraries.DatabaseHelpers.Attributes
         /// <param name="columnName"></param>
         public ColumnAttribute(string columnName)
         {
-            //TableName = TSQLTableName;
             ColumnName = columnName;
         }
         /// <summary>

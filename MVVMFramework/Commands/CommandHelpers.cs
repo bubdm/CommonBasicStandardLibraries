@@ -1,18 +1,15 @@
-﻿using CommonBasicStandardLibraries.CollectionClasses;
+﻿using CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.BasicExtensions;
+using CommonBasicStandardLibraries.CollectionClasses;
+using CommonBasicStandardLibraries.Exceptions;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.BasicExtensions;
-using CommonBasicStandardLibraries.Exceptions;
 
 namespace CommonBasicStandardLibraries.MVVMFramework.Commands
 {
     public static class CommandHelpers
     {
 
-        //public ReflectiveCommand GetReflectiveCommand<T>(string name, )
 
         public static ReflectiveCommand GetReflectiveCommand(object payLoad, string name)
         {
@@ -30,10 +27,6 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Commands
             && x.Name != "FocusOnFirstControl"
             && x.Name != "Refresh"
             );
-            //for now, don't worry about some repeating.
-
-            //the first part must be command period.
-            //for this part, name has to be exact
 
 
             var tempList = methods.Where(x => x.Name == name).ToCustomBasicList();

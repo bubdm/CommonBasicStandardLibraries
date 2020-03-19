@@ -26,7 +26,6 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
 
         public static string GetApplicationDataForMobileDevices()
         {
-            // Dim ThisPath = System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
             return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData); // i think this is where it should be.
         }
         public static string GetSDCardReadingPathForAndroid()

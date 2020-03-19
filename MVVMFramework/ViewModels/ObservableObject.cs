@@ -13,7 +13,6 @@ namespace CommonBasicStandardLibraries.MVVMFramework.ViewModels
 {
     public abstract class ObservableObject : INotifyPropertyChangedEx, INotifyCanExecuteChanged, IObservableObject, IMappable
     {
-        //i do like my improved observable object.
         [NotMapped] //so if any are used with dapper and sql, then will know this is never mapped.
         [JsonIgnore]
         public virtual bool IsNotifying { get; set; }
@@ -120,15 +119,8 @@ namespace CommonBasicStandardLibraries.MVVMFramework.ViewModels
                 OnUIThread(() => CanExecuteChanged.Invoke(this, new CanExecuteChangedEventArgs(predicate!)));
         }
 
-        //the lamba way of doing for functions did not work.
-        //unless i find another way, am forced to use the callbymembername or nameof
 
 
-
-        //public void NotifyOfPropertyChange(string propertyName)
-        //{
-        //    Execute.OnUIThread(() => PropertyChanged(this, new PropertyChangedEventArgs(propertyName)));
-        //}
 
         /// <summary>
         /// Executes the given action on the UI thread

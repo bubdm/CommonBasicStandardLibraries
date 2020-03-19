@@ -38,7 +38,6 @@ namespace CommonBasicStandardLibraries.BasicDataSettingsAndProcesses
             return sqls.GetConnectionString(databaseOrPath);
         }
         public delegate Task ActionAsync<in T> (T obj); //this is used so if there is a looping, then it can await it if needed.
-        public delegate object VisibleTranslation(bool endResults); 
         public delegate void TextEventData(string TthisStr); //in this case the argument being received is text.  this can be used anywhere the argument being passed back is a string
 		public delegate void ErrorRaisedEventHandler(string message); //this is when i want to make it clear its error data.  anything can use this.
 		public delegate void UpdateFunct<T>(T thisObj, int expectedItem); //the purpose of this is so i can update.  for this to work, the list has to determine the proper value

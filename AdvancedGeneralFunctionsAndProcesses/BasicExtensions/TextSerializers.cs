@@ -498,10 +498,9 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             CustomBasicList<string> output = new CustomBasicList<string>();
             foreach (var item in list)
             {
-                output.Add($"{item.Key!.ToString()},{item.Value!.ToString()}");
+                output.Add($"{item.Key},{item.Value}");
             }
             await File.WriteAllLinesAsync(path, output, Encoding.UTF8);
-            //return output;
         }
         public static async Task<Dictionary<TKey, TValue>> LoadTextDictionaryAsync<TKey, TValue>(this string path, string delimiter = ",")
         {
@@ -521,11 +520,6 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
                 return new Dictionary<TKey, TValue>();
             }
 
-            //var firstProperties = GetProperties<TKey>();
-            //if (firstProperties.Count > 1)
-            //{
-            //    throw new BasicBlankException("")
-            //}
             var lines = await File.ReadAllLinesAsync(path);
 
             Dictionary<TKey, TValue> output = new Dictionary<TKey, TValue>();

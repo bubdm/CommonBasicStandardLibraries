@@ -14,7 +14,7 @@ namespace CommonBasicStandardLibraries.CommonConverters
             if (UseDayOfWeek == true)
             {
                 DateTime newDate = (DateTime)value;
-                return $"{newDate.DayOfWeek.ToString()} {newDate.Month}/{newDate.Day}/{newDate.Year}";
+                return $"{newDate.DayOfWeek} {newDate.Month}/{newDate.Day}/{newDate.Year}";
             }
 
             DateTime thisDate = (DateTime)value;

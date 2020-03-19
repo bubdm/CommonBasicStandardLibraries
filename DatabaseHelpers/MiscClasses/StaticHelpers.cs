@@ -2,9 +2,6 @@
 using CommonBasicStandardLibraries.DatabaseHelpers.ConditionClasses;
 using CommonBasicStandardLibraries.DatabaseHelpers.EntityInterfaces;
 using CommonBasicStandardLibraries.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using static CommonBasicStandardLibraries.DatabaseHelpers.MiscClasses.SortInfo;
 using cs = CommonBasicStandardLibraries.DatabaseHelpers.ConditionClasses.ConditionOperators;
 
@@ -12,67 +9,67 @@ namespace CommonBasicStandardLibraries.DatabaseHelpers.MiscClasses
 {
     public static class StaticHelpers
     {
-        public static CustomBasicList<ICondition> StartConditionWithID(int ID)
+        public static CustomBasicList<ICondition> StartConditionWithID(int id)
         {
-            CustomBasicList<ICondition> ThisList = new CustomBasicList<ICondition>();
-            AndCondition ThisCon = new AndCondition();
-            ThisCon.Property = nameof(ISimpleDapperEntity.ID);
-            ThisCon.Value = ID;
-            ThisList.Add(ThisCon);
-            return ThisList;
+            CustomBasicList<ICondition> list = new CustomBasicList<ICondition>();
+            AndCondition condition = new AndCondition();
+            condition.Property = nameof(ISimpleDapperEntity.ID);
+            condition.Value = id;
+            list.Add(condition);
+            return list;
         }
 
-        public static CustomBasicList<ICondition> StartWithOneCondition(string Property, object Value)
+        public static CustomBasicList<ICondition> StartWithOneCondition(string property, object value)
         {
-            CustomBasicList<ICondition> ThisList = new CustomBasicList<ICondition>();
-            AndCondition ThisCon = new AndCondition();
-            ThisCon.Property = Property;
-            ThisCon.Value = Value;
-            ThisList.Add(ThisCon);
-            return ThisList;
+            CustomBasicList<ICondition> list = new CustomBasicList<ICondition>();
+            AndCondition condition = new AndCondition();
+            condition.Property = property;
+            condition.Value = value;
+            list.Add(condition);
+            return list;
         }
-        public static CustomBasicList<ICondition> StartWithNullCondition(string Property, string Operator)
+        public static CustomBasicList<ICondition> StartWithNullCondition(string property, string operation)
         {
-            CustomBasicList<ICondition> ThisList = new CustomBasicList<ICondition>();
-            AndCondition ThisCon = new AndCondition();
-            ThisCon.Property = Property;
-            if (Operator != cs.IsNotNull && Operator != cs.IsNull)
+            CustomBasicList<ICondition> list = new CustomBasicList<ICondition>();
+            AndCondition condition = new AndCondition();
+            condition.Property = property;
+            if (operation != cs.IsNotNull && operation != cs.IsNull)
                 throw new BasicBlankException("Only null or is not null is allowed when starting with null conditions");
             //this was needed for the tv shows.
-            ThisCon.Operator = Operator;
-            ThisList.Add(ThisCon);
-            return ThisList;
+            condition.Operator = operation;
+            list.Add(condition);
+            return list;
         }
 
-        public static CustomBasicList<ICondition> StartWithOneCondition(string Property, string Operator, object Value)
+        public static CustomBasicList<ICondition> StartWithOneCondition(string property, string operation, object value)
         {
-            CustomBasicList<ICondition> ThisList = new CustomBasicList<ICondition>();
-            AndCondition ThisCon = new AndCondition();
-            ThisCon.Property = Property;
-            ThisCon.Value = Value;
-            ThisCon.Operator = Operator;
-            ThisList.Add(ThisCon);
-            return ThisList;
+            CustomBasicList<ICondition> list = new CustomBasicList<ICondition>();
+            AndCondition condition = new AndCondition();
+            condition.Property = property;
+            condition.Value = value;
+            condition.Operator = operation;
+            list.Add(condition);
+            return list;
         }
 
-        public static CustomBasicList<SortInfo> StartSorting(string Property)
+        public static CustomBasicList<SortInfo> StartSorting(string property)
         {
-            SortInfo ThisSort = new SortInfo();
-            ThisSort.Property = Property;
-            return new CustomBasicList<SortInfo> { ThisSort };
+            SortInfo sort = new SortInfo();
+            sort.Property = property;
+            return new CustomBasicList<SortInfo> { sort };
         }
-        public static CustomBasicList<SortInfo> StartSorting(string Property, EnumOrderBy Order)
+        public static CustomBasicList<SortInfo> StartSorting(string property, EnumOrderBy order)
         {
-            SortInfo ThisSort = new SortInfo();
-            ThisSort.Property = Property;
-            ThisSort.OrderBy = Order;
-            return new CustomBasicList<SortInfo> { ThisSort };
+            SortInfo sort = new SortInfo();
+            sort.Property = property;
+            sort.OrderBy = order;
+            return new CustomBasicList<SortInfo> { sort };
         }
-        public static CustomBasicList<UpdateEntity> StartUpdate(string Property, object value)
+        public static CustomBasicList<UpdateEntity> StartUpdate(string property, object value)
         {
             CustomBasicList<UpdateEntity> output = new CustomBasicList<UpdateEntity>
             {
-                new UpdateEntity(Property, value)
+                new UpdateEntity(property, value)
             };
             return output;
         }

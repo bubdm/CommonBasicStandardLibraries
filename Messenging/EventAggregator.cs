@@ -16,7 +16,6 @@ namespace CommonBasicStandardLibraries.Messenging
     {
 
         private readonly CustomBasicList<Handler> _handlers = new CustomBasicList<Handler>();
-        //done.
         public bool HandlerExistsFor(Type messageType, string arguments = "", EnumActionCategory action = EnumActionCategory.Regular)
         {
             lock (_handlers)
@@ -38,7 +37,7 @@ namespace CommonBasicStandardLibraries.Messenging
                 results.AddRange(items.GetItemsToInvoke(messageType, EnumActionCategory.Regular));
             });
             if (allowDuplicates == false && results.Count > 1)
-                throw new BasicBlankException($"Duplicates not allowed For PublishAsync.  Message Was {messageType.ToString()} and tag was {message}");
+                throw new BasicBlankException($"Duplicates not allowed For PublishAsync.  Message Was {messageType} and tag was {message}");
 
             results.ForEach(items =>
             {
@@ -60,7 +59,7 @@ namespace CommonBasicStandardLibraries.Messenging
                 results.AddRange(items.GetItemsToInvoke(messageType, EnumActionCategory.Async));
             });
             if (allowDuplicates == false && results.Count > 1)
-                throw new BasicBlankException($"Duplicates not allowed For PublishAsync.  Message Was {messageType.ToString()} and tag was {message}");
+                throw new BasicBlankException($"Duplicates not allowed For PublishAsync.  Message Was {messageType} and tag was {message}");
 
             CustomBasicList<Task> taskList = new CustomBasicList<Task>();
             results.ForEach(items =>
@@ -108,8 +107,6 @@ namespace CommonBasicStandardLibraries.Messenging
                         _handlers.RemoveSpecificItem(found);
                     return;
                 }
-                //var fins = _handlers.ToCustomBasicList(x => x.Matches(subscriber));
-
                 var list = _handlers.Where(x => x.Matches(subscriber)).ToCustomBasicList();
                 foreach (var item in list)
                 {

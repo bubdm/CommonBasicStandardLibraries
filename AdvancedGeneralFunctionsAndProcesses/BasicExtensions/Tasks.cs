@@ -22,7 +22,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             var retTask = await Task.WhenAny(task, Task.Delay(timeoutInMilliseconds))
 
                 .ConfigureAwait(false);
-            return retTask is Task<T> ? task.Result : default;
+            return retTask is Task<T> ? task.Result : default!;
         }
         /// <summary>
 

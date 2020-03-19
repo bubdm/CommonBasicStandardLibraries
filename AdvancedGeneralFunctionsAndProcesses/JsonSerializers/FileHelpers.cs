@@ -31,13 +31,13 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Json
             {
                 thisT = js.DeserializeObject<T>(thisText, JsonSettingsGlobals._jsonSettingsData);
             });
-            return thisT;
+            return thisT!;
         }
         public static T RetrieveSavedObject<T>(string path)
         {
             JsonSettingsGlobals.PopulateSettings();
             string thisText = AllText(path);
-            return js.DeserializeObject<T>(thisText, JsonSettingsGlobals._jsonSettingsData);
+            return js.DeserializeObject<T>(thisText, JsonSettingsGlobals._jsonSettingsData)!;
         }
     }
 }

@@ -4,7 +4,6 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Json
 {
     public static class NewtonJsonStrings
     {
-        //looks like there are cases i need the non async version.
 
         public static async Task<string> SerializeObjectAsync(object thisObj)
         {
@@ -19,8 +18,8 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Json
             T thisT = default;
 #pragma warning restore CS8653 // A default expression introduces a null value for a type parameter.
             JsonSettingsGlobals.PopulateSettings();
-            await Task.Run(() => thisT = JsonConvert.DeserializeObject<T>(thisStr, JsonSettingsGlobals._jsonSettingsData));
-            return thisT;
+            await Task.Run(() => thisT = JsonConvert.DeserializeObject<T>(thisStr, JsonSettingsGlobals._jsonSettingsData)!);
+            return thisT!;
         }
         public static T ConvertObject<T>(object thisObj)
         {
@@ -36,7 +35,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Json
         public static T DeserializeObject<T>(string thisStr)
         {
             JsonSettingsGlobals.PopulateSettings();
-            return JsonConvert.DeserializeObject<T>(thisStr, JsonSettingsGlobals._jsonSettingsData);
+            return JsonConvert.DeserializeObject<T>(thisStr, JsonSettingsGlobals._jsonSettingsData)!;
         }
         public static async Task<T> ConvertObjectAsync<T>(object thisObj)
         {

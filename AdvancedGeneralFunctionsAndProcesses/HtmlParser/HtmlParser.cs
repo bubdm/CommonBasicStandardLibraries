@@ -8,7 +8,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Html
 {
     public class HtmlParser
     {
-        private static readonly string DEFAULT_WORD_SEPARATORS = " " + Constants.vbLf + Constants.vbCr + Constants.vbTab + "<>;,!";
+        private static readonly string _dEFAULT_WORD_SEPARATORS = " " + Constants.vbLf + Constants.vbCr + Constants.vbTab + "<>;,!";
         private string _error = "";
         public string ErrorPath = "";
         public string StartTag { get; set; } = "";
@@ -262,7 +262,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Html
                     while ((curPos < str_tmp_body.Length) && (str_tmp_body[curPos] == ' ' || str_tmp_body[curPos].ToString() == Constants.vbLf || str_tmp_body[curPos].ToString() == Constants.vbCr || str_tmp_body[curPos].ToString() == Constants.vbTab))
                         curPos += 1;
                     start_pos = curPos;
-                    string strToken = PickWord(ref curPos, ref str_tmp_body, HtmlParser.DEFAULT_WORD_SEPARATORS);
+                    string strToken = PickWord(ref curPos, ref str_tmp_body, HtmlParser._dEFAULT_WORD_SEPARATORS);
                     if (strToken.Length == 0)
                     {
                         curPos += 1;

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CommonBasicStandardLibraries.MVVMFramework.UIHelpers
@@ -11,11 +9,6 @@ namespace CommonBasicStandardLibraries.MVVMFramework.UIHelpers
         {
             action();
         }
-
-        //void IExit.ExitApp()
-        //{
-        //    Console.WriteLine("Exiting");
-        //}
 
         void IUIThread.OnUIThread(Action action)
         {

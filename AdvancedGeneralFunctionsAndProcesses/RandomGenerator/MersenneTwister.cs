@@ -5,11 +5,11 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
     {
         #region Fields
 
-        private const short N = 624;
-        private const short M = 397;
-        private const uint MatrixA = 0x9908b0df;
-        private const uint UpperMask = 0x80000000;
-        private const uint LowerMask = 0x7fffffff;
+        private const short _n = 624;
+        private const short _m = 397;
+        private const uint _matrixA = 0x9908b0df;
+        private const uint _upperMask = 0x80000000;
+        private const uint _lowerMask = 0x7fffffff;
         private uint[]? _mt;
         private ushort _mti;
         private uint[]? _mag01;
@@ -66,9 +66,9 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
 
         private void Init()
         {
-            _mt = new uint[N];
-            _mag01 = new uint[] { 0, MatrixA };
-            _mti = N + 1;
+            _mt = new uint[_n];
+            _mag01 = new uint[] { 0, _matrixA };
+            _mti = _n + 1;
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
         private void InitGenRand(uint seed)
         {
             _mt![0] = seed;
-            for (_mti = 1; _mti < N; _mti++)
+            for (_mti = 1; _mti < _n; _mti++)
             {
                 _mt[_mti] = 1812433253 * (_mt[_mti - 1] ^ (_mt[_mti - 1] >> 30)) + _mti;
             }
@@ -88,29 +88,29 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Rand
         {
             uint y;
 
-            if (_mti >= N)
+            if (_mti >= _n)
             {
                 short kk;
 
-                if (_mti == N + 1)
+                if (_mti == _n + 1)
                 {
                     InitGenRand(5489);
                 }
 
-                for (kk = 0; kk < N - M; kk++)
+                for (kk = 0; kk < _n - _m; kk++)
                 {
-                    y = ((_mt![kk] & UpperMask) | (_mt[kk + 1] & LowerMask)) >> 1;
-                    _mt[kk] = _mt[kk + M] ^ _mag01![_mt[kk + 1] & 1] ^ y;
+                    y = ((_mt![kk] & _upperMask) | (_mt[kk + 1] & _lowerMask)) >> 1;
+                    _mt[kk] = _mt[kk + _m] ^ _mag01![_mt[kk + 1] & 1] ^ y;
                 }
 
-                for (; kk < N - 1; kk++)
+                for (; kk < _n - 1; kk++)
                 {
-                    y = ((_mt![kk] & UpperMask) | (_mt[kk + 1] & LowerMask)) >> 1;
-                    _mt[kk] = _mt[kk + (M - N)] ^ _mag01![_mt[kk + 1] & 1] ^ y;
+                    y = ((_mt![kk] & _upperMask) | (_mt[kk + 1] & _lowerMask)) >> 1;
+                    _mt[kk] = _mt[kk + (_m - _n)] ^ _mag01![_mt[kk + 1] & 1] ^ y;
                 }
 
-                y = ((_mt![N - 1] & UpperMask) | (_mt[0] & LowerMask)) >> 1;
-                _mt[N - 1] = _mt[M - 1] ^ _mag01![_mt[0] & 1] ^ y;
+                y = ((_mt![_n - 1] & _upperMask) | (_mt[0] & _lowerMask)) >> 1;
+                _mt[_n - 1] = _mt[_m - 1] ^ _mag01![_mt[0] & 1] ^ y;
                 _mti = 0;
             }
             y = _mt![_mti++];

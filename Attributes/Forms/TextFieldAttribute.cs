@@ -13,13 +13,6 @@ namespace CommonBasicStandardLibraries.Attributes.Forms
             MethodName = methodName;
 
         }
-        //public TextFieldAttribute(string header, bool useSaveCommand)
-        //{
-        //    HeaderLabel = header;
-        //    if (useSaveCommand)
-        //    {
-        //        CommandPath = nameof(DataEntryViewModel.SaveCommand); //try this way.
-        //    }
-        //}
+        
     }
 }

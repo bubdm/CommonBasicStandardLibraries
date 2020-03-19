@@ -1,16 +1,12 @@
-﻿using System;
-using System.Text;
-using CommonBasicStandardLibraries.Exceptions;
-using CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.BasicExtensions;
-using System.Linq;
-using CommonBasicStandardLibraries.BasicDataSettingsAndProcesses;
-using static CommonBasicStandardLibraries.BasicDataSettingsAndProcesses.BasicDataFunctions;
-using CommonBasicStandardLibraries.CollectionClasses;
-using System.Collections.Generic;
+﻿using CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.BasicExtensions;
 using CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.RandomGenerator;
+using CommonBasicStandardLibraries.BasicDataSettingsAndProcesses;
+using CommonBasicStandardLibraries.CollectionClasses;
+using CommonBasicStandardLibraries.Exceptions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
-using CommonBasicStandardLibraries.DatabaseHelpers.MiscInterfaces;
-//i think this is the most common things i like to do
 namespace CommonBasicStandardLibraries.ContainerClasses
 {
     public enum EnumResolveCategory
@@ -21,18 +17,15 @@ namespace CommonBasicStandardLibraries.ContainerClasses
         LIFO = 3,
         //Factory = 4, //this means that whoever has a factory will get it first.  if more than one factory, then raise error so i have to rethink
     }
-    //decided to noteven deal with factories.  because i don't think we even dealt with factories anyways.
 
 
 
-    public class ContainerMain: IResolver //this is the main class for the container
+    public class ContainerMain : IResolver //this is the main class for the container
     {
         private readonly HashSet<ContainerData> _thisSet = new HashSet<ContainerData>();
         public static EnumResolveCategory ResolveCategory = EnumResolveCategory.ShowError; //default to show error so you have to rethink.
 
         private int _id;
-        //private static readonly HashSet<IContainerFactory> FactoryList = new HashSet<IContainerFactory>(); //i think i want anybody to be able to add to this list.  makes the container more powerful.
-        //public IContainerFactory ParentFactory; //i think its implied that if you set the parent, the parent will handle all duplicates.
         private readonly RandomGenerator _rans; //this is most common.
         private HttpClient? _client;
         private void NeedsClient() //i like doing it automatically after all now.
@@ -44,14 +37,6 @@ namespace CommonBasicStandardLibraries.ContainerClasses
 
         private bool _needsHttpClient;//if set to true, then if it requests httpclient, will be a brand new one if not already there
         //decided to not even have the ability to clear container since game package had its own system.
-        //its probably best its kept this way.  they both implement iresolver so when needed, works.
-
-
-        //public void ClearContainer() //there are cases i still have to clear container (if doing multiple games and some has to re registered
-        //{
-        //    ThisSet.Clear();
-        //    //FactoryList.Clear();
-        //}
 
         public ContainerMain()
         {
@@ -86,10 +71,6 @@ namespace CommonBasicStandardLibraries.ContainerClasses
             return output;
         }
 
-        //public static void AddFactoryToContainer(IContainerFactory ThisFact)
-        //{
-        //    FactoryList.Add(ThisFact);
-        //}
 
         public T GetInstance<T>()
         {
@@ -125,31 +106,12 @@ namespace CommonBasicStandardLibraries.ContainerClasses
                 throw new BasicBlankException($"Had Duplicates For Instance With Tag.  Name Was {thisType.Name}.  Rethink");
             return GetInstance(tempList.Single());
         }
-        //private CustomBasicList<ContainerData> PossibleList(ContainerData thisResult, Type thisType)
-        //{
-        //    var TempList = _thisSet.Where(Items => Items.TypeIn == thisResult.TypeIn || Items.TypeOut == thisResult.TypeOut).ToCustomBasicList();
-        //    TempList.ForEach(Items => Items.RequestedType = thisType);
-        //    return TempList;
-        //}
 
         private object GetInstance(ContainerData thisResult)
         {
-            //if (ThisResult.ThisFact != null && ThisResult.SimpleFunction != null)
-            //    throw new BasicBlankException("You can't both use a function and a factory");
             if (thisResult.ThisObject != null && thisResult.IsSingle == true)
                 return thisResult.ThisObject;
 
-            //if (ThisResult.ThisFact != null)
-            //{
-            //    if (ThisResult.IsSingle == true)
-            //    {
-            //        ThisResult.ThisObject = ThisResult.ThisFact.GetReturnObject(PossibleList(ThisResult, ThisType), ThisResult);
-            //        return ThisResult.ThisObject;
-            //    }
-            //    else
-            //        return ThisResult.ThisFact.GetReturnObject(PossibleList(ThisResult, ThisType), ThisResult); //since objects are going to be used, then its more flexible
-            //    //the downside is it takes a while to get used to it.  not sure how i can use generics without causing other problems though.
-            //}
             if (thisResult.SimpleFunction != null)
             {
                 if (thisResult.IsSingle == true)
@@ -187,14 +149,6 @@ namespace CommonBasicStandardLibraries.ContainerClasses
                         if (firstItem.ID == secondItem.ID)
                             throw new BasicBlankException("Sorting By ID Failed");
                         break;
-                    //case EnumResolveCategory.Factory:
-                    //    if (firstItem.WasCustomFunction == true & secondItem.WasCustomFunction == true)
-                    //        throw new BasicBlankException("I think there should not have been 2 custom functions.  Maybe sorting by custom function failed.");
-                    //    if (firstItem.WasCustomFunction == false && thisList.Exists(Items => Items.WasCustomFunction == true))
-                    //        throw new BasicBlankException("For sure, sorting by custom function failed because the first item obtained was not a custom function");
-                    //    if (firstItem.WasCustomFunction == false)
-                    //        throw new BasicBlankException("There was no factories or custom funtions.  Therefore it was not appropriate to use factories category in this case");
-                    //    break;
                     default:
                         throw new BasicBlankException("GetInstance Rethink");
                 }
@@ -207,9 +161,6 @@ namespace CommonBasicStandardLibraries.ContainerClasses
         public object GetInstance(Type thisType) //i want to be forced to use generics.
         {
 
-            //if (ParentFactory != null)
-            //    return ParentFactory.GetReturnObject(_thisSet.ToCustomBasicList(), thisType); //this means if i have a parent factory, then the parent is responsible for everything.
-            //i could change my mind if i choose to.  i'll have to decide later if that was the right decision or not (?)
             if (thisType == typeof(RandomGenerator))
                 return _rans; //i think this is best.
             if (thisType == typeof(HttpClient))
@@ -222,22 +173,17 @@ namespace CommonBasicStandardLibraries.ContainerClasses
             }
             CustomBasicList<ContainerData> tempList;
             tempList = _thisSet.Where(items => items.TypeIn == thisType).ToCustomBasicList();
-            //bool HadAtLeastOne = false;
-            //tempList.RemoveAllOnly(Items => Items.ThisFact != null && Items.ThisFact.CanAcceptObject(tempList, thisType) == false);
             if (tempList.Count == 1)
                 return GetInstance(tempList.Single());
             if (tempList.Count > 1 && ResolveCategory == EnumResolveCategory.ManuelPriority)
             {
-                //HadAtLeastOne = true;
                 tempList.RemoveAllOnly(Items => Items.Priority == 0);
             }
             if (tempList.Count > 1)
                 return GetInstance(tempList, thisType);
             tempList = _thisSet.Where(Items => Items.TypeOut == thisType).ToCustomBasicList();
-            //tempList.RemoveAllOnly(Items => Items.ThisFact != null && Items.ThisFact.CanAcceptObject(tempList, thisType) == false);
             if (tempList.Count > 1 && ResolveCategory == EnumResolveCategory.ManuelPriority)
             {
-                //HadAtLeastOne = true;
                 tempList.RemoveAllOnly(Items => Items.Priority == 0);
             }
             if (tempList.Count > 1)
@@ -247,19 +193,7 @@ namespace CommonBasicStandardLibraries.ContainerClasses
             tempList = _thisSet.Where(Items => thisType.IsAssignableFrom(Items.TypeOut)).ToCustomBasicList();
             if (tempList.Count == 1)
                 return GetInstance(tempList.Single());
-            //CommonBasicStandardLibraries.BasicDataSettingsAndProcesses.VBCompat.Stop();
             throw new BasicBlankException($"Looks Like Type {thisType.Name} Was Not Registered.  If I am wrong, rethink");
-            //if (tempList.Count == 0 && FactoryList.Count == 0)
-            //    throw new BasicBlankException($"Looks Like Type {thisType.Name} Was Not Registered And Had No Factories.  If It Was, Rethink");
-            //tempList = _thisSet.ToCustomBasicList();
-            //CustomBasicList<IContainerFactory> ResultList = FactoryList.Where(Items => Items.CanAcceptObject(tempList, thisType) == true).ToCustomBasicList();
-            //if (ResultList.Count > 1)
-            //    throw new BasicBlankException($"There is more than one result found for requested type {thisType.Name}.  I think that rethinking is required now");
-            //if (ResultList.Count == 0 && HadAtLeastOne == false)
-            //    throw new BasicBlankException($"There was nothing registered with the name {thisType.Name}.  No factories was able to handle this request");
-            //else if (ResultList.Count == 0)
-            //    throw new BasicBlankException($"Since you set the priority to manuel priority, you are required to manually set the priority to resolve duplicates.  Type Was {thisType.Name}.  Most likely all the ones with the duplicates has to be set manually, choose another option or rethink");
-            //return ResultList.Single().GetReturnObject(tempList, thisType);
         }
         private object PrivateInstance(Type thisType)
         {
@@ -291,19 +225,6 @@ namespace CommonBasicStandardLibraries.ContainerClasses
             };
             SetResults(thisResults, 0, null!);
         }
-        //void RegisterSingleton(Type ThisType)
-        //{
-        //    //looks like another entry here.
-        //    ContainerData ThisResults = new ContainerData()
-        //    {
-        //        TypeOut = ThisType,
-        //        TypeIn = ThisType,
-        //        IsSingle = true,
-        //        IntendedTypeOnly = true, //i think
-        //        SimpleFunction = new Func<object>(() => PrivateInstance(ThisType))
-        //    };
-        //    SetResults(ThisResults, 0, null);
-        //}
         public void RegisterInstance<TIn>(Func<TIn> thisFunct, int TPriority = 0, object? tag = null) //i do like it this way because you have complete control of what you will actually get back.
         {
             object thisObj = thisFunct;
@@ -317,18 +238,7 @@ namespace CommonBasicStandardLibraries.ContainerClasses
             };
             SetResults(ThisResults, TPriority, tag);
         }
-        //public void RegisterInstance<TIn>(IContainerFactory ThisFact, int TPriority = 0, object ThisObject = null)
-        //{
-        //    ContainerData ThisResults = new ContainerData()
-        //    {
-        //        TypeIn = typeof(TIn),
-        //        TypeOut = typeof(TIn),
-        //        WasCustomFunction = true, //i think this should imply its custom obviously.
-        //        ThisFact = ThisFact
-        //    };
-        //    SetResults(ThisResults, TPriority, ThisObject);
-        //}
-        public void RegisterStaticVariable<V>(V variable, string tag) where V: IConvertible
+        public void RegisterStaticVariable<V>(V variable, string tag) where V : IConvertible
         {
             ContainerData ThisResults = new ContainerData()
             {
@@ -375,19 +285,7 @@ namespace CommonBasicStandardLibraries.ContainerClasses
             };
             SetResults(results, priority, tag);
         }
-        //public void RegisterSingleton<TIn>(IContainerFactory ThisFact, int TPriority = 0, object ThisObject = null)
-        //{
-        //    ContainerData ThisResults = new ContainerData()
-        //    {
-        //        IsSingle = true,
-        //        TypeIn = typeof(TIn),
-        //        TypeOut = typeof(TIn),
-        //        ThisFact = ThisFact
-        //    };
-        //    AddFactoryToContainer(ThisFact); //i think i should automatically add a factory for a possibility if i do one.  if i am wrong, can rethink.
-        //    SetResults(ThisResults, TPriority, ThisObject);
-        //}
-        
+
         public void RegisterSingleton<TIn, TOut>(int tPriority = 0, object? tag = null) where TOut : TIn //if you specified priority on any, then all will be priority.
         {
             ContainerData thisResults = new ContainerData()
@@ -415,7 +313,7 @@ namespace CommonBasicStandardLibraries.ContainerClasses
                 ContainerData thisData = _thisSet.Where(Items => Items.TypeOut == thisType && Items.IsSingle == true).Single();
                 thisData.ThisObject = newObject;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new BasicBlankException($"Unable to replace object.  The type you were trying to replace is {thisType.Name}.  Error was {ex.Message}");
             }

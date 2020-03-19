@@ -24,7 +24,6 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Conf
                 throw new BasicBlankException(@"Only text files are supported.  Rethink");
             CustomBasicList<string> firstList = await ReadAllLinesAsync(path);
             Dictionary<string, string> output = new Dictionary<string, string>();
-            //CustomBasicList<ConfigPair> output = new CustomBasicList<ConfigPair>();
             firstList.ForEach(row =>
             {
                 CustomBasicList<string> nextList = row.Split(Constants.vbTab).ToCustomBasicList();
@@ -33,14 +32,8 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Conf
                 bool rets = output.TryAdd(nextList.First(), nextList.Last());
                 if (rets == false)
                     throw new BasicBlankException($"{key} was duplicated");
-                //output.Add(nextList.First(), nextList.Last());
             });
             return output[key];
-            //if (output.Exists(items => items.Key == key) == false)
-            //    throw new BasicBlankException($"{key} was not found");
-            //if (output.HasDuplicates(items => items.Key == key))
-
-            //return output.Single(items =>items.Key == key).Value;
         }
     }
 }

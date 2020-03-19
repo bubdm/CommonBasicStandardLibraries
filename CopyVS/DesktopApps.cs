@@ -14,7 +14,6 @@ using CommonBasicStandardLibraries.MVVMFramework.UIHelpers;
 
 namespace CommonBasicStandardLibraries.CopyVS
 {
-    // public delegate void ProgressEventHandler(long TimeLeft);
     public delegate Task FinishFileProcesses(CustomBasicList<string> files, string oldName, string newName, string newProjectFile);
     public class DesktopApps
     {
@@ -27,9 +26,6 @@ namespace CommonBasicStandardLibraries.CopyVS
 
         public FinishFileProcesses? FinishRenaming { get; set; }
 
-        //public Func<CustomBasicList<string>, string, string, 
-
-        //public ISimpleUI? ThisMessage { get; set; }//if you want to show messagebox, needs to do through here.
         #endregion
 
         #region Public Methods
@@ -42,7 +38,6 @@ namespace CommonBasicStandardLibraries.CopyVS
                 if (FileExists($@"{NewPath}\{NewName}.sln") == true)
                     await DeleteFileAsync($@"{NewPath}\{NewName}.sln");
                 await FileCopyAsync($@"{parentPath}\{OldName}.sln", $@"{parentPath}\{NewName}.sln");
-                //string TempPath = $@"{NewPath}\{NewName}.sln";
                 string thisText = await AllTextAsync(NewPath);
                 thisText = thisText.Replace(OldName, NewName);
                 await WriteTextAsync(NewPath, thisText, false);
@@ -78,16 +73,12 @@ namespace CommonBasicStandardLibraries.CopyVS
             }
             if (FinishRenaming != null)
             {
-                //needs to get a list of files.
-                //that something can process.
                 string newProjectPath = $@"{NewPath}\{NewName}\{NewName}.csproj";
                 if (FileExists(newProjectPath) == false)
                 {
                     UIPlatform.ShowError($"Path of {newProjectPath} does not exist.  Rethink");
                     return;
                 }
-                //needs to check newpath.
-                //only list cs files.
                 string checkPath = $@"{NewPath}\{NewName}";
                 Console.WriteLine($"Checking path {checkPath}");
                 var list = GetSeveralSpecificFiles(checkPath, "cs", SearchOption.AllDirectories);
@@ -118,19 +109,6 @@ namespace CommonBasicStandardLibraries.CopyVS
                 return false;
             }
         }
-        //private async  Task<bool> CreateFolderAsync(string pPath)
-        //{
-        //    try
-        //    {
-        //        await Task.Run(() => Directory.CreateDirectory(pPath));
-        //        return true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ThisMessage!.ShowError(ex.Message);
-        //        return false;
-        //    }
-        //}
         private async Task CopyFolderAsync(DirectoryInfo sourceDirectory, DirectoryInfo destinationDirectory) //done i think
         {
             DirectoryInfo[]? SourceSubDirectories = null;
@@ -152,32 +130,6 @@ namespace CommonBasicStandardLibraries.CopyVS
             }
         }
 
-        //private async Task ChangeProjFileAsync()
-        //{
-        //    await Task.Run(() =>
-        //    {
-        //        string PPath;
-        //        string SPath;
-        //        PPath = $@"{NewPath}\{NewName}\{NewName}.csproj"; //its going to be c# now.  no more vb.net anymore.
-        //        SPath = $@"{NewPath}\{NewName}\{NewName}.sln";
-        //        StreamReader rdr = new StreamReader(PPath, Encoding.Default);
-        //        string allFile = rdr.ReadToEnd();
-        //        rdr.Close();
-        //        StreamWriter wri = new StreamWriter(PPath, false, Encoding.Default);
-        //        allFile = allFile.Replace($"<AssemblyName>{OldName}</AssemblyName>", $"<AssemblyName>{NewName}</AssemblyName>");
-        //        wri.Write(allFile);
-        //        wri.Close();
-        //        rdr = new StreamReader(SPath, Encoding.Default);
-        //        allFile = rdr.ReadToEnd();
-        //        rdr.Close();
-        //        wri = new StreamWriter(SPath, false, Encoding.Default);
-        //        allFile = allFile.Replace(OldName, NewName);
-        //        allFile = GetCleanText(allFile);
-        //        wri.Write(allFile.Trim());
-        //        wri.Close();
-
-        //    });
-        //}
 
         private async Task ProcessRenamingAsync()
         {

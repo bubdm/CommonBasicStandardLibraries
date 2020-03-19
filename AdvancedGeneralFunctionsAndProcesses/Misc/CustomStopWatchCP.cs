@@ -6,7 +6,6 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Misc
     public class CustomStopWatchCP
     {
         private readonly Stopwatch _thisStop;
-        // try the built in way.  that worked.
         public int MaxTime { get; set; }
         private bool _isStarted;
         public event TimeUpEventHandler? TimeUp;

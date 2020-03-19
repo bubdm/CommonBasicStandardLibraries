@@ -40,11 +40,6 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Conductors
                 //should not activate twice.
             }
 
-            //try risk not running on ui thread here too.
-            //await Execute.OnUIThreadAsync(async () =>
-            //{
-
-            //});
             return true;
         }
     }

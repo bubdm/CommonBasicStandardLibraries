@@ -91,7 +91,7 @@ namespace CommonBasicStandardLibraries.CollectionClasses
         {
             get
             {
-                if (index > MaximumAllowed - 1)
+                if (index > MaximumAllowed)
                 {
                     throw new BasicBlankException($"Only up to {MaximumAllowed} are supported");
                 }
