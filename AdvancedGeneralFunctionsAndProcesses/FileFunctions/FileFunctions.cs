@@ -32,6 +32,10 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
         {
             if (DirectoryExists("/storage/sdcard1") == true)
                 return "/storage/sdcard1"; // can't assume its always accessing the music folder
+            else if (DirectoryExists("//storage/0123-4567"))
+            {
+                return "//storage/0123-4567";
+            }
             else if (DirectoryExists("/storage/emulated/0") == true)
                 return "/storage/emulated/0";
             else
