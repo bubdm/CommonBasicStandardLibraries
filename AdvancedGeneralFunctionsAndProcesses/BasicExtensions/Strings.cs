@@ -497,64 +497,62 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
         }
 
 
-        //looks like there are some serious setbacks.
-        //if i need extension to convert, needs to figure out what to do.
-        //for now, i should comment and see what happens.
-        //try to not even convertcase.
+        //i needed this for my music processes.
+        //however, it has to return a string
 
-        //public static void ConvertCase(this string info, bool doAll)
-        //{
-        //    string tempStr = "";
-        //    bool isSpaceOrDot = false;
-        //    if (doAll)
-        //    {
-        //        var loopTo = info.Length - 1;
-        //        for (int i = 0; i <= loopTo; i++)
-        //        {
-        //            if (info[i].ToString() != " " & info[i].ToString() != ".")
-        //            {
-        //                if (i == 0 | isSpaceOrDot)
-        //                {
-        //                    tempStr += char.ToUpper(info[i]);
-        //                    isSpaceOrDot = false;
-        //                }
-        //                else
-        //                    tempStr += char.ToLower(info[i]);
-        //            }
-        //            else
-        //            {
-        //                isSpaceOrDot = true;
-        //                tempStr += info[i];
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        var loopTo1 = info.Length - 1;
-        //        for (int i = 0; i <= loopTo1; i++)
-        //        {
-        //            if (info[i].ToString() != " " & info[i].ToString() != ".")
-        //            {
-        //                if (isSpaceOrDot)
-        //                {
-        //                    tempStr += char.ToUpper(info[i]);
-        //                    isSpaceOrDot = false;
-        //                }
-        //                else if (i == 0)
-        //                    tempStr += char.ToUpper(info[0]);
-        //                else
-        //                    tempStr += char.ToLower(info[i]);
-        //            }
-        //            else
-        //            {
-        //                if (info[i].ToString() != " ")
-        //                    isSpaceOrDot = !isSpaceOrDot;
-        //                tempStr += info[i];
-        //            }
-        //        }
-        //    }
-        //    info = tempStr;
-        //}
+        public static string ConvertCase(this string info, bool doAll = true)
+        {
+            string tempStr = "";
+            bool isSpaceOrDot = false;
+            if (doAll)
+            {
+                var loopTo = info.Length - 1;
+                for (int i = 0; i <= loopTo; i++)
+                {
+                    if (info[i].ToString() != " " & info[i].ToString() != ".")
+                    {
+                        if (i == 0 | isSpaceOrDot)
+                        {
+                            tempStr += char.ToUpper(info[i]);
+                            isSpaceOrDot = false;
+                        }
+                        else
+                            tempStr += char.ToLower(info[i]);
+                    }
+                    else
+                    {
+                        isSpaceOrDot = true;
+                        tempStr += info[i];
+                    }
+                }
+            }
+            else
+            {
+                var loopTo1 = info.Length - 1;
+                for (int i = 0; i <= loopTo1; i++)
+                {
+                    if (info[i].ToString() != " " & info[i].ToString() != ".")
+                    {
+                        if (isSpaceOrDot)
+                        {
+                            tempStr += char.ToUpper(info[i]);
+                            isSpaceOrDot = false;
+                        }
+                        else if (i == 0)
+                            tempStr += char.ToUpper(info[0]);
+                        else
+                            tempStr += char.ToLower(info[i]);
+                    }
+                    else
+                    {
+                        if (info[i].ToString() != " ")
+                            isSpaceOrDot = !isSpaceOrDot;
+                        tempStr += info[i];
+                    }
+                }
+            }
+            return tempStr;
+        }
         //public static void RemoveKeyWords(this string Text, List<string> WordList, bool DoAll)
         //{
         //    if (Text == "")
