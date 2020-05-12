@@ -43,7 +43,8 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
         }
         public static string GetWriteLocationForExternalOnAndroid()
         {
-            return "/storage/emulated/0"; // for writing, its always this location.  so for cristina, it will be internal.  for andy, external but the path is still the same
+            return @"/sdcard"; //try this instead of the other.  tried on 2 devices and this worked.  the other did not always work.
+            //return "/storage/emulated/0"; // for writing, its always this location.  so for cristina, it will be internal.  for andy, external but the path is still the same
         }
         public static bool FileExists(string filePath)
         {

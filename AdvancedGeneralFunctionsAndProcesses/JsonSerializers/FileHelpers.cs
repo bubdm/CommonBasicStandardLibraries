@@ -14,9 +14,8 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Json
         }
         public static void SaveObject(string path, object thisObject)
         {
-            JsonSettingsGlobals.PopulateSettings();
-            string? thisText = default;
-            js.SerializeObject(thisObject, JsonSettingsGlobals._jsonSettingsData);
+            JsonSettingsGlobals.PopulateSettings(); //look slike saveobject when not doing async had a serious problem.
+            string thisText = js.SerializeObject(thisObject, JsonSettingsGlobals._jsonSettingsData);
             WriteText(path, thisText!, false);
         }
         public static async Task<T> RetrieveSavedObjectAsync<T>(string path)
