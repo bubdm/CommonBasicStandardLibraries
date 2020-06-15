@@ -46,6 +46,43 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             }
             return possNum;
         }
+        //i like the idea of having it here.
+        public static string FirstAndLastCharacterToLower(string str)
+        {
+
+            if (string.IsNullOrWhiteSpace(str))
+            {
+                return str;
+            }
+            if (str.Count() <= 3)
+            {
+                return str.ToLower(); //i think even the third one should be lower case as well.
+            }
+            int lastIndex = str.Count() - 1;
+            if (str == "RefX")
+            {
+                return "refX";
+            }
+            if (str == "RefY")
+            {
+                return "refY";
+            }
+            if (char.IsLower(str, 0) == false && char.IsLower(str, lastIndex) == false)
+            {
+                return char.ToLowerInvariant(str[0]) + str.Substring(1, str.Count() - 2) + char.ToLowerInvariant(str[lastIndex]);
+            }
+            if (char.IsLower(str, 0) == true && char.IsLower(str, lastIndex) == true)
+            {
+                return str;
+            }
+            if (char.IsLower(str, 0) == false)
+            {
+                return char.ToLowerInvariant(str[0]) + str.Substring(1);
+            }
+            return str.Substring(0, lastIndex - 2) + char.ToLowerInvariant(str[lastIndex]);
+
+
+        }
         public static string ToWebColor(this string color)
         {
             if (color == cc.Transparent)
