@@ -12,7 +12,7 @@ and cross platform converters.</Description>
     <RepositoryUrl>https://github.com/musictopia2/CommonBasicStandardLibraries</RepositoryUrl>
     <PackageProjectUrl>https://github.com/musictopia2/CommonBasicStandardLibraries</PackageProjectUrl>
     <PackageTags>MVVM Helpers mvvmhelper Collections Converters Extensions Messenging nugethelpers ExceptionHandling DependencyInjection Interfaces FileHelpers</PackageTags>
-    <Version>3.0.5</Version>
+    <Version>3.0.6</Version>
     <!--Decided to increase to 2.0 because needs to beware of possible breaking changes.  plus this uses .net standard 2.1 as well. -->
     <!--decided to risk not using the newton jsonsoft now.  hopefully the risk pays off.  the good news is i have the old copy in 3.0 just in case.  -->
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>

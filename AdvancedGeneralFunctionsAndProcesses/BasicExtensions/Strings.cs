@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using cc = CommonBasicStandardLibraries.BasicDataSettingsAndProcesses.SColorString;
+
 namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.BasicExtensions
 {
     public static class Strings
@@ -43,6 +45,27 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
                 }
             }
             return possNum;
+        }
+        public static string ToWebColor(this string color)
+        {
+            if (color == cc.Transparent)
+            {
+                return "none"; //this is how svg shows as transparent
+            }
+            if (color.Length == 0)
+            {
+                throw new BasicBlankException("Had no color");
+            }
+            if (color.Length != 9)
+            {
+                throw new BasicBlankException("Color In Wrong Format");
+            }
+            if (color.StartsWith("#FF") == false)
+            {
+                throw new BasicBlankException("Colors must start with FF so no transparency");
+            }
+            string output = $"#{color.Substring(3, 6)}";
+            return output;
         }
         public static CustomBasicList<string> SplitStringEliminateMonth(this string thisStr)
         {
