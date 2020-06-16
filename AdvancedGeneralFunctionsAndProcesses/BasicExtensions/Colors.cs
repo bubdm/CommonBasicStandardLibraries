@@ -6,6 +6,29 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
 {
     public static class Colors
     {
+        //i think should be here.
+        public static string ToWebColor(this string color)
+        {
+            if (color == cs.Transparent)
+            {
+                return "none"; //this is how svg shows as transparent
+            }
+            if (color.Length == 0)
+            {
+                throw new BasicBlankException("Had no color");
+            }
+            if (color.Length != 9)
+            {
+                throw new BasicBlankException("Color In Wrong Format");
+            }
+            if (color.StartsWith("#FF") == false)
+            {
+                throw new BasicBlankException("Colors must start with FF so no transparency");
+            }
+            string output = $"#{color.Substring(3, 6)}";
+            return output;
+        }
+
         public static string ToColor(this string thisStr, bool showError = true)
         {
             switch (thisStr)
