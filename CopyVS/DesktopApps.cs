@@ -23,6 +23,15 @@ namespace CommonBasicStandardLibraries.CopyVS
         public string NewPath { get; set; } = "";
         public string OldName { get; set; } = "";
         public string NewName { get; set; } = "";
+        /// <summary>
+        /// the purpose of this would be sometimes one project happens to be webstuff.
+        /// </summary>
+        public bool IncludeWebFiles { get; set; }
+        /// <summary>
+        /// sometimes blazor is needed.  the extension is .razor.
+        /// </summary>
+        public bool IncludeRazorFiles { get; set; }
+
 
         public FinishFileProcesses? FinishRenaming { get; set; }
 
@@ -82,6 +91,27 @@ namespace CommonBasicStandardLibraries.CopyVS
                 string checkPath = $@"{NewPath}\{NewName}";
                 Console.WriteLine($"Checking path {checkPath}");
                 var list = GetSeveralSpecificFiles(checkPath, "cs", SearchOption.AllDirectories);
+
+                CustomBasicList<string> extensions = new CustomBasicList<string>();
+                if (IncludeWebFiles)
+                {
+                    extensions = new CustomBasicList<string>()
+                    {
+                        "css", "js", "ts", "html"
+                    };
+                }
+                if (IncludeRazorFiles)
+                {
+                    extensions.Add("razor");
+                    //var nexts = GetSeveralSpecificFiles(checkPath, "razor", SearchOption.AllDirectories);
+                    //list.AddRange(nexts);
+                }
+                extensions.ForEach(e =>
+                {
+                    var nexts = GetSeveralSpecificFiles(checkPath, e, SearchOption.AllDirectories);
+                    list.AddRange(nexts);
+                });
+
                 await FinishRenaming.Invoke(list, OldName, NewName, newProjectPath);
             }
 
