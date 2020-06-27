@@ -76,6 +76,25 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
             internalPath = firstName + "." + fileName;
             return internalPath;
         }
+
+        public static string ResourcesBinaryTextFromFile(this Assembly assembly, string fileName)
+        {
+            Stream stream = assembly.ResourcesGetStream(fileName);
+            byte[] bb = new byte[stream.Length - 1 + 1];
+            stream.Read(bb, 0, (int)stream.Length);
+            stream.Close();
+            return System.Convert.ToBase64String(bb);
+        }
+
+        public static async Task<string> ResourcesBinaryTextFromFileAsync(this Assembly assembly, string fileName)
+        {
+            var stream = await GetStreamAsync(assembly, fileName);
+            byte[] bb = new byte[stream!.Length - 1 + 1];
+            await stream.ReadAsync(bb, 0, (int)stream.Length);
+            stream.Close();
+            return Convert.ToBase64String(bb);
+        }
+
         public static async Task<string> ResourcesAllTextFromFileAsync(this Assembly thisAssembly, string fileName)
         {
             var thisStream = await GetStreamAsync(thisAssembly, fileName);
