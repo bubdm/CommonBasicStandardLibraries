@@ -83,7 +83,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
             byte[] bb = new byte[stream.Length - 1 + 1];
             stream.Read(bb, 0, (int)stream.Length);
             stream.Close();
-            return System.Convert.ToBase64String(bb);
+            return Convert.ToBase64String(bb);
         }
 
         public static async Task<string> ResourcesBinaryTextFromFileAsync(this Assembly assembly, string fileName)
