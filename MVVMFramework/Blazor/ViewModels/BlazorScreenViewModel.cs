@@ -12,9 +12,11 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Blazor.ViewModels
         //this is for blazor.  however, good news is does not have to reference any blazor specific stuff though.
         //since you can't actually open the screen since the way navigation works.
         Action IBlazorScreen.Closing { get; set; } = () => { };
-        IEventAggregator IBlazorScreen.Aggregator => Aggregator;
+        //IEventAggregator IBlazorScreen.Aggregator => Aggregator;
 
-        protected IEventAggregator Aggregator; //i think this needs it.
+        //protected IEventAggregator Aggregator; //i think this needs it.
+
+        public IEventAggregator Aggregator { get; set; } //made public so others can subscribe with less code.
 
         public BlazorScreenViewModel()
         {
