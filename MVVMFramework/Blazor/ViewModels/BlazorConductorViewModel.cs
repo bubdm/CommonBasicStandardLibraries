@@ -10,7 +10,7 @@ namespace CommonBasicStandardLibraries.MVVMFramework.Blazor.ViewModels
             return viewModel.ActivateAsync(); //hopefully this simple.
         }
 
-        protected Task CloseSpecificChildAsync(IBlazorScreen viewModel)
+        virtual protected Task CloseSpecificChildAsync(IBlazorScreen viewModel) //looke like this has to be virtual afterall.
         {
             return viewModel.TryCloseAsync();
         }
