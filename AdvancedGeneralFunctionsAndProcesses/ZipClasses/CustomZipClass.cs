@@ -44,7 +44,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.ZipC
                 //i think it will replace existing one no matter what here.
                 File.Delete(zipPath);
             }
-            using FileStream zipToOpen = new FileStream(@"c:\TempFiles\E.zip", FileMode.Create);
+            using FileStream zipToOpen = new FileStream(zipPath, FileMode.Create);
             using ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Create);
             //ZipArchiveEntry rr = archive.CreateEntryFromFile(@"C:\TempFiles\problem.png", @"Folder\Good.png");
 
