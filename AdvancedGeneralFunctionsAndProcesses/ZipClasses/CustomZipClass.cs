@@ -109,7 +109,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.ZipC
 
         public void UnzipAll(string zipFile, string extractPath) //nice to have a choice.
         {
-            ZipFile.ExtractToDirectory(zipFile, extractPath);
+            ZipFile.ExtractToDirectory(zipFile, extractPath, true);
         }
         public void UnzipFile(string zipFile, string extractPath, CustomBasicList<OpenedZipFile> files)
         {
