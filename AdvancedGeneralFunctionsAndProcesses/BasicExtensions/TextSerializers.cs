@@ -567,26 +567,40 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
         }
 
         public static async Task<CustomBasicList<T>> LoadTextListFromResourceAsync<T>(this Assembly assembly, string name, string delimiter = ",")
-             where T : new()
         {
             string content = await assembly.ResourcesAllTextFromFileAsync(name);
             return content.DeserializeDelimitedTextList<T>(delimiter);
         }
 
         public static CustomBasicList<T> LoadTextFromListResource<T>(this Assembly assembly, string name, string delimiter = ",")
-             where T : new()
         {
             string content = assembly.ResourcesAllTextFromFile(name);
             return content.DeserializeDelimitedTextList<T>(delimiter);
         }
 
+        //return Activator.CreateInstance(thisType, args);
+
         public static CustomBasicList<T> DeserializeDelimitedTextList<T>(this string content, string delimiter = ",")
-             where T : new()
         {
             //has to convert to a list first.
+            CustomBasicList<T> output;
+
+            Type key = typeof(T); //if this works, then i can have a list of numbers, etc.
+            if (key.IsSimpleType())
+            {
+                var temps = content.Split(delimiter).ToCustomBasicList();
+                //hopefully this simple (?)
+                output = temps.ToCastedList<T>();
+                //foreach (var item in temps)
+                //{
+                //    output.Add((T) item.ToString());
+                //}
+                return output;
+            }
+
+            output = new CustomBasicList<T>();
             CustomBasicList<string> lines = content.Split(Constants.vbCrLf).ToCustomBasicList();
             var properties = GetProperties<T>();
-            CustomBasicList<T> output = new CustomBasicList<T>();
             foreach (var line in lines)
             {
                 var items = line.Split(delimiter).ToCustomBasicList();
@@ -596,7 +610,9 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
                 }
                 //if i decide to ignore, then won't be a problem.  don't worry for now.
                 int x = 0;
-                T row = new T();
+                object temp = Activator.CreateInstance(typeof(T));
+                T row = (T)temp;
+                //T row = new T();
                 properties.ForEach(p =>
                 {
                     string item = items[x];
@@ -608,6 +624,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             return output;
         }
 
+        
 
 
         /// <summary>
@@ -618,9 +635,8 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
         /// <param name="delimiter"></param>
         /// <returns></returns>
         public static async Task<CustomBasicList<T>> LoadTextListAsync<T>(this string path, string delimiter = ",")
-            where T : new()
         {
-            var properties = GetProperties<T>();
+            //var properties = GetProperties<T>();
 
             CustomBasicList<T> output = new CustomBasicList<T>();
             if (File.Exists(path) == false)
@@ -629,7 +645,7 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             }
 
             string content = await File.ReadAllTextAsync(path);
-            output = content.DeserializeDelimitedTextList<T>();
+            output = content.DeserializeDelimitedTextList<T>(delimiter);
             return output;
 
             //var lines = await File.ReadAllLinesAsync(path);
