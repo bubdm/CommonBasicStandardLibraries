@@ -1,4 +1,5 @@
-﻿using CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Misc;
+﻿using CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.FileFunctions;
+using CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Misc;
 using CommonBasicStandardLibraries.BasicDataSettingsAndProcesses;
 using CommonBasicStandardLibraries.CollectionClasses;
 using CommonBasicStandardLibraries.Exceptions;
@@ -24,11 +25,8 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             });
             await File.WriteAllLinesAsync(path, list);
         }
-
-        public static async Task SaveTextAsync<T>(this CustomBasicList<T> payLoad, string path, string delimiter = ",")
+        public static string SerializeText<T>(this CustomBasicList<T> payLoad, string delimiter = ",")
         {
-            //will be utf8
-
             var properties = GetProperties<T>();
             CustomBasicList<string> list = new CustomBasicList<string>();
             foreach (var item in payLoad)
@@ -52,8 +50,27 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
                         cats.AddToString("", delimiter);
                     }
                 });
+                list.Add(cats.GetInfo());
             }
-            await File.WriteAllLinesAsync(path, list, Encoding.UTF8);
+
+            StrCat fins = new StrCat();
+            list.ForEach(x => fins.AddToString(x, Constants.vbCrLf));
+            return fins.GetInfo();
+        }
+
+        public static void SaveText<T>(this CustomBasicList<T> payLoad, string path, string delimiter = ",")
+        {
+            string content = payLoad.SerializeText(delimiter);
+            File.WriteAllText(path, content, Encoding.UTF8);
+        }
+
+        public static async Task SaveTextAsync<T>(this CustomBasicList<T> payLoad, string path, string delimiter = ",")
+        {
+            //will be utf8
+
+            string content = payLoad.SerializeText<T>(delimiter);
+            await File.WriteAllTextAsync(path, content, Encoding.UTF8);
+
         }
 
         private static CustomBasicList<PropertyInfo> GetProperties<T>()
@@ -549,24 +566,27 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
 
         }
 
-        /// <summary>
-        /// this will load the text file and return a list of the object you want.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="path"></param>
-        /// <param name="delimiter"></param>
-        /// <returns></returns>
-        public static async Task<CustomBasicList<T>> LoadTextListAsync<T>(this string path, string delimiter = ",")
-            where T : new()
+        public static async Task<CustomBasicList<T>> LoadTextListFromResourceAsync<T>(this Assembly assembly, string name, string delimiter = ",")
+             where T : new()
         {
-            var properties = GetProperties<T>();
+            string content = await assembly.ResourcesAllTextFromFileAsync(name);
+            return content.DeserializeDelimitedTextList<T>(delimiter);
+        }
 
+        public static CustomBasicList<T> LoadTextFromListResource<T>(this Assembly assembly, string name, string delimiter = ",")
+             where T : new()
+        {
+            string content = assembly.ResourcesAllTextFromFile(name);
+            return content.DeserializeDelimitedTextList<T>(delimiter);
+        }
+
+        public static CustomBasicList<T> DeserializeDelimitedTextList<T>(this string content, string delimiter = ",")
+             where T : new()
+        {
+            //has to convert to a list first.
+            CustomBasicList<string> lines = content.Split(Constants.vbCrLf).ToCustomBasicList();
+            var properties = GetProperties<T>();
             CustomBasicList<T> output = new CustomBasicList<T>();
-            if (File.Exists(path) == false)
-            {
-                return output;
-            }
-            var lines = await File.ReadAllLinesAsync(path);
             foreach (var line in lines)
             {
                 var items = line.Split(delimiter).ToCustomBasicList();
@@ -586,6 +606,52 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
                 output.Add(row);
             }
             return output;
+        }
+
+
+
+        /// <summary>
+        /// this will load the text file and return a list of the object you want.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="path"></param>
+        /// <param name="delimiter"></param>
+        /// <returns></returns>
+        public static async Task<CustomBasicList<T>> LoadTextListAsync<T>(this string path, string delimiter = ",")
+            where T : new()
+        {
+            var properties = GetProperties<T>();
+
+            CustomBasicList<T> output = new CustomBasicList<T>();
+            if (File.Exists(path) == false)
+            {
+                return output;
+            }
+
+            string content = await File.ReadAllTextAsync(path);
+            output = content.DeserializeDelimitedTextList<T>();
+            return output;
+
+            //var lines = await File.ReadAllLinesAsync(path);
+            //foreach (var line in lines)
+            //{
+            //    var items = line.Split(delimiter).ToCustomBasicList();
+            //    if (items.Count != properties.Count)
+            //    {
+            //        throw new BasicBlankException("Text file corrupted because the delimiter count don't match the properties");
+            //    }
+            //    //if i decide to ignore, then won't be a problem.  don't worry for now.
+            //    int x = 0;
+            //    T row = new T();
+            //    properties.ForEach(p =>
+            //    {
+            //        string item = items[x];
+            //        PopulateValue(item, row, p);
+            //        x++;
+            //    });
+            //    output.Add(row);
+            //}
+            //return output;
         }
 
         private static void PopulateValue<T>(string item, T row, PropertyInfo p)
