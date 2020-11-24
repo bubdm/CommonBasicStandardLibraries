@@ -1,6 +1,6 @@
-﻿using System;
+﻿using CommonBasicStandardLibraries.Exceptions;
 using System.Diagnostics;
-using System.Threading.Tasks;
+using System.Timers;
 namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Misc
 {
     public class CustomStopWatchCP
@@ -11,71 +11,58 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Misc
         public event TimeUpEventHandler? TimeUp;
         public delegate void TimeUpEventHandler();
         public event ProgressEventHandler? Progress;
+        private readonly Timer _timer;
         public delegate void ProgressEventHandler(long TimeLeft); //has to be long now.
-        private readonly IProgress<EnumCategory> _thisProgress;
-        public enum EnumCategory
-        {
-            Progress = 1,
-            TimeUp = 2
-        }
         public bool IsRunning => _thisStop.IsRunning;
         public CustomStopWatchCP()
         {
             _thisStop = new Stopwatch();
-            _thisProgress = new Progress<EnumCategory>((EnumCategory Category) =>
+            _timer = new Timer();
+            _timer.Interval = 50;
+            _timer.AutoReset = false;
+            _timer.Elapsed += TimerElapsed;
+        }
+        private void TimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            if (_thisStop.IsRunning == false)
             {
-                if (Category == EnumCategory.TimeUp)
-                {
-                    TimeUp?.Invoke(); // otherwise, threading problem
-                    return;
-                }
-                if (Category == EnumCategory.Progress)
-                {
-                    Progress?.Invoke(MaxTime - _thisStop.ElapsedMilliseconds);
-                    return;
-                }
-                throw new Exception("No category found");
-            });
+                return;
+            }
+            if (_thisStop.ElapsedMilliseconds > MaxTime)
+            {
+                _thisStop.Stop();
+                TimeUp?.Invoke();
+                return;
+            }
+            Progress?.Invoke(MaxTime - _thisStop.ElapsedMilliseconds);
+            _timer.Start(); //i think.
         }
         public void StartTimer()
         {
             _isStarted = true;
             _thisStop.Restart(); // i think
-            LoopTimer();
-        }
-        private void LoopTimer()
-        {
-            Task.Run(() =>
-            {
-                do
-                {
-                    System.Threading.Thread.Sleep(50);
-                    if (_thisStop.IsRunning == false)
-                        return;
-                    if (_thisStop.ElapsedMilliseconds > MaxTime)
-                    {
-                        _thisStop.Stop();
-                        _thisProgress.Report(EnumCategory.TimeUp);
-                        return;
-                    }
-
-                    _thisProgress.Report(EnumCategory.Progress);
-                }
-                while (true);// because times up.
-            });
+            PrivateInit();
         }
         public void PauseTimer()
         {
             if (_isStarted == false)
-                throw new Exception("Cannot pause the timer because it was never started");
-            _thisStop.Stop(); // hopefully this simple.
+            {
+                throw new BasicBlankException("Cannot pause the timer because it was never started");
+            }
+            _thisStop.Stop();
         }
         public void ContinueTimer()
         {
             if (_isStarted == false)
-                throw new Exception("The timer was never started");
-            _thisStop.Start(); // i think this is time.
-            LoopTimer(); // keep looping again now.
+            {
+                throw new BasicBlankException("The timer was never started");
+            }
+            _thisStop.Start();
+            PrivateInit();
+        }
+        private void PrivateInit()
+        {
+            _timer.Start();
         }
         public void ManualStop(bool showEvent)
         {
@@ -96,8 +83,10 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Misc
         private void StopTimer(bool showEvent)
         {
             _thisStop.Stop();
-            if (showEvent == true)
-                _thisProgress.Report(EnumCategory.TimeUp);
+            if (showEvent)
+            {
+                TimeUp?.Invoke(); //i think.
+            }
         }
     }
 }
