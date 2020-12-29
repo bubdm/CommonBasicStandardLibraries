@@ -8,6 +8,9 @@ using CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.BasicExt
 using System.Reflection;
 using CommonBasicStandardLibraries.Attributes;
 using CommonBasicStandardLibraries.ContainerClasses;
+using CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.RandomGenerator;
+using CommonBasicStandardLibraries.Exceptions;
+
 namespace CommonBasicStandardLibraries.BasicDataSettingsAndProcesses
 {
     public static class BasicDataFunctions
@@ -45,6 +48,27 @@ namespace CommonBasicStandardLibraries.BasicDataSettingsAndProcesses
 		{
 			return Enumerable.Range(startAt, howMany).ToCustomBasicList();
 		}
+
+        public static bool AutoUseMainContainer { get; set; } = true; //this means if nothing is registered, then will use main container.
+
+
+        public static RandomGenerator GetStaticRandomGenerator()
+        {
+            if (cons == null && AutoUseMainContainer)
+            {
+                RegisterCommonDI();
+            }
+            if (cons == null)
+            {
+                throw new BasicBlankException("No custom dependency injection system was registered and did not choose to use the built in custom main container");
+            }
+            return cons.Resolve<RandomGenerator>();
+        }
+        internal static void RegisterCommonDI()
+        {
+            cons = new ContainerMain(); //this allows the ability of the custombasiclist to use the 
+        }
+
         //public static void AutoClearProperties(object thisObj)
         //{
         //    Type thisType = thisObj.GetType();
