@@ -6,10 +6,11 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.File
         public static string MainLocation { get; set; } = "";
         public static string GetLocation(string name)
         {
+            string olds = MainLocation;
             string path = aa.GetApplicationPath();
             int finds = path.IndexOf(MainLocation);
             string modified = path.Substring(0, finds);
-            modified += MainLocation += @"\";
+            modified += olds += @"\";
             modified += name;
             return modified;
         }
