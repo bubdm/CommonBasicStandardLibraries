@@ -53,6 +53,11 @@ namespace CommonBasicStandardLibraries.AdvancedGeneralFunctionsAndProcesses.Basi
             CustomBasicList<string> thisList = thisStr.Split(".").ToCustomBasicList();
             return int.Parse(thisList.First());
         }
+        public static double MultiplyAndAdd(this double original, double amount)
+        {
+            double subs = original * amount;
+            return subs + original;
+        }
         public static int Multiply(this double thisAmount, int howMuch)
         {
             return (int)Math.Ceiling((thisAmount) * howMuch);
